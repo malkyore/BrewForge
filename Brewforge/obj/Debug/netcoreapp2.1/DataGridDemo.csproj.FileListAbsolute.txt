@@ -1,0 +1,16 @@
+F:\DataGridDemo2\DataGridDemo\bin\Debug\netcoreapp2.1\DataGridDemo.deps.json
+F:\DataGridDemo2\DataGridDemo\bin\Debug\netcoreapp2.1\DataGridDemo.runtimeconfig.json
+F:\DataGridDemo2\DataGridDemo\bin\Debug\netcoreapp2.1\DataGridDemo.runtimeconfig.dev.json
+F:\DataGridDemo2\DataGridDemo\bin\Debug\netcoreapp2.1\DataGridDemo.dll
+F:\DataGridDemo2\DataGridDemo\bin\Debug\netcoreapp2.1\DataGridDemo.pdb
+F:\DataGridDemo2\DataGridDemo\bin\Debug\netcoreapp2.1\Beernet-Lib.dll
+F:\DataGridDemo2\DataGridDemo\bin\Debug\netcoreapp2.1\Beernet-Lib.pdb
+F:\DataGridDemo2\DataGridDemo\obj\Debug\netcoreapp2.1\DataGridDemo.csprojAssemblyReference.cache
+F:\DataGridDemo2\DataGridDemo\obj\Debug\netcoreapp2.1\DataGridDemo.Properties.Resources.resources
+F:\DataGridDemo2\DataGridDemo\obj\Debug\netcoreapp2.1\DataGridDemo.csproj.GenerateResource.cache
+F:\DataGridDemo2\DataGridDemo\obj\Debug\netcoreapp2.1\DataGridDemo.csproj.CoreCompileInputs.cache
+F:\DataGridDemo2\DataGridDemo\obj\Debug\netcoreapp2.1\DataGridDemo.AssemblyInfoInputs.cache
+F:\DataGridDemo2\DataGridDemo\obj\Debug\netcoreapp2.1\DataGridDemo.AssemblyInfo.cs
+F:\DataGridDemo2\DataGridDemo\obj\Debug\netcoreapp2.1\DataGridDemo.csproj.CopyComplete
+F:\DataGridDemo2\DataGridDemo\obj\Debug\netcoreapp2.1\DataGridDemo.dll
+F:\DataGridDemo2\DataGridDemo\obj\Debug\netcoreapp2.1\DataGridDemo.pdb

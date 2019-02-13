@@ -1,0 +1,192 @@
+﻿@{
+  ViewBag.Title = "Brewmeister Online";
+}
+<div id="header">
+
+</div>
+<div id="toolbar" class="btn-group" >  
+  <!-- <div class="checkbox-inline">
+    <input type="checkbox" value=""/>2 digits landcodes
+  </div>
+  <button id="btn" class="btn btn-default" type="button"><i class="glyphicon glyphicon-info-sign"></i>&nbsp;row info</button>--> 
+</div>
+<div id="recipeInfo">
+    <h3>Recipe Info</h3>
+    Name : @ViewBag.recipeName <br />
+    Style : @ViewBag.style<br />
+    Description : @ViewBag.description<br />
+    <h4>Statistics</h4>
+    IBU : @ViewBag.recipeStats.ibu<br />
+    ABV : @ViewBag.recipeStats.abv<br />
+    FG : @ViewBag.recipeStats.fg<br />
+    OG : @ViewBag.recipeStats.og<br />
+    SRM : @ViewBag.recipeStats.srm<br />
+</div>
+<div>
+    <h3>Hops</h3>
+</div>
+<div class="container-fluid">
+  <table id="table"
+         data-unique-id="hopID"
+         data-sort-name="type"
+         data-sort-order="asc"
+         data-classes="table table-condensed table-hover table-striped"
+         data-toggle="table"
+         data-side-pagination="server"
+         data-url="LoadHop"
+         data-query-params="extraServerParams"
+         data-pagination="true"
+         data-show-refresh="true"
+         data-search="true"
+         data-toolbar="#toolbar"
+         data-page-size="20"
+         data-page-list="[5,10,20,50,100,All]">
+    <thead>
+      <tr>
+        <th data-field="hop.name" data-sortable="false" data-halign="center" data-align="center" >Name</th>
+        <th data-field="hop.aau" data-sortable="true" data-halign="center" data-align="center">AAU</th>
+        <th data-field="amount" data-sortable="true">Amount</th>
+          <th data-field="type" data-sortable="true">Type</th>
+          <th data-field="time" data-sortable="true">Time</th>
+      </tr>
+    </thead>
+  </table>
+</div>
+
+<div>
+    <h3>Fermentables</h3>
+</div>
+<div class="container-fluid">
+    <table id="table"
+           data-unique-id="fermentableID"
+           data-sort-name="fermentableID"
+           data-sort-order="asc"
+           data-classes="table table-condensed table-hover table-striped"
+           data-toggle="table"
+           data-side-pagination="server"
+           data-url="LoadFermentable"
+           data-query-params="extraServerParams"
+           data-pagination="true"
+           data-show-refresh="true"
+           data-search="true"
+           data-toolbar="#toolbar"
+           data-page-size="20"
+           data-page-list="[5,10,20,50,100,All]">
+        <thead>
+            <tr>
+                <th data-field="fermentable.name" data-sortable="false" data-halign="center" data-align="center">Name</th>
+                <th data-field="fermentable.ppg" data-sortable="true" data-halign="center" data-align="center">PPG</th>
+                <th data-field="fermentable.color" data-sortable="true">Color</th>
+                <th data-field="fermentable.type" data-sortable="true">Type</th>
+                <th data-field="fermentable.maltster" data-sortable="true">Time</th>
+                <th data-field="use" data-sortable="true">Use</th>
+                <th data-field="weight" data-sortable="true">Weight</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+<div>
+    <h3>Yeasts</h3>
+</div>
+<div class="container-fluid">
+    <table id="yeasttable"
+           data-unique-id="idString"
+           data-sort-name="idString"
+           data-sort-order="asc"
+           data-classes="table table-condensed table-hover table-striped"
+           data-toggle="table"
+           data-side-pagination="server"
+           data-url="LoadYeast"
+           data-query-params="extraServerParams"
+           data-pagination="true"
+           data-show-refresh="true"
+           data-search="true"
+           data-toolbar="#toolbar"
+           data-page-size="20"
+           data-page-list="[5,10,20,50,100,All]">
+        <thead>
+            <tr>
+                <th data-field="name" data-sortable="false" data-halign="center" data-align="center">Name</th>
+                <th data-field="lab" data-sortable="true" data-halign="center" data-align="center">Lab</th>
+                <th data-field="attenuation" data-sortable="true">Attenuation</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+<div>
+    <h3>Adjuncts</h3>
+</div>
+<div class="container-fluid">
+    <table id="adjuncttable"
+           data-unique-id="adjunctID"
+           data-sort-name="adjunctID"
+           data-sort-order="asc"
+           data-classes="table table-condensed table-hover table-striped"
+           data-toggle="table"
+           data-side-pagination="server"
+           data-url="LoadAdjunct"
+           data-query-params="extraServerParams"
+           data-pagination="true"
+           data-show-refresh="true"
+           data-search="true"
+           data-toolbar="#toolbar"
+           data-page-size="20"
+           data-page-list="[5,10,20,50,100,All]">
+        <thead>
+            <tr>
+                <th data-field="adjunct.name" data-sortable="false" data-halign="center" data-align="center">Name</th>
+                <th data-field="amount" data-sortable="true" data-halign="center" data-align="center">Amount</th>
+                <th data-field="unit" data-sortable="true">Unit</th>
+                <th data-field="time" data-sortable="true">Time</th>
+                <th data-field="timeUnit" data-sortable="true">Time Unit</th>
+                <th data-field="type" data-sortable="true">Type</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section scripts {
+  @await Html.PartialAsync("bootstraptable")
+
+  <script type="text/javascript">
+
+    function flagFormatter(value, row) {
+      return '<img src="/images/flags/' + value.toLowerCase() + '.png" >';
+    }
+
+    function extraServerParams(params) {
+      params.ExtraParam = 2;
+      return params;
+    }
+
+    function highLightRow($tr) {
+      $tr.addClass('highlight').siblings().removeClass('highlight');
+    }
+
+    function getId($element) {
+      var result = $($element).closest('tr').data('uniqueid');
+      return result;
+    }
+
+    $(document).ready(function () {
+      var $table = $('#table');
+
+    //  $('#btninfo').click(function () {
+    //    $tr = $table.find('tr.highlight');
+    //    var id = getId($tr);
+    //
+    //    var msg = (id === undefined) ? 'No row selected' : 'Recipe ID : ' + id;
+    //    alert(msg);
+    //  });
+
+      // register row-click event
+      $table.on('click-row.bs.table', function ($element, row, $tr) {
+        highLightRow($tr);
+      });
+
+    });
+
+  </script>
+}
