@@ -1,8 +1,3 @@
-F:\_Repos\BrewForge\Brewforge\bin\Debug\netcoreapp2.2\DataGridDemo.deps.json
-F:\_Repos\BrewForge\Brewforge\bin\Debug\netcoreapp2.2\DataGridDemo.runtimeconfig.json
-F:\_Repos\BrewForge\Brewforge\bin\Debug\netcoreapp2.2\DataGridDemo.runtimeconfig.dev.json
-F:\_Repos\BrewForge\Brewforge\bin\Debug\netcoreapp2.2\DataGridDemo.dll
-F:\_Repos\BrewForge\Brewforge\bin\Debug\netcoreapp2.2\DataGridDemo.pdb
 F:\_Repos\BrewForge\Brewforge\bin\Debug\netcoreapp2.2\Beernet-Lib.dll
 F:\_Repos\BrewForge\Brewforge\bin\Debug\netcoreapp2.2\Beernet-Lib.pdb
 F:\_Repos\BrewForge\Brewforge\obj\Debug\netcoreapp2.2\Beernet-BrewForge.csprojAssemblyReference.cache
@@ -12,5 +7,10 @@ F:\_Repos\BrewForge\Brewforge\obj\Debug\netcoreapp2.2\Beernet-BrewForge.csproj.C
 F:\_Repos\BrewForge\Brewforge\obj\Debug\netcoreapp2.2\Beernet-BrewForge.AssemblyInfoInputs.cache
 F:\_Repos\BrewForge\Brewforge\obj\Debug\netcoreapp2.2\Beernet-BrewForge.AssemblyInfo.cs
 F:\_Repos\BrewForge\Brewforge\obj\Debug\netcoreapp2.2\Beernet-BrewForge.csproj.CopyComplete
-F:\_Repos\BrewForge\Brewforge\obj\Debug\netcoreapp2.2\DataGridDemo.dll
-F:\_Repos\BrewForge\Brewforge\obj\Debug\netcoreapp2.2\DataGridDemo.pdb
+F:\_Repos\BrewForge\Brewforge\bin\Debug\netcoreapp2.2\BrewForge.deps.json
+F:\_Repos\BrewForge\Brewforge\bin\Debug\netcoreapp2.2\BrewForge.runtimeconfig.json
+F:\_Repos\BrewForge\Brewforge\bin\Debug\netcoreapp2.2\BrewForge.runtimeconfig.dev.json
+F:\_Repos\BrewForge\Brewforge\bin\Debug\netcoreapp2.2\BrewForge.dll
+F:\_Repos\BrewForge\Brewforge\bin\Debug\netcoreapp2.2\BrewForge.pdb
+F:\_Repos\BrewForge\Brewforge\obj\Debug\netcoreapp2.2\BrewForge.dll
+F:\_Repos\BrewForge\Brewforge\obj\Debug\netcoreapp2.2\BrewForge.pdb

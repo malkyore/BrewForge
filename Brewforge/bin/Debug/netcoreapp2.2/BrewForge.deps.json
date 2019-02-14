@@ -22,7 +22,7 @@
   },
   "targets": {
     ".NETCoreApp,Version=v2.2": {
-      "DataGridDemo/1.0.0": {
+      "BrewForge/1.0.0": {
         "dependencies": {
           "Beernet-Lib": "1.0.0",
           "Microsoft.AspNetCore.Diagnostics": "2.0.1",
@@ -50,10 +50,10 @@
           "System.Linq.Dynamic.Core": "1.0.10"
         },
         "runtime": {
-          "DataGridDemo.dll": {}
+          "BrewForge.dll": {}
         },
         "compile": {
-          "DataGridDemo.dll": {}
+          "BrewForge.dll": {}
         }
       },
       "DnsClient/1.0.7": {
@@ -3100,7 +3100,7 @@
     }
   },
   "libraries": {
-    "DataGridDemo/1.0.0": {
+    "BrewForge/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
