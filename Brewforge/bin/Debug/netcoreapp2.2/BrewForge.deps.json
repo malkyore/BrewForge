@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.2",
-    "signature": "79e80e7048e8433e192295d5aa08786fd03c3889"
+    "signature": "08e40f8dfdaee3db69a4ed832304126ef16e6f01"
   },
   "compilationOptions": {
     "defines": [
@@ -42,9 +42,11 @@
           "Microsoft.Extensions.Options.ConfigurationExtensions": "2.0.0",
           "Microsoft.NETCore.App": "2.2.0",
           "Microsoft.VisualStudio.Web.BrowserLink": "2.0.1",
+          "Microsoft.jQuery.Unobtrusive.Ajax": "3.2.6",
           "MongoDB.Bson": "2.7.3",
           "MongoDB.Driver": "2.7.3",
           "Newtonsoft.Json": "12.0.1",
+          "NonFactors.Grid.Mvc6": "5.0.0",
           "RestSharp": "106.6.7",
           "System.Configuration.ConfigurationManager": "4.5.0",
           "System.Linq.Dynamic.Core": "1.0.10"
@@ -85,6 +87,7 @@
           "lib/netstandard1.3/DnsClient.dll": {}
         }
       },
+      "jQuery/1.8.0": {},
       "Libuv/1.10.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "2.2.0"
@@ -1435,6 +1438,11 @@
           "lib/netstandard2.0/Microsoft.Extensions.WebEncoders.dll": {}
         }
       },
+      "Microsoft.jQuery.Unobtrusive.Ajax/3.2.6": {
+        "dependencies": {
+          "jQuery": "1.8.0"
+        }
+      },
       "Microsoft.Net.Http.Headers/2.0.1": {
         "dependencies": {
           "Microsoft.Extensions.Primitives": "2.2.0",
@@ -1518,7 +1526,7 @@
           "MongoDB.Driver.Core": "2.7.3",
           "NETStandard.Library": "2.0.3",
           "System.ComponentModel.TypeConverter": "4.1.0",
-          "System.Linq.Queryable": "4.0.1"
+          "System.Linq.Queryable": "4.3.0"
         },
         "runtime": {
           "lib/netstandard1.5/MongoDB.Driver.dll": {
@@ -1576,6 +1584,26 @@
         },
         "compile": {
           "lib/netstandard1.3/Newtonsoft.Json.Bson.dll": {}
+        }
+      },
+      "NonFactors.Grid.Core.Mvc6/5.0.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Mvc.ViewFeatures": "2.0.1",
+          "System.Linq.Queryable": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard1.6/Mvc.Grid.Core.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.0.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard1.6/Mvc.Grid.Core.dll": {}
+        }
+      },
+      "NonFactors.Grid.Mvc6/5.0.0": {
+        "dependencies": {
+          "NonFactors.Grid.Core.Mvc6": "5.0.0"
         }
       },
       "RestSharp/106.6.7": {
@@ -2119,7 +2147,7 @@
           "System.Threading": "4.3.0"
         }
       },
-      "System.Linq.Queryable/4.0.1": {
+      "System.Linq.Queryable/4.3.0": {
         "dependencies": {
           "System.Collections": "4.3.0",
           "System.Diagnostics.Debug": "4.3.0",
@@ -3112,6 +3140,13 @@
       "path": "dnsclient/1.0.7",
       "hashPath": "dnsclient.1.0.7.nupkg.sha512"
     },
+    "jQuery/1.8.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-j+5U/D9DWcMQGUhfx/q14qlU/7UH0oqUa1tC9/4pVwMJSJuKOF+KBBJrv57kzc/2c/vtWdinpUywmEg4jT+zug==",
+      "path": "jquery/1.8.0",
+      "hashPath": "jquery.1.8.0.nupkg.sha512"
+    },
     "Libuv/1.10.0": {
       "type": "package",
       "serviceable": true,
@@ -3693,6 +3728,13 @@
       "path": "microsoft.extensions.webencoders/2.0.0",
       "hashPath": "microsoft.extensions.webencoders.2.0.0.nupkg.sha512"
     },
+    "Microsoft.jQuery.Unobtrusive.Ajax/3.2.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-oNKDdH3/MnXOtTAye9x7NuZxEKq3jUpY6IEC6QXZdpk2ta7btCtyh4/JlTqe/X6ufUdG2CTuzV/dKOJQDo1nWA==",
+      "path": "microsoft.jquery.unobtrusive.ajax/3.2.6",
+      "hashPath": "microsoft.jquery.unobtrusive.ajax.3.2.6.nupkg.sha512"
+    },
     "Microsoft.Net.Http.Headers/2.0.1": {
       "type": "package",
       "serviceable": true,
@@ -3755,6 +3797,20 @@
       "sha512": "sha512-W5Ke5xei9yS0ljQZuT75VgSp5M43eCPm5hHAelvKyGGU4dV7hYCmtwdsxoADb/exO6pYHeu/Iki43TdYPzfESQ==",
       "path": "newtonsoft.json.bson/1.0.1",
       "hashPath": "newtonsoft.json.bson.1.0.1.nupkg.sha512"
+    },
+    "NonFactors.Grid.Core.Mvc6/5.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-xYV5PgSLyYxzsJoAH8fQJnwlyIam5n6OZU65sDlVKDAM0F1xy5LJr0LkawzX6sE4aFqhu3rcQ/syNxPMZ2XWEw==",
+      "path": "nonfactors.grid.core.mvc6/5.0.0",
+      "hashPath": "nonfactors.grid.core.mvc6.5.0.0.nupkg.sha512"
+    },
+    "NonFactors.Grid.Mvc6/5.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Jn9I51lUi0Q4I0FmVyTq2Nf/9yn2eKFiP8Ar4Br7vkfcw6nKifjS7aezEEcSsRDMmYk4x5UVTA6kJfzT2asqqg==",
+      "path": "nonfactors.grid.mvc6/5.0.0",
+      "hashPath": "nonfactors.grid.mvc6.5.0.0.nupkg.sha512"
     },
     "RestSharp/106.6.7": {
       "type": "package",
@@ -4120,12 +4176,12 @@
       "path": "system.linq.expressions/4.3.0",
       "hashPath": "system.linq.expressions.4.3.0.nupkg.sha512"
     },
-    "System.Linq.Queryable/4.0.1": {
+    "System.Linq.Queryable/4.3.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-Yn/WfYe9RoRfmSLvUt2JerP0BTGGykCZkQPgojaxgzF2N0oPo+/AhB8TXOpdCcNlrG3VRtsamtK2uzsp3cqRVw==",
-      "path": "system.linq.queryable/4.0.1",
-      "hashPath": "system.linq.queryable.4.0.1.nupkg.sha512"
+      "sha512": "sha512-In1Bmmvl/j52yPu3xgakQSI0YIckPUr870w4K5+Lak3JCCa8hl+my65lABOuKfYs4ugmZy25ScFerC4nz8+b6g==",
+      "path": "system.linq.queryable/4.3.0",
+      "hashPath": "system.linq.queryable.4.3.0.nupkg.sha512"
     },
     "System.Memory/4.5.1": {
       "type": "package",

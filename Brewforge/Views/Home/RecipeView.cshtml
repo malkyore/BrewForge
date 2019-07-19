@@ -1,192 +1,442 @@
 ﻿@{
-  ViewBag.Title = "BeerNet Brew Forge";
+    ViewBag.Title = "BeerNet Brew Forge";
 }
-<div id="header">
+@using NonFactors.Mvc.Grid;
+@using Beernet_Lib.Models;
+@using Microsoft.AspNetCore.Http;
+@using Beernet_Lib;
+@using Brewforge.Models;
 
+
+
+<div id="header">
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    @model EditorViewModel
 </div>
-<div id="toolbar" class="btn-group" >  
-  <!-- <div class="checkbox-inline">
-    <input type="checkbox" value=""/>2 digits landcodes
-  </div>
-  <button id="btn" class="btn btn-default" type="button"><i class="glyphicon glyphicon-info-sign"></i>&nbsp;row info</button>--> 
+<div id="toolbar" class="btn-group">
+    <!-- <div class="checkbox-inline">
+      <input type="checkbox" value=""/>2 digits landcodes
+    </div>
+    <button id="btn" class="btn btn-default" type="button"><i class="glyphicon glyphicon-info-sign"></i>&nbsp;row info</button>-->
 </div>
-<div id="recipeInfo">
+
+<div class="module" id="recipeInfo">
     <h3>Recipe Info</h3>
-    Name : @ViewBag.recipeName <br />
-    Style : @ViewBag.style<br />
-    Description : @ViewBag.description<br />
+    Name : @Model.currentRecipe.name<br />
+    Style : @Model.currentRecipe.style<br />
+    Description : @Model.currentRecipe.description<br />
     <h4>Statistics</h4>
-    IBU : @ViewBag.recipeStats.ibu<br />
-    ABV : @ViewBag.recipeStats.abv<br />
-    FG : @ViewBag.recipeStats.fg<br />
-    OG : @ViewBag.recipeStats.og<br />
-    SRM : @ViewBag.recipeStats.srm<br />
+    IBU : @Model.currentRecipe.recipeStats.ibu<br />
+    ABV : @Model.currentRecipe.recipeStats.abv<br />
+    FG : @Model.currentRecipe.recipeStats.fg<br />
+    OG : @Model.currentRecipe.recipeStats.og<br />
+    SRM : @Model.currentRecipe.recipeStats.srm<br />
+</div>
+
+<!--Hop Widget-->
+<div class="grid grid-pad">
+    <div class="col-1-2">
+        <h3>Hops</h3>
+        @using (Html.BeginForm("testThing", "Home", FormMethod.Get, new { returnModel = Model }))
+        {
+        <div class="grid grid-pad" style="width:800px; height:350px; margin:20px;">
+            <div class="col-1-2">
+                <div class="module selectorWidget">
+                    @{int index2 = 0;
+                        foreach (hopAddition ha in Model.currentRecipe.hops)
+                        {
+                            string name = "" + index2;
+                            <div id=@name class="hopListItem grid" onclick="changeSelectedHop(this)">
+                                <div class="col-1-3">
+                                    @ha.hop.name
+                                </div>
+                                <div class="col-1-3">
+                                    @ha.hop.aau
+                                </div>
+                                <div class="col-1-3">
+                                    @ha.amount
+                                </div>
+                            </div>
+                            index2++;
+                        }
+                    }
+                </div>
+            </div>
+            <div class="col-1-2">
+                <div class="module grid">
+                    <div class="col-1-2">
+                        <button type="button">Add Hop</button>
+                    </div>
+                    <div class="col-1-2">
+                        <button type="button">Delete Hop</button>
+                    </div>
+                </div>
+                <div class="module editorWidget">
+                    <div style="display:none">
+                        @Html.TextBoxFor(m => m.selectedHopAddition.hopID)
+                        @Html.EditorFor(m => m.selectedHopAddition.hop)
+                    </div>
+                    <h4 style="padding-top:0;">Edit Hop</h4>
+                    <div class="editorListItem infogrid">
+                        <div class="col-1-4">
+                            <label>Hop: </label>
+                        </div>
+                        <div class="col-3-4">
+                            <select id="HopSelector" style="width:100%;">
+                                <option value="Chinook">Chinook</option>
+                                <option value="Citra">Citra</option>
+                                <option value="Cascade (US)">Cascade (US)</option>
+                                <option value="Azacca">Azacca</option>
+                                <option value="Amarillo (US)">Amarillo (US)</option>
+                                <option value="Amarillo">Amarillo</option>
+                                <option value="Centennial">Centennial</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="editorListItem infogrid">
+                        <div class="col-1-4">
+                            <label>AAU: </label>
+                        </div>
+                        <div class="col-3-4">
+                            <label>@Model.selectedHopAddition.hop.aau</label>
+                        </div>
+                    </div>
+                    <div class="editorListItem infogrid">
+                        <div class="col-1-4">
+                            <label>amount</label>
+                        </div>
+                        <div class="col-3-4">
+                            @Html.TextBoxFor(m => m.selectedHopAddition.amount)
+                        </div>
+                    </div>
+                    <div class="editorListItem infogrid">
+                        <div class="col-1-4">
+                            <label>time</label>
+                        </div>
+                        <div class="col-3-4">
+                            @Html.TextBoxFor(m => m.selectedHopAddition.time)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <input type="submit" value="Save" />
+        </div>
+        }
+
+    </div>
+    <!--fermentable widget-->
+    <div class="col-1-2">
+        <h3>Fermentables</h3>
+        <div class="grid grid-pad" style="width:800px; height:350px; margin:20px;">
+            <div class="col-1-2">
+                <div class="module selectorWidget">
+                    @{int index = 0;
+                        foreach (fermentableAddition fa in Model.currentRecipe.fermentables)
+                        {
+                            string name = "" + index;
+                            <div id=@name class="hopListItem grid" onclick="changeSelectedFermentable(this)">
+                                <div class="col-1-3">
+                                    @fa.fermentable.name
+                                </div>
+                                <div class="col-1-3">
+                                    @fa.fermentable.maltster
+                                </div>
+                                <div class="col-1-3">
+                                    @fa.weight
+                                </div>
+                            </div>
+                            index++;
+                        }
+                    }
+                </div>
+            </div>
+            <div class="col-1-2">
+                <div class="module grid">
+                    <div class="col-1-2">
+                        <button type="button">Add Fermentable</button>
+                    </div>
+                    <div class="col-1-2">
+                        <button type="button">Delete Fermentable</button>
+                    </div>
+                </div>
+                <div class="module editorWidget">
+                    @using (Html.BeginForm("testThing", "Home", FormMethod.Get, new { returnModel = Model}))
+                    {
+                    <div style="display:none">
+                        @Html.TextBoxFor(m => m.selectedFermentableAddition.fermentableID)
+                        @Html.EditorFor(m => m.selectedFermentableAddition.fermentable)
+                    </div>
+                        <h4 style="padding-top:0;">Edit Fermentable</h4>
+                        <div class="editorListItem infogrid">
+                            <div class="col-1-4">
+                                <label>Hop: </label>
+                            </div>
+                            <div class="col-3-4">
+                                <select id="FermentableSelector" style="width:100%;">
+                                    <option value="2 Row">2 Row</option>
+                                    <option value="Carapils">Carapils</option>
+                                    <option value="Caramel 30">Caramel 30</option>
+                                    <option value="BlackPrinz">BlackPrinz</option>
+                                    <option value="Roasted Barley">Roasted Barley</option>
+                                    <option value="Toasted Oat">Toasted Oats</option>
+                                    <option value="6 Row">6 Row</option>
+                                    <option value="Caramel/Crystal 30L (US)">Caramel/Crystal 30L (US)</option>
+                                    <option value="Vienna">Vienna</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="editorListItem infogrid">
+                            <div class="col-1-4">
+                                <label>PPG: </label>
+                            </div>
+                            <div class="col-3-4">
+                                <label>@Model.selectedFermentableAddition.fermentable.ppg</label>
+                            </div>
+                        </div>
+                        <div class="editorListItem infogrid">
+                            <div class="col-1-4">
+                                <label>Type: </label>
+                            </div>
+                            <div class="col-3-4">
+                                <label>@Model.selectedFermentableAddition.fermentable.type</label>
+                            </div>
+                        </div>
+                        <div class="editorListItem infogrid">
+                            <div class="col-1-4">
+                                <label>Maltster: </label>
+                            </div>
+                            <div class="col-3-4">
+                                <label>@Model.selectedFermentableAddition.fermentable.maltster</label>
+                            </div>
+                        </div>
+                        <div class="editorListItem infogrid">
+                            <div class="col-1-4">
+                                <label>amount</label>
+                            </div>
+                            <div class="col-3-4">
+                                @Html.TextBoxFor(m => m.selectedFermentableAddition.weight)
+                            </div>
+                        </div>
+                        <div class="editorListItem infogrid">
+                            <div class="col-1-4">
+                                <label>use</label>
+                            </div>
+                            <div class="col-3-4">
+                                @Html.TextBoxFor(m => m.selectedFermentableAddition.use)
+                            </div>
+                        </div>
+                        <input type="submit" value="Save" />
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div>
     <h3>Hops</h3>
 </div>
-<div class="container-fluid">
-  <table id="table"
-         data-unique-id="hopID"
-         data-sort-name="type"
-         data-sort-order="asc"
-         data-classes="table table-condensed table-hover table-striped"
-         data-toggle="table"
-         data-side-pagination="server"
-         data-url="LoadHop"
-         data-query-params="extraServerParams"
-         data-pagination="true"
-         data-show-refresh="true"
-         data-search="true"
-         data-toolbar="#toolbar"
-         data-page-size="20"
-         data-page-list="[5,10,20,50,100,All]">
-    <thead>
-      <tr>
-        <th data-field="hop.name" data-sortable="false" data-halign="center" data-align="center" >Name</th>
-        <th data-field="hop.aau" data-sortable="true" data-halign="center" data-align="center">AAU</th>
-        <th data-field="amount" data-sortable="true">Amount</th>
-          <th data-field="type" data-sortable="true">Type</th>
-          <th data-field="time" data-sortable="true">Time</th>
-      </tr>
-    </thead>
-  </table>
-</div>
-
 <div>
-    <h3>Fermentables</h3>
-</div>
-<div class="container-fluid">
-    <table id="table"
-           data-unique-id="fermentableID"
-           data-sort-name="fermentableID"
-           data-sort-order="asc"
-           data-classes="table table-condensed table-hover table-striped"
-           data-toggle="table"
-           data-side-pagination="server"
-           data-url="LoadFermentable"
-           data-query-params="extraServerParams"
-           data-pagination="true"
-           data-show-refresh="true"
-           data-search="true"
-           data-toolbar="#toolbar"
-           data-page-size="20"
-           data-page-list="[5,10,20,50,100,All]">
-        <thead>
-            <tr>
-                <th data-field="fermentable.name" data-sortable="false" data-halign="center" data-align="center">Name</th>
-                <th data-field="fermentable.ppg" data-sortable="true" data-halign="center" data-align="center">PPG</th>
-                <th data-field="fermentable.color" data-sortable="true">Color</th>
-                <th data-field="fermentable.type" data-sortable="true">Type</th>
-                <th data-field="fermentable.maltster" data-sortable="true">Time</th>
-                <th data-field="use" data-sortable="true">Use</th>
-                <th data-field="weight" data-sortable="true">Weight</th>
-            </tr>
-        </thead>
-    </table>
-</div>
+    <table>
+        <tr>
+            <td>
+                <div>
 
-<div>
-    <h3>Yeasts</h3>
-</div>
-<div class="container-fluid">
-    <table id="yeasttable"
-           data-unique-id="idString"
-           data-sort-name="idString"
-           data-sort-order="asc"
-           data-classes="table table-condensed table-hover table-striped"
-           data-toggle="table"
-           data-side-pagination="server"
-           data-url="LoadYeast"
-           data-query-params="extraServerParams"
-           data-pagination="true"
-           data-show-refresh="true"
-           data-search="true"
-           data-toolbar="#toolbar"
-           data-page-size="20"
-           data-page-list="[5,10,20,50,100,All]">
-        <thead>
-            <tr>
-                <th data-field="name" data-sortable="false" data-halign="center" data-align="center">Name</th>
-                <th data-field="lab" data-sortable="true" data-halign="center" data-align="center">Lab</th>
-                <th data-field="attenuation" data-sortable="true">Attenuation</th>
-            </tr>
-        </thead>
-    </table>
-</div>
+                    @using (Html.BeginForm("testThing", "Home", FormMethod.Post, new { recipew = Model }))
+                    {
+                        <div style="display: none;">
+                            @Html.EditorForModel();
+                        </div>
 
-<div>
-    <h3>Adjuncts</h3>
-</div>
-<div class="container-fluid">
-    <table id="adjuncttable"
-           data-unique-id="adjunctID"
-           data-sort-name="adjunctID"
-           data-sort-order="asc"
-           data-classes="table table-condensed table-hover table-striped"
-           data-toggle="table"
-           data-side-pagination="server"
-           data-url="LoadAdjunct"
-           data-query-params="extraServerParams"
-           data-pagination="true"
-           data-show-refresh="true"
-           data-search="true"
-           data-toolbar="#toolbar"
-           data-page-size="20"
-           data-page-list="[5,10,20,50,100,All]">
-        <thead>
-            <tr>
-                <th data-field="adjunct.name" data-sortable="false" data-halign="center" data-align="center">Name</th>
-                <th data-field="amount" data-sortable="true" data-halign="center" data-align="center">Amount</th>
-                <th data-field="unit" data-sortable="true">Unit</th>
-                <th data-field="time" data-sortable="true">Time</th>
-                <th data-field="timeUnit" data-sortable="true">Time Unit</th>
-                <th data-field="type" data-sortable="true">Type</th>
-            </tr>
-        </thead>
+                        int i = 0;
+                        @foreach (hopAddition ha in Model.currentRecipe.hops)
+                        {
+                            <div>
+                                @ha.hop.name
+                                <br />
+                                @ha.hop.aau
+                                <br />
+                                @Html.LabelFor(a => a.currentRecipe.hops[i].amount)
+                                @Html.TextBoxFor(m => m.currentRecipe.hops[i].amount)
+                                <br />
+                                @Html.LabelFor(a => a.currentRecipe.hops[i].time)
+                                @Html.TextBoxFor(m => m.currentRecipe.hops[i].time)
+                            </div>
+                            i++;
+                        }
+                        <input type="submit" value="Save" />
+                    }
+                </div>
+            </td>
+            <td></td>
+        </tr>
     </table>
+    <table>
+        <tr style="width:100%;">
+            <td>
+                <div>
+                    @(Html
+                                                                                  .Grid(Model.currentRecipe.hops)
+                                                                                  .Build(columns =>
+                                                                                  {
+                                                                                      columns.Add(model => model.hop.name).Titled("Name");
+                                                                                      columns.Add(model => model.hop.aau).Titled("aau");
+                                                                                      columns.Add(model => model.amount).Titled("Amount");
+                                                                                      columns.Add(model => model.time).Titled("Time");
+                                                                                  })
+                                                                                  .Empty("No data found")
+                                                                                  .Filterable()
+                                                                                  .Sortable()
+                                                                                  .Pageable()
+                    )
+                </div>
+            </td>
+            <td>
+                <div>
+                    Test
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    @(Html
+                                                                                                            .Grid(Model.currentRecipe.fermentables)
+                                                                                                            .Build(columns =>
+                                                                                                            {
+                                                                                                                columns.Add(model => model.fermentable.name).Titled("Name");
+                                                                                                                columns.Add(model => model.fermentable.ppg).Titled("ppg");
+                                                                                                                columns.Add(model => model.fermentable.maltster).Titled("Maltster");
+                                                                                                                columns.Add(model => model.fermentable.type).Titled("Type");
+                                                                                                                columns.Add(model => model.use).Titled("Use");
+                                                                                                                columns.Add(model => model.weight).Titled("Weight");
+                                                                                                            })
+                                                                                                            .Empty("No data found")
+                                                                                                            .Filterable()
+                                                                                                            .Sortable()
+                                                                                                            .Pageable()
+    )
+    @(Html
+                                                                                                            .Grid(Model.currentRecipe.yeasts)
+                                                                                                            .Build(columns =>
+                                                                                                            {
+                                                                                                                columns.Add(model => model.name).Titled("Name");
+                                                                                                                columns.Add(model => model.lab).Titled("Lab");
+                                                                                                                columns.Add(model => model.attenuation).Titled("Attenuation");
+                                                                                                            })
+                                                                                                            .Empty("No data found")
+                                                                                                            .Filterable()
+                                                                                                            .Sortable()
+                                                                                                            .Pageable()
+    )
+    @(Html
+                                                                                                            .Grid(Model.currentRecipe.adjuncts)
+                                                                                                            .Build(columns =>
+                                                                                                            {
+                                                                                                                columns.Add(model => model.adjunct.name).Titled("Name");
+                                                                                                                columns.Add(model => model.amount).Titled("Amount");
+                                                                                                                columns.Add(model => model.type).Titled("Type");
+                                                                                                                columns.Add(model => model.time).Titled("Time");
+                                                                                                                columns.Add(model => model.timeUnit).Titled("Time Unit");
+                                                                                                            })
+                                                                                                            .Empty("No data found")
+                                                                                                            .Filterable()
+                                                                                                            .Sortable()
+                                                                                                            .Pageable()
+    )
 </div>
 
 @section scripts {
-  @await Html.PartialAsync("bootstraptable")
+    @await Html.PartialAsync("bootstraptable")
+    <script>
+    document.addEventListener('rowclick', function (e) {
+        //This is where you need to post stuff back to the controller
+        console.log('data: ', e.detail.data);
+        console.log('grid: ', e.detail.grid);
+        console.log('original event: ', e.detail.originalEvent);
 
-  <script type="text/javascript">
+        sessionStorage.setItem("data", e.detail.data);
+        window.location = '@Url.Action("testThing", "Home")';
+        })
+    </script>
 
-    function flagFormatter(value, row) {
-      return '<img src="/images/flags/' + value.toLowerCase() + '.png" >';
-    }
 
-    function extraServerParams(params) {
-      params.ExtraParam = 2;
-      return params;
-    }
+    <script type="text/javascript">
 
-    function highLightRow($tr) {
-      $tr.addClass('highlight').siblings().removeClass('highlight');
-    }
+        function changeSelectedHop(el) {
+            window.location = '/Home/testThing?selectedHop='+el.id;
+            console.log(el.id);
 
-    function getId($element) {
-      var result = $($element).closest('tr').data('uniqueid');
-      return result;
-    }
+        }
 
-    $(document).ready(function () {
-      var $table = $('#table');
+        function changeSelectedFermentable(el) {
+            window.location = '/Home/testThing?selectedFermentable=' + el.id;
+            console.log(el.id);
 
-    //  $('#btninfo').click(function () {
-    //    $tr = $table.find('tr.highlight');
-    //    var id = getId($tr);
-    //
-    //    var msg = (id === undefined) ? 'No row selected' : 'Recipe ID : ' + id;
-    //    alert(msg);
-    //  });
+        }
 
-      // register row-click event
-      $table.on('click-row.bs.table', function ($element, row, $tr) {
-        highLightRow($tr);
-      });
+        function setHopSelector() {
+            var valuetoselect = '@Model.selectedHopAddition.hop.name';
+            var element = document.getElementById("HopSelector");
+            for (var i = 0; i < element.options.length; i++) {
+                if (element.options[i].text == valuetoselect) {
+                    element.options[i].selected = true;
+                    return;
+                }
+            }
+            console.log('@Model.selectedHopAddition.hop.name');
+        }
 
-    });
+        function setFermentableSelector() {
+            var valuetoselect = '@Model.selectedFermentableAddition.fermentable.name';
+            var element = document.getElementById("FermentableSelector");
+            for (var i = 0; i < element.options.length; i++) {
+                if (element.options[i].text == valuetoselect) {
+                    element.options[i].selected = true;
+                    return;
+                }
+            }
+            console.log('@Model.selectedFermentableAddition.fermentable.name');
+        }
 
-  </script>
+        function flagFormatter(value, row) {
+            return '<img src="/images/flags/' + value.toLowerCase() + '.png" >';
+        }
+
+        function extraServerParams(params) {
+            params.ExtraParam = 2;
+            return params;
+        }
+
+        function highLightRow($tr) {
+            $tr.addClass('highlight').siblings().removeClass('highlight');
+        }
+
+        function getId($element) {
+            var result = $($element).closest('tr').data('uniqueid');
+            return result;
+        }
+
+        $(document).ready(function () {
+            setHopSelector();
+            setFermentableSelector();
+            var $table = $('#table');
+
+            //  $('#btninfo').click(function () {
+            //    $tr = $table.find('tr.highlight');
+            //    var id = getId($tr);
+            //
+            //    var msg = (id === undefined) ? 'No row selected' : 'Recipe ID : ' + id;
+            //    alert(msg);
+            //  });
+
+            // register row-click event
+            $table.on('click-row.bs.table', function ($element, row, $tr) {
+                highLightRow($tr);
+            });
+
+        });
+
+    </script>
 }

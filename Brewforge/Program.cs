@@ -25,6 +25,7 @@ namespace Brewforge
           .Build();
 
             host.Run();
+            
         }
     }
 }

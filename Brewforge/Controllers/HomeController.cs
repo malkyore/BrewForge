@@ -15,20 +15,25 @@ using RestSharp;
 using Beernet_Lib.Models;
 using Beernet_Lib.Tools;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Http;
 
 namespace Brewforge.Controllers
 {
     public class HomeController : BaseController
     {
         private IHostingEnvironment hostingEnvironment;
-        
+
         public HomeController(IOptions<AppSettings> settings, IHostingEnvironment env) : base(settings)
         {
-            
-        }
 
-    //Save all the recipes stats (for now until we get more legit it just uses ViewBag....)
-    private void populateRecipeInfo()
+        }
+        public static recipe recipeDetails { get; set; }
+
+        public static int currentSelectedHop { get; set; }
+        public static int currentSelectedFermentable { get; set; }
+
+        //Save all the recipes stats (for now until we get more legit it just uses ViewBag....)
+        private void populateRecipeInfo()
         {
             recipe recipes = DataAccess.getRecipeDetails(AppSettings.apiLink + AppSettings.recipeEndpoint, AppSettings.apiAuthToken, ViewBag.recipeID);
             ViewBag.recipeName = recipes.name;
@@ -70,7 +75,7 @@ namespace Brewforge.Controllers
             recipeDetails = JsonConvert.DeserializeObject<recipe>(TempData.Peek("recipeDetails").ToString());
 
             // Get entity fieldnames
-            List <String> columnNames = typeof(hopAddition).GetProperties(BindingFlags.Public | BindingFlags.Instance).Select(p => p.Name).ToList();
+            List<String> columnNames = typeof(hopAddition).GetProperties(BindingFlags.Public | BindingFlags.Instance).Select(p => p.Name).ToList();
 
             // Create a seperate list for searchable field names   
             List<String> searchFields = new List<String>(columnNames);
@@ -148,8 +153,69 @@ namespace Brewforge.Controllers
                 HttpContext.Items.Add("recipeID", idString);
                 HttpContext.Session.Set("recipeID", Encoding.ASCII.GetBytes(idString));
             }
-            populateRecipeInfo();
-            return View("Views/Home/RecipeView.cshtml");
+             recipeDetails = DataAccess.getRecipeDetails(AppSettings.apiLink + AppSettings.recipeEndpoint, AppSettings.apiAuthToken, ViewBag.recipeID);
+            EditorViewModel e = new EditorViewModel();
+            e.currentRecipe = recipeDetails;
+            e.selectedHopAddition = recipeDetails.hops[0];
+            e.selectedFermentableAddition = recipeDetails.fermentables[0];
+            return View("Views/Home/RecipeView.cshtml", e);
+        }
+
+
+        public virtual IActionResult testThing (EditorViewModel returnModel, int selectedHop = -1, int selectedFermentable = -1)
+        {
+            if(selectedHop == -1)
+            {
+                if(currentSelectedHop != null)
+                {
+                    selectedHop = currentSelectedHop;
+                }
+                else
+                {
+                    selectedHop = 0;
+                }
+            }
+            else
+            {
+                currentSelectedHop = selectedHop;
+            }
+
+            if(selectedFermentable == -1)
+            {
+                if(currentSelectedFermentable != null)
+                {
+                    selectedFermentable = currentSelectedFermentable;
+                }
+                else
+                {
+                    selectedHop = 0;
+                }
+            }
+            else
+            {
+                currentSelectedFermentable = selectedFermentable;
+            }
+
+            if(returnModel.selectedFermentableAddition != null)
+            {
+                recipeDetails.fermentables[currentSelectedFermentable] = returnModel.selectedFermentableAddition;
+            }
+
+            if(returnModel.selectedHopAddition != null)
+            {
+                recipeDetails.hops[currentSelectedHop] = returnModel.selectedHopAddition;
+            }
+            
+            //RecipeResponse RecipeStats = DataAccess.postRecipe(recipeDetails, AppSettings.apiAuthToken);
+
+           // recipeDetails.recipeStats = RecipeStats.recipeStats;
+
+            var a = HttpContext.Session.Get("data");
+            EditorViewModel e = new EditorViewModel();
+            e.currentRecipe = recipeDetails;
+            e.selectedHopAddition = recipeDetails.hops[selectedHop];
+            e.selectedFermentableAddition = recipeDetails.fermentables[selectedFermentable];
+            return View("Views/Home/RecipeView.cshtml", e);
         }
     }
 }
