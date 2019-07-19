@@ -164,6 +164,7 @@ namespace Brewforge.Controllers
 
         public virtual IActionResult testThing (EditorViewModel returnModel, int selectedHop = -1, int selectedFermentable = -1)
         {
+            bool save = false;
             if(selectedHop == -1)
             {
                 if(currentSelectedHop != null)
@@ -199,16 +200,21 @@ namespace Brewforge.Controllers
             if(returnModel.selectedFermentableAddition != null)
             {
                 recipeDetails.fermentables[currentSelectedFermentable] = returnModel.selectedFermentableAddition;
+                save = true;
             }
 
             if(returnModel.selectedHopAddition != null)
             {
                 recipeDetails.hops[currentSelectedHop] = returnModel.selectedHopAddition;
+                save = true;
             }
-            
-            //RecipeResponse RecipeStats = DataAccess.postRecipe(recipeDetails, AppSettings.apiAuthToken);
 
-           // recipeDetails.recipeStats = RecipeStats.recipeStats;
+            if (save)
+            {
+                RecipeResponse RecipeStats = DataAccess.postRecipe(recipeDetails, AppSettings.apiAuthToken);
+
+                recipeDetails.recipeStats = RecipeStats.recipeStats;
+            }
 
             var a = HttpContext.Session.Get("data");
             EditorViewModel e = new EditorViewModel();

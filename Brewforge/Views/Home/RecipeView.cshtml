@@ -11,6 +11,7 @@
 
 <div id="header">
     @model EditorViewModel
+    <br />
 </div>
 <div id="toolbar" class="btn-group">
 </div>
@@ -34,7 +35,7 @@
         <h3>Hops</h3>
         @using (Html.BeginForm("testThing", "Home", FormMethod.Get, new { returnModel = Model }))
         {
-            <div class="grid grid-pad" style="width:800px; height:350px; margin:20px;">
+            <div class="grid grid-pad" style="width:800px; height:400px; margin:20px;">
                 <div class="col-1-2">
                     <div class="module selectorWidget">
                         @{int index2 = 0;
@@ -70,6 +71,7 @@
                         <div style="display:none">
                             @Html.TextBoxFor(m => m.selectedHopAddition.hopID)
                             @Html.EditorFor(m => m.selectedHopAddition.hop)
+                            @Html.TextBoxFor(m => m.selectedHopAddition.type, new { id = "HopTypeHidden" })
                         </div>
                         <h4 style="padding-top:0;">Edit Hop</h4>
                         <div class="editorListItem infogrid">
@@ -106,16 +108,27 @@
                         </div>
                         <div class="editorListItem infogrid">
                             <div class="col-1-4">
+                                <label>Type</label>
+                            </div>
+                            <div class="col-3-4">
+                                <select id="HopTypeSelector" class="ingredientSelector" style="width:100%;" onchange="">
+                                    <option value="Boil">Boil</option>
+                                    <option value="Whirlpool">Whirlpool</option>
+                                    <option value="Dry Hop">Dry Hop</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="editorListItem infogrid">
+                            <div class="col-1-4">
                                 <label>time</label>
                             </div>
                             <div class="col-3-4">
                                 @Html.TextBoxFor(m => m.selectedHopAddition.time)
                             </div>
                         </div>
+                        <input type="submit" value="Save" />
                     </div>
                 </div>
-
-                <input type="submit" value="Save" />
             </div>
         }
 
@@ -123,7 +136,7 @@
     <!--fermentable widget-->
     <div class="col-1-2">
         <h3>Fermentables</h3>
-        <div class="grid grid-pad" style="width:800px; height:350px; margin:20px;">
+        <div class="grid grid-pad" style="width:800px; height:400px; margin:20px;">
             <div class="col-1-2">
                 <div class="module selectorWidget">
                     @{int index = 0;
@@ -229,134 +242,18 @@
         </div>
     </div>
 </div>
-<div>
-    <h3>Hops</h3>
-</div>
-<div>
-    <table>
-        <tr>
-            <td>
-                <div>
-
-                    @using (Html.BeginForm("testThing", "Home", FormMethod.Post, new { recipew = Model }))
-                    {
-                        <div style="display: none;">
-                            @Html.EditorForModel();
-                        </div>
-
-                        int i = 0;
-                        @foreach (hopAddition ha in Model.currentRecipe.hops)
-                        {
-                            <div>
-                                @ha.hop.name
-                                <br />
-                                @ha.hop.aau
-                                <br />
-                                @Html.LabelFor(a => a.currentRecipe.hops[i].amount)
-                                @Html.TextBoxFor(m => m.currentRecipe.hops[i].amount)
-                                <br />
-                                @Html.LabelFor(a => a.currentRecipe.hops[i].time)
-                                @Html.TextBoxFor(m => m.currentRecipe.hops[i].time)
-                            </div>
-                            i++;
-                        }
-                        <input type="submit" value="Save" />
-                    }
-                </div>
-            </td>
-            <td></td>
-        </tr>
-    </table>
-    <table>
-        <tr style="width:100%;">
-            <td>
-                <div>
-                    @(Html
-                                                                                          .Grid(Model.currentRecipe.hops)
-                                                                                          .Build(columns =>
-                                                                                          {
-                                                                                              columns.Add(model => model.hop.name).Titled("Name");
-                                                                                              columns.Add(model => model.hop.aau).Titled("aau");
-                                                                                              columns.Add(model => model.amount).Titled("Amount");
-                                                                                              columns.Add(model => model.time).Titled("Time");
-                                                                                          })
-                                                                                          .Empty("No data found")
-                                                                                          .Filterable()
-                                                                                          .Sortable()
-                                                                                          .Pageable()
-                    )
-                </div>
-            </td>
-            <td>
-                <div>
-                    Test
-                </div>
-            </td>
-        </tr>
-    </table>
-
-    @(Html
-                                                                                                                    .Grid(Model.currentRecipe.fermentables)
-                                                                                                                    .Build(columns =>
-                                                                                                                    {
-                                                                                                                        columns.Add(model => model.fermentable.name).Titled("Name");
-                                                                                                                        columns.Add(model => model.fermentable.ppg).Titled("ppg");
-                                                                                                                        columns.Add(model => model.fermentable.maltster).Titled("Maltster");
-                                                                                                                        columns.Add(model => model.fermentable.type).Titled("Type");
-                                                                                                                        columns.Add(model => model.use).Titled("Use");
-                                                                                                                        columns.Add(model => model.weight).Titled("Weight");
-                                                                                                                    })
-                                                                                                                    .Empty("No data found")
-                                                                                                                    .Filterable()
-                                                                                                                    .Sortable()
-                                                                                                                    .Pageable()
-    )
-    @(Html
-                                                                                                                    .Grid(Model.currentRecipe.yeasts)
-                                                                                                                    .Build(columns =>
-                                                                                                                    {
-                                                                                                                        columns.Add(model => model.name).Titled("Name");
-                                                                                                                        columns.Add(model => model.lab).Titled("Lab");
-                                                                                                                        columns.Add(model => model.attenuation).Titled("Attenuation");
-                                                                                                                    })
-                                                                                                                    .Empty("No data found")
-                                                                                                                    .Filterable()
-                                                                                                                    .Sortable()
-                                                                                                                    .Pageable()
-    )
-    @(Html
-                                                                                                                    .Grid(Model.currentRecipe.adjuncts)
-                                                                                                                    .Build(columns =>
-                                                                                                                    {
-                                                                                                                        columns.Add(model => model.adjunct.name).Titled("Name");
-                                                                                                                        columns.Add(model => model.amount).Titled("Amount");
-                                                                                                                        columns.Add(model => model.type).Titled("Type");
-                                                                                                                        columns.Add(model => model.time).Titled("Time");
-                                                                                                                        columns.Add(model => model.timeUnit).Titled("Time Unit");
-                                                                                                                    })
-                                                                                                                    .Empty("No data found")
-                                                                                                                    .Filterable()
-                                                                                                                    .Sortable()
-                                                                                                                    .Pageable()
-    )
-</div>
 
 @section scripts {
-    @await Html.PartialAsync("bootstraptable")
-    <script>
-    document.addEventListener('rowclick', function (e) {
-        //This is where you need to post stuff back to the controller
-        console.log('data: ', e.detail.data);
-        console.log('grid: ', e.detail.grid);
-        console.log('original event: ', e.detail.originalEvent);
-
-        sessionStorage.setItem("data", e.detail.data);
-        window.location = '@Url.Action("testThing", "Home")';
-        })
-    </script>
-
-
     <script type="text/javascript">
+
+        $('#HopTypeSelector').on('select2:select', function (e) {
+            $('#HopTypeHidden').val(e.target.value);
+            console.log($('#HopTypeHidden').val());
+        });
+
+        function changeSelectedHopType(el) {
+            
+        }
 
         function changeSelectedHop(el) {
             window.location = '/Home/testThing?selectedHop='+el.id;
@@ -370,45 +267,21 @@
 
         }
 
-        function setHopSelector() {
+        function setDropDowns() {
             $('#HopSelector').val('@Model.selectedHopAddition.hop.name');
             $('#HopSelector').trigger('change');
-        }
 
-        function setFermentableSelector() {
             $('#FermentableSelector').val('@Model.selectedFermentableAddition.fermentable.name');
             $('#FermentableSelector').trigger('change');
-        }
 
-        function flagFormatter(value, row) {
-            return '<img src="/images/flags/' + value.toLowerCase() + '.png" >';
+            $('#HopTypeSelector').val('@Model.selectedHopAddition.type');
+            $('#HopTypeSelector').trigger('change');
         }
-
-        function extraServerParams(params) {
-            params.ExtraParam = 2;
-            return params;
-        }
-
-        function highLightRow($tr) {
-            $tr.addClass('highlight').siblings().removeClass('highlight');
-        }
-
-        function getId($element) {
-            var result = $($element).closest('tr').data('uniqueid');
-            return result;
-        }
+        
 
         $(document).ready(function () {
             $('.ingredientSelector').select2();
-            setHopSelector();
-            setFermentableSelector();
-            var $table = $('#table');
-
-
-            $table.on('click-row.bs.table', function ($element, row, $tr) {
-                highLightRow($tr);
-            });
-
+            setDropDowns();
         });
 
     </script>

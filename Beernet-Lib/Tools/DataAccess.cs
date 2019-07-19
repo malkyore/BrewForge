@@ -104,21 +104,19 @@ namespace Beernet_Lib.Tools
         public static RecipeResponse postRecipe(recipe recipe, string apiAuthToken)
         {
             string dataurl = "http://rest.unacceptable.beer:5123";
-            string jsonurl = dataurl + "/beernet/recipe/" + recipe.id;
+            string jsonurl = dataurl + "/beernet/recipe/" + recipe.idString;
 
 
-            var restClient = new RestClient(jsonurl);
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("Content-type", "application/json");
-            request.AddJsonBody(recipe);
+            var client = new RestClient("" + dataurl);
+            var request = new RestRequest(jsonurl, Method.POST);
+
+            // Json to post.
+            string jsonToSend = Newtonsoft.Json.JsonConvert.SerializeObject(recipe);
+            request.AddParameter("application/json; charset=utf-8", jsonToSend, ParameterType.RequestBody);
+            request.RequestFormat = DataFormat.Json;
+
             request.AddHeader("Authorization", "bearer " + apiAuthToken);
-
-            var response = restClient.Execute(request);
-            //request.RequestFormat = DataFormat.Json;
-            //request.AddHeader("Content-type", "application/json");
-            //request.AddJsonBody(recipe);
-            //request.AddHeader("Authorization", "bearer " + apiAuthToken);
-            //IRestResponse response = client.Execute(request);
+            var response = client.Execute(request);
             RecipeResponse returnable = JsonConvert.DeserializeObject<RecipeResponse>(response.Content);
             return returnable;
         }

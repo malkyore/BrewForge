@@ -1,5 +1,6 @@
 ﻿//using MongoDB.Bson;
 //using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 using System;
@@ -11,40 +12,41 @@ namespace Beernet_Lib.Models
 {
     public class recipe
     {
-        [BsonId]
-        public string id { get; set; }
+        //[BsonId]
+        //[BsonRepresentation(BsonType.ObjectId)]
+        //public string Id { get; set; }
         //public id id { get; set; }
         public string idString
         {
             get; set;
         }
-      //  [BsonElement("name")]
+        [BsonElement("name")]
         public string name { get; set; }
-      //  [BsonElement("style")]
+        [BsonElement("style")]
         public string style { get; set; }
-      //  [BsonElement("description")]
+        [BsonElement("description")]
         public string description { get; set; }
-      //  [BsonElement("recipeStats")]
+        [BsonElement("recipeStats")]
         public RecipeStatistics recipeStats { get; set; }
-     //   [BsonElement("recipeParameters")]
+        [BsonElement("recipeParameters")]
         public RecipeParameters recipeParameters { get; set; }
-      //  [BsonElement("version")]
+        [BsonElement("version")]
         public double version { get; set; }
-      //  [BsonElement("parentRecipe")]
+        [BsonElement("parentRecipe")]
         public string parentRecipe { get; set; }
-      //  [BsonElement("clonedFrom")]
+        [BsonElement("clonedFrom")]
         public string clonedFrom { get; set; }
-       // [BsonElement("hidden")]
+        [BsonElement("hidden")]
         public string hidden { get; set; }
-      //  [BsonElement("hops")]
+        [BsonElement("hops")]
         public List<hopAddition> hops { get; set; }
-      //  [BsonElement("fermentables")]
+        [BsonElement("fermentables")]
         public List<fermentableAddition> fermentables { get; set; }
-      //  [BsonElement("yeasts")]
+        [BsonElement("yeasts")]
         public List<yeast> yeasts { get; set; }
-      //  [BsonElement("adjuncts")]
+        [BsonElement("adjuncts")]
         public List<adjunctAddition> adjuncts { get; set; }
-      //  [BsonElement("styleID")]
+        [BsonElement("styleID")]
         public string styleID { get; set; }
         
     }
