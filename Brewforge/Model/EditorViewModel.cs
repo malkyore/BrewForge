@@ -1,5 +1,6 @@
 using Beernet_Lib.Models;
 using System;
+using System.Collections.Generic;
 
 namespace Brewforge.Models
 {
@@ -14,6 +15,14 @@ namespace Brewforge.Models
         public fermentableAddition selectedFermentableAddition { get; set; }
 
         public int selectedFermentableIndex { get; set; }
+
+        public List<hopbase> hopOptions { get; set; }
+
+        public List<fermentable> fermentableOptions { get; set; }
+
+        public int selectedFermentableAdditionIndex {get;set;}
+
+        public int selectedHopAdditionIndex { get; set; }
 
     }
 }

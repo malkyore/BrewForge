@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Hosting;
-//using DataGridDemo.Model;
 using Brewforge.Models;
 using System.Text;
 using System.Reflection;
@@ -31,6 +30,8 @@ namespace Brewforge.Controllers
 
         public static int currentSelectedHop { get; set; }
         public static int currentSelectedFermentable { get; set; }
+        public static List<hopbase> hopOptions { get; set; }
+        public static List<fermentable> fermentableOptions { get; set; }
 
         //Save all the recipes stats (for now until we get more legit it just uses ViewBag....)
         private void populateRecipeInfo()
@@ -153,18 +154,70 @@ namespace Brewforge.Controllers
                 HttpContext.Items.Add("recipeID", idString);
                 HttpContext.Session.Set("recipeID", Encoding.ASCII.GetBytes(idString));
             }
-             recipeDetails = DataAccess.getRecipeDetails(AppSettings.apiLink + AppSettings.recipeEndpoint, AppSettings.apiAuthToken, ViewBag.recipeID);
+            recipeDetails = DataAccess.getRecipeDetails(AppSettings.apiLink + AppSettings.recipeEndpoint, AppSettings.apiAuthToken, ViewBag.recipeID);
             EditorViewModel e = new EditorViewModel();
             e.currentRecipe = recipeDetails;
-            e.selectedHopAddition = recipeDetails.hops[0];
-            e.selectedFermentableAddition = recipeDetails.fermentables[0];
+            if(recipeDetails.hops.Count > 0)
+            {
+                e.selectedHopAddition = recipeDetails.hops[0];
+            }
+            else
+            {
+                e.selectedHopAddition = makeEmptyHopAddition();
+            }
+            if(recipeDetails.fermentables.Count > 0)
+            {
+                e.selectedFermentableAddition = recipeDetails.fermentables[0];
+            }
+            else
+            {
+                e.selectedFermentableAddition = makeEmptyFermentablAddition();
+            }
+            
+            hopOptions = DataAccess.getAllHops(AppSettings.apiAuthToken);
+            fermentableOptions = DataAccess.getAllFermentables(AppSettings.apiAuthToken);
+            e.selectedHopAdditionIndex = currentSelectedHop;
+            e.selectedFermentableAdditionIndex = currentSelectedFermentable;
+            e.hopOptions = hopOptions;
+            e.fermentableOptions = fermentableOptions;
+
             return View("Views/Home/RecipeView.cshtml", e);
         }
 
 
-        public virtual IActionResult testThing (EditorViewModel returnModel, int selectedHop = -1, int selectedFermentable = -1)
+        public virtual IActionResult testThing (EditorViewModel returnModel, int selectedHop = -1, int selectedFermentable = -1, int updatedHop = -1, int updatedFermentable = -1)
         {
             bool save = false;
+            //check if the recipe info was changed
+            if(returnModel != null && returnModel.currentRecipe != null)
+            {
+                if (returnModel.currentRecipe.name != recipeDetails.name)
+                {
+                    recipeDetails.name = returnModel.currentRecipe.name;
+                    save = true;
+                }
+                if (returnModel.currentRecipe.style != recipeDetails.style)
+                {
+                    recipeDetails.style = returnModel.currentRecipe.style;
+                    save = true;
+                }
+                if (returnModel.currentRecipe.description != recipeDetails.description)
+                {
+                    recipeDetails.description = returnModel.currentRecipe.description;
+                    save = true;
+                }
+            }
+
+            if (recipeDetails.recipeParameters == null)
+            {
+                recipeDetails.recipeParameters = new RecipeParameters();
+                recipeDetails.recipeParameters.intoFermenterVolume = 1;
+                recipeDetails.recipeParameters.ibuCalcType = "basic";
+                recipeDetails.recipeParameters.fermentableCalcType = "basic";
+                recipeDetails.recipeParameters.ibuBoilTimeCurveFit = -0.04; 
+            }
+            
+            //Change Hop Selection
             if(selectedHop == -1)
             {
                 if(currentSelectedHop != null)
@@ -176,12 +229,30 @@ namespace Brewforge.Controllers
                     selectedHop = 0;
                 }
             }
+            //Add Hop
+            else if (selectedHop == -2)
+            {
+                recipeDetails.hops.Add(makeEmptyHopAddition());
+                currentSelectedHop = recipeDetails.hops.Count-1;
+                save = true;
+            }
+            //Delete Hop
+            else if (selectedHop == -3)
+            {
+                recipeDetails.hops.RemoveAt(currentSelectedHop);
+                if(currentSelectedHop == recipeDetails.hops.Count)
+                {
+                    currentSelectedHop--;
+                }
+                save = true;
+            }
             else
             {
                 currentSelectedHop = selectedHop;
             }
 
-            if(selectedFermentable == -1)
+
+            if (selectedFermentable == -1)
             {
                 if(currentSelectedFermentable != null)
                 {
@@ -192,12 +263,56 @@ namespace Brewforge.Controllers
                     selectedHop = 0;
                 }
             }
+            //Add Fermentable
+            else if (selectedFermentable == -2)
+            {
+                recipeDetails.fermentables.Add(makeEmptyFermentablAddition());
+                currentSelectedFermentable = recipeDetails.fermentables.Count - 1;
+                save = true;
+            }
+            //Delete Fermentable
+            else if (selectedFermentable == -3)
+            {
+                recipeDetails.fermentables.RemoveAt(currentSelectedFermentable);
+                if (currentSelectedFermentable == recipeDetails.fermentables.Count)
+                {
+                    currentSelectedFermentable--;
+                }
+                save = true;
+            }
             else
             {
                 currentSelectedFermentable = selectedFermentable;
             }
 
-            if(returnModel.selectedFermentableAddition != null)
+            if (updatedHop != -1)
+            {
+                if(recipeDetails.hops.Count > 0)
+                {
+                    recipeDetails.hops[currentSelectedHop].hop = hopOptions[updatedHop];
+                }
+                else
+                {
+                    recipeDetails.hops.Add(new hopAddition { hop = hopOptions[updatedHop] });
+                }
+                save = true;
+            }
+
+            if (updatedFermentable != -1)
+            {
+                if(recipeDetails.fermentables.Count > 0)
+                {
+
+                    recipeDetails.fermentables[currentSelectedFermentable].fermentable = fermentableOptions[updatedFermentable];
+                }
+                else
+                {
+                    recipeDetails.fermentables.Add(new fermentableAddition { fermentable = fermentableOptions[updatedFermentable] });
+                }
+                save = true;
+            }
+
+            if (returnModel.selectedFermentableAddition != null)
             {
                 recipeDetails.fermentables[currentSelectedFermentable] = returnModel.selectedFermentableAddition;
                 save = true;
@@ -208,7 +323,6 @@ namespace Brewforge.Controllers
                 recipeDetails.hops[currentSelectedHop] = returnModel.selectedHopAddition;
                 save = true;
             }
-
             if (save)
             {
                 RecipeResponse RecipeStats = DataAccess.postRecipe(recipeDetails, AppSettings.apiAuthToken);
@@ -219,9 +333,55 @@ namespace Brewforge.Controllers
             var a = HttpContext.Session.Get("data");
             EditorViewModel e = new EditorViewModel();
             e.currentRecipe = recipeDetails;
-            e.selectedHopAddition = recipeDetails.hops[selectedHop];
-            e.selectedFermentableAddition = recipeDetails.fermentables[selectedFermentable];
+
+            if (recipeDetails.hops.Count > 0)
+            {
+                e.selectedHopAddition = recipeDetails.hops[currentSelectedHop];
+            }
+            else
+            {
+                e.selectedHopAddition = makeEmptyHopAddition();
+            }
+
+
+            if (recipeDetails.fermentables.Count > 0)
+            {
+                e.selectedFermentableAddition = recipeDetails.fermentables[currentSelectedFermentable];
+            }
+            else
+            {
+                e.selectedFermentableAddition = makeEmptyFermentablAddition();
+            }
+            e.selectedHopAdditionIndex = currentSelectedHop;
+            e.selectedFermentableAdditionIndex = currentSelectedFermentable;
+            e.hopOptions = hopOptions;
+            e.fermentableOptions = fermentableOptions;
             return View("Views/Home/RecipeView.cshtml", e);
+        }
+
+        public fermentableAddition makeEmptyFermentablAddition()
+        {
+            fermentableAddition e = new fermentableAddition();
+            e.use = "";
+            e.weight = 0;
+            e.fermentable = new fermentable();
+            e.fermentable.name = "";
+            e.fermentable.maltster = "";
+            e.fermentable.ppg = 0;
+            e.fermentable.type = "";
+            return e;
+        }
+
+        public hopAddition makeEmptyHopAddition()
+        {
+            hopAddition e = new hopAddition();
+            e.amount = 0;
+            e.time = 0;
+            e.type = "";
+            e.hop = new hopbase();
+            e.hop.aau = 0;
+            e.hop.name = "";
+            return e;
         }
     }
 }
