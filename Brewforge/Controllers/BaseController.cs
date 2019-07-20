@@ -24,21 +24,21 @@ namespace Brewforge.Controllers
             AppSettings.apiAuthToken = Auth.getAPIAuthToken(AppSettings.apiLink, AppSettings.loginEndpoint).Replace("\"", "");
         }
 
-    [HttpGet()]
-    public virtual IActionResult Index()
-    {
-      String path = Request.Path;
-
-      var controllerName = GetType().Name.Substring(0, GetType().Name.IndexOf("controller", StringComparison.CurrentCultureIgnoreCase));
-
-      if (path == "/")
-        path += controllerName;
-
-      if (path.IndexOf(@"/index", StringComparison.OrdinalIgnoreCase) == -1)
-        return Redirect((path + "/Index").Replace("//", "/"));
-
-      return View();
-    }
+  //  [HttpGet()]
+  //  public virtual IActionResult Index()
+  //  {
+  //    String path = Request.Path;
+  //
+  //    var controllerName = GetType().Name.Substring(0, GetType().Name.IndexOf("controller", StringComparison.CurrentCultureIgnoreCase));
+  //
+  //    if (path == "/")
+  //      path += controllerName;
+  //
+  //    if (path.IndexOf(@"/index", StringComparison.OrdinalIgnoreCase) == -1)
+  //      return Redirect((path + "/Index").Replace("//", "/"));
+  //
+  //    return View();
+  //  }
       
 
     protected String ItemsToJson(IQueryable items, List<String> columnNames, String sort, String order, Int32 limit, Int32 offset)
