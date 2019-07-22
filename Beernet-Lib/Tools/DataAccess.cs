@@ -141,6 +141,46 @@ namespace Beernet_Lib.Tools
             return fermentables;
         }
 
+        /*
+        * Get all yeasts
+        * */
+        public static List<yeast> getAllYeasts(string apiAuthToken)
+        {
+            string dataurl = "http://rest.unacceptable.beer:5123";
+            string jsonurl = dataurl + "/beernet/yeast";
+
+            List<yeast> yeasts = new List<yeast>();
+
+            var restClient = new RestClient(jsonurl);
+            var request = new RestRequest(Method.GET);
+
+            request.AddHeader("Authorization", "bearer " + apiAuthToken);
+
+            var response = restClient.Execute(request);
+            yeasts = JsonConvert.DeserializeObject<List<yeast>>(response.Content);
+            return yeasts;
+        }
+
+        /*
+        * Get all adjuncts
+        * */
+        public static List<adjunct> getAllAdjuncts(string apiAuthToken)
+        {
+            string dataurl = "http://rest.unacceptable.beer:5123";
+            string jsonurl = dataurl + "/beernet/adjunct";
+
+            List<adjunct> adjuncts = new List<adjunct>();
+
+            var restClient = new RestClient(jsonurl);
+            var request = new RestRequest(Method.GET);
+
+            request.AddHeader("Authorization", "bearer " + apiAuthToken);
+
+            var response = restClient.Execute(request);
+            adjuncts = JsonConvert.DeserializeObject<List<adjunct>>(response.Content);
+            return adjuncts;
+        }
+
         public static RecipeResponse postRecipe(recipe recipe, string apiAuthToken)
         {
             string dataurl = "http://rest.unacceptable.beer:5123";

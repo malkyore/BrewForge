@@ -1,4 +1,5 @@
 ﻿//using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,19 +12,19 @@ namespace Beernet_Lib.Models
         //[BsonElement("Id")]
         //public string Id { get; set; }
         //public string recipeID { get; set; }
-        //[BsonElement("adjunctID")]
+        [BsonElement("adjunctID")]
         public string adjunctID { get; set; }
-        //[BsonElement("amount")]
+        [BsonElement("amount")]
         public double amount { get; set; }
-        //[BsonElement("unit")]
+        [BsonElement("unit")]
         public string unit { get; set; }
-        //[BsonElement("time")]
+        [BsonElement("time")]
         public double time { get; set; }
-        //[BsonElement("timeUnit")]
+        [BsonElement("timeUnit")]
         public string timeUnit { get; set; }
-        //[BsonElement("type")]
+        [BsonElement("type")]
         public string type { get; set; }
-        //[BsonElement("adjunct")]
+        [BsonElement("adjunct")]
         public adjunct adjunct { get; set; }
     }
 }

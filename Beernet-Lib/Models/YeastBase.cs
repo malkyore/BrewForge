@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Beernet_Lib.Models
 {
-    public class YeastBase
+    public class yeast
     {
        // [BsonElement("idString")]
         public string idString { get; set; }
