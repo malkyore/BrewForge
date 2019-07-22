@@ -30,23 +30,14 @@ namespace Brewforge.Controllers
 
         public static int currentSelectedHop { get; set; }
         public static int currentSelectedFermentable { get; set; }
+        public static int currentSelectedYeast { get; set; }
+        public static int currentSelectedAdjunct { get; set; }
         public static string currentSelectedRecipe { get; set; }
         public static List<hopbase> hopOptions { get; set; }
         public static List<fermentable> fermentableOptions { get; set; }
-
-        //Save all the recipes stats (for now until we get more legit it just uses ViewBag....)
-        //   private void populateRecipeInfo()
-        //   {
-        //       recipe recipes = DataAccess.getRecipeDetails(AppSettings.apiLink + AppSettings.recipeEndpoint, AppSettings.apiAuthToken, ViewBag.recipeID);
-        //       ViewBag.recipeName = recipes.name;
-        //       ViewBag.style = recipes.style;
-        //       ViewBag.description = recipes.description;
-        //       ViewBag.recipeStats = recipes.recipeStats;
-        //       HttpContext.Items["recipeDetails"] = recipes;
-        //       TempData.Remove("recipeDetails");
-        //       TempData.Add("recipeDetails", JsonConvert.SerializeObject(recipes));
-        //   }
-
+        public static List<yeast> yeastOptions { get; set; }
+        public static List<adjunct> adjunctOptions { get; set; }
+        
         /*
          * loads all the data for all the recipes.
          * */
@@ -65,84 +56,6 @@ namespace Brewforge.Controllers
                 // Sort the filtered items and apply paging
                 return Content(ItemsToJson(items, columnNames, sort, order, limit, offset), "application/json");
             }
-        //
-        //
-        //    /*
-        //     * load the list of hops for the hop grid
-        //     * */
-        //    [HttpGet]
-        //    public virtual ActionResult LoadHop(String sort, String order, String search, Int32 limit, Int32 offset, String ExtraParam)
-        //    {
-        //        recipe recipeDetails;
-        //        recipeDetails = JsonConvert.DeserializeObject<recipe>(TempData.Peek("recipeDetails").ToString());
-        //
-        //        // Get entity fieldnames
-        //        List<String> columnNames = typeof(hopAddition).GetProperties(BindingFlags.Public | BindingFlags.Instance).Select(p => p.Name).ToList();
-        //
-        //        // Create a seperate list for searchable field names   
-        //        List<String> searchFields = new List<String>(columnNames);
-        //
-        //        // Sort the filtered items and apply paging
-        //        return Content(ItemsToJson(recipeDetails.hops.AsQueryable(), columnNames, sort, order, limit, offset), "application/json");
-        //    }
-        //
-        //    /*
-        //     * load the list of fermentables for the fermentable grid
-        //     * */
-        //    [HttpGet]
-        //    public virtual ActionResult LoadFermentable(String sort, String order, String search, Int32 limit, Int32 offset, String ExtraParam)
-        //    {
-        //        recipe recipeDetails;
-        //        recipeDetails = JsonConvert.DeserializeObject<recipe>(TempData.Peek("recipeDetails").ToString());
-        //
-        //        // Get entity fieldnames
-        //        List<String> columnNames = typeof(fermentableAddition).GetProperties(BindingFlags.Public | BindingFlags.Instance).Select(p => p.Name).ToList();
-        //
-        //        // Create a seperate list for searchable field names   
-        //        List<String> searchFields = new List<String>(columnNames);
-        //
-        //        // Sort the filtered items and apply paging
-        //        return Content(ItemsToJson(recipeDetails.fermentables.AsQueryable(), columnNames, sort, order, limit, offset), "application/json");
-        //    }
-        //
-        //    /*
-        //     * Load the list of yeasts for the yeast grid
-        //     * */
-        //    [HttpGet]
-        //    public virtual ActionResult LoadYeast(String sort, String order, String search, Int32 limit, Int32 offset, String ExtraParam)
-        //    {
-        //        recipe recipeDetails;
-        //        recipeDetails = JsonConvert.DeserializeObject<recipe>(TempData.Peek("recipeDetails").ToString());
-        //
-        //        // Get entity fieldnames
-        //        List<String> columnNames = typeof(yeast).GetProperties(BindingFlags.Public | BindingFlags.Instance).Select(p => p.Name).ToList();
-        //
-        //        // Create a seperate list for searchable field names   
-        //        List<String> searchFields = new List<String>(columnNames);
-        //
-        //
-        //        // Sort the filtered items and apply paging
-        //        return Content(ItemsToJson(recipeDetails.yeasts.AsQueryable(), columnNames, sort, order, limit, offset), "application/json");
-        //    }
-        //
-        //    /*
-        //     * Load the list of Adjuncts for the Adjunct grid.
-        //     * */
-        //    [HttpGet]
-        //    public virtual ActionResult LoadAdjunct(String sort, String order, String search, Int32 limit, Int32 offset, String ExtraParam)
-        //    {
-        //        recipe recipeDetails;
-        //        recipeDetails = JsonConvert.DeserializeObject<recipe>(TempData.Peek("recipeDetails").ToString());
-        //
-        //        // Get entity fieldnames
-        //        List<String> columnNames = typeof(adjunctAddition).GetProperties(BindingFlags.Public | BindingFlags.Instance).Select(p => p.Name).ToList();
-        //
-        //        // Create a seperate list for searchable field names   
-        //        List<String> searchFields = new List<String>(columnNames);
-        //
-        //        // Sort the filtered items and apply paging
-        //        return Content(ItemsToJson(recipeDetails.adjuncts.AsQueryable(), columnNames, sort, order, limit, offset), "application/json");
-        //    }
         [HttpGet()]
         public virtual IActionResult Index(string selectedRecipe = "-1")
         {
@@ -157,6 +70,7 @@ namespace Brewforge.Controllers
             {
                 currentSelectedRecipe = selectedRecipe;
                 model.selectedRecipe = DataAccess.getRecipeDetails(AppSettings.apiLink + AppSettings.recipeEndpoint, AppSettings.apiAuthToken, currentSelectedRecipe);
+                model.selectedRecipeIndex = selectedRecipe;
             }
             else
             {
@@ -180,52 +94,120 @@ namespace Brewforge.Controllers
         /*
          * Opens the selected recipe 
          * */
-        public virtual ActionResult openRecipe(String idString)
+        public virtual ActionResult openRecipe(String openRecipe)
         {
-            currentSelectedFermentable = 0;
-            currentSelectedHop = 0;
-            if (idString != "LoadHop" && idString != "LoadFermentable")
-            {
-                ViewBag.recipeID = idString;
-                HttpContext.Items.Add("recipeID", idString);
-                HttpContext.Session.Set("recipeID", Encoding.ASCII.GetBytes(idString));
-            }
-            recipeDetails = DataAccess.getRecipeDetails(AppSettings.apiLink + AppSettings.recipeEndpoint, AppSettings.apiAuthToken, ViewBag.recipeID);
             EditorViewModel e = new EditorViewModel();
-            e.currentRecipe = recipeDetails;
-            if(recipeDetails.hops.Count > 0)
+            if (openRecipe == "NEW")
             {
-                e.selectedHopAddition = recipeDetails.hops[0];
-            }
-            else
-            {
+                recipeDetails = makeEmptyRecipe();
+                hopOptions = DataAccess.getAllHops(AppSettings.apiAuthToken);
+                fermentableOptions = DataAccess.getAllFermentables(AppSettings.apiAuthToken);
+                yeastOptions = DataAccess.getAllYeasts(AppSettings.apiAuthToken);
+                adjunctOptions = DataAccess.getAllAdjuncts(AppSettings.apiAuthToken);
+                
+                e.currentRecipe = recipeDetails;
                 e.selectedHopAddition = makeEmptyHopAddition();
-            }
-            if(recipeDetails.fermentables.Count > 0)
-            {
-                e.selectedFermentableAddition = recipeDetails.fermentables[0];
+
+                e.selectedFermentableAddition = makeEmptyFermentablAddition();
+                e.selectedYeastAddition = makeEmptyYeast();
+
+                e.selectedAdjunctAddition = makeEmptyAdjunctAddition();
+                e.selectedHopAdditionIndex = currentSelectedHop;
+                e.selectedFermentableAdditionIndex = currentSelectedFermentable;
+                e.hopOptions = hopOptions;
+                e.fermentableOptions = fermentableOptions;
+                e.yeastOptions = yeastOptions;
+                e.adjunctOptions = adjunctOptions;
             }
             else
             {
-                e.selectedFermentableAddition = makeEmptyFermentablAddition();
-            }
-            
-            hopOptions = DataAccess.getAllHops(AppSettings.apiAuthToken);
-            fermentableOptions = DataAccess.getAllFermentables(AppSettings.apiAuthToken);
-            e.selectedHopAdditionIndex = currentSelectedHop;
-            e.selectedFermentableAdditionIndex = currentSelectedFermentable;
-            e.hopOptions = hopOptions;
-            e.fermentableOptions = fermentableOptions;
 
+                currentSelectedFermentable = 0;
+                currentSelectedHop = 0;
+                currentSelectedYeast = 0;
+                currentSelectedAdjunct = 0;
+                
+                recipeDetails = DataAccess.getRecipeDetails(AppSettings.apiLink + AppSettings.recipeEndpoint, AppSettings.apiAuthToken, openRecipe);
+                e.currentRecipe = recipeDetails;
+                if (recipeDetails.hops.Count > 0)
+                {
+                    e.selectedHopAddition = recipeDetails.hops[0];
+                }
+                else
+                {
+                    e.selectedHopAddition = makeEmptyHopAddition();
+                }
+
+                if (recipeDetails.fermentables.Count > 0)
+                {
+                    e.selectedFermentableAddition = recipeDetails.fermentables[0];
+                }
+                else
+                {
+                    e.selectedFermentableAddition = makeEmptyFermentablAddition();
+                }
+
+                if (recipeDetails.yeasts.Count > 0)
+                {
+                    e.selectedYeastAddition = recipeDetails.yeasts[0];
+                }
+                else
+                {
+                    e.selectedYeastAddition = makeEmptyYeast();
+                }
+
+                if (recipeDetails.adjuncts.Count > 0)
+                {
+                    e.selectedAdjunctAddition = recipeDetails.adjuncts[0];
+                }
+                else
+                {
+                    e.selectedAdjunctAddition = makeEmptyAdjunctAddition();
+                }
+
+                hopOptions = DataAccess.getAllHops(AppSettings.apiAuthToken);
+                fermentableOptions = DataAccess.getAllFermentables(AppSettings.apiAuthToken);
+                yeastOptions = DataAccess.getAllYeasts(AppSettings.apiAuthToken);
+                adjunctOptions = DataAccess.getAllAdjuncts(AppSettings.apiAuthToken);
+
+                e.selectedHopAdditionIndex = currentSelectedHop;
+                e.selectedFermentableAdditionIndex = currentSelectedFermentable;
+                e.hopOptions = hopOptions;
+                e.fermentableOptions = fermentableOptions;
+                e.yeastOptions = yeastOptions;
+                e.adjunctOptions = adjunctOptions;
+
+            }
             return View("Views/Home/RecipeView.cshtml", e);
         }
 
 
-        public virtual IActionResult testThing (EditorViewModel returnModel, int selectedHop = -1, int selectedFermentable = -1, int updatedHop = -1, int updatedFermentable = -1)
+        public virtual IActionResult testThing (
+            EditorViewModel returnModel, 
+            int selectedHop = -1, 
+            int selectedFermentable = -1, 
+            int selectedAdjunct = -1, 
+            int selectedYeast = -1, 
+            int updatedHop = -1, 
+            int updatedFermentable = -1, 
+            int updatedYeast = -1, 
+            int updatedAdjunct = -1)
         {
+
+            /*
+             * "Dirty Flag"
+             * 
+             * If true it will save the data
+             * if false it will not sabe the data
+             * */
             bool save = false;
-            //check if the recipe info was changed
-            if(returnModel != null && returnModel.currentRecipe != null)
+
+
+            /**********
+             * check if the recipe info was changed
+             * Only Applicable to updating recipe information
+             * */
+            if (returnModel != null && returnModel.currentRecipe != null)
             {
                 if (returnModel.currentRecipe.name != recipeDetails.name)
                 {
@@ -244,6 +226,11 @@ namespace Brewforge.Controllers
                 }
             }
 
+            /*
+             * Some recipes were being saved with null recipe parameters. 
+             * If recipe parameters is null add one, because the math will
+             * blow up without it.
+             * */
             if (recipeDetails.recipeParameters == null)
             {
                 recipeDetails.recipeParameters = new RecipeParameters();
@@ -252,9 +239,16 @@ namespace Brewforge.Controllers
                 recipeDetails.recipeParameters.fermentableCalcType = "basic";
                 recipeDetails.recipeParameters.ibuBoilTimeCurveFit = -0.04; 
             }
-            
-            //Change Hop Selection
-            if(selectedHop == -1)
+
+            /*
+             * handles selected hop change states.
+             * 
+             * -1 = no hop change
+             * -2 = add hop
+             * -3 = delete hop
+             * actual value = update current selected hop index.
+             * */
+            if (selectedHop == -1)
             {
                 if(currentSelectedHop != null)
                 {
@@ -287,7 +281,14 @@ namespace Brewforge.Controllers
                 currentSelectedHop = selectedHop;
             }
 
-
+            /*
+             * handles selected fermentable change states.
+             * 
+             * -1 = no fermentable change
+             * -2 = add fermentable
+             * -3 = delete fermentable
+             * actual value = update current selected fermentable index.
+             * */
             if (selectedFermentable == -1)
             {
                 if(currentSelectedFermentable != null)
@@ -321,6 +322,78 @@ namespace Brewforge.Controllers
                 currentSelectedFermentable = selectedFermentable;
             }
 
+            /*
+             * handles selected yeast change states.
+             * 
+             * -1 = no yeast change
+             * -2 = add yeast
+             * -3 = delete yeast
+             * actual value = update current selected yeast index.
+             * */
+            if (selectedYeast == -1)
+            {
+                    selectedYeast = 0;
+            }
+            //Add yeast
+            else if (selectedYeast == -2)
+            {
+                recipeDetails.yeasts.Add(makeEmptyYeast());
+                currentSelectedYeast = recipeDetails.yeasts.Count - 1;
+                save = true;
+            }
+            //Delete yeast
+            else if (selectedYeast == -3)
+            {
+                recipeDetails.yeasts.RemoveAt(currentSelectedYeast);
+                if (currentSelectedYeast == recipeDetails.yeasts.Count)
+                {
+                    currentSelectedYeast--;
+                }
+                save = true;
+            }
+            else
+            {
+                currentSelectedYeast = selectedYeast;
+            }
+
+            /*
+             * handles selected adjunct change states.
+             * 
+             * -1 = no adjunct change
+             * -2 = add adjunct
+             * -3 = delete adjunct
+             * actual value = update current selected adjunct index.
+             * */
+            if (selectedAdjunct == -1)
+            {
+                selectedAdjunct = currentSelectedAdjunct;//why does it do this?
+            }
+            //Add Adjunt
+            else if (selectedAdjunct == -2)
+            {
+                recipeDetails.adjuncts.Add(makeEmptyAdjunctAddition());
+                currentSelectedAdjunct = recipeDetails.adjuncts.Count - 1;
+                save = true;
+            }
+            //Delete Fermentable
+            else if (selectedAdjunct == -3)
+            {
+                recipeDetails.adjuncts.RemoveAt(currentSelectedAdjunct);
+                if (currentSelectedAdjunct == recipeDetails.adjuncts.Count)
+                {
+                    currentSelectedAdjunct--;
+                }
+                save = true;
+            }
+            else
+            {
+                currentSelectedAdjunct = selectedAdjunct;
+            }
+
+
+            /*
+             * handles changing the hop for an addition
+             * */
             if (updatedHop != -1)
             {
                 if(recipeDetails.hops.Count > 0)
@@ -334,6 +407,9 @@ namespace Brewforge.Controllers
                 save = true;
             }
 
+            /*
+             * handles changing the fermentable for an addition
+             * */
             if (updatedFermentable != -1)
             {
                 if(recipeDetails.fermentables.Count > 0)
@@ -348,25 +424,82 @@ namespace Brewforge.Controllers
                 save = true;
             }
 
+            /*
+             * handles changing the yeast for an addition
+             * */
+            if (updatedYeast != -1)
+            {
+                if (recipeDetails.yeasts.Count > 0)
+                {
+
+                    recipeDetails.yeasts[currentSelectedYeast] = yeastOptions[updatedYeast];
+                }
+                else
+                {
+                    recipeDetails.yeasts.Add(yeastOptions[updatedYeast]);
+                }
+                save = true;
+            }
+
+            /*
+             * handles changing the adjunct for an addition
+             * */
+            if (updatedAdjunct != -1)
+            {
+                if (recipeDetails.adjuncts.Count > 0)
+                {
+
+                    recipeDetails.adjuncts[updatedAdjunct].adjunct = adjunctOptions[updatedAdjunct];
+                }
+                else
+                {
+                    recipeDetails.adjuncts.Add(new adjunctAddition { adjunct = adjunctOptions[updatedAdjunct] });
+                }
+                save = true;
+            }
+
+            /*
+             * handles updating fermentable addition information
+             * */
             if (returnModel.selectedFermentableAddition != null)
             {
                 recipeDetails.fermentables[currentSelectedFermentable] = returnModel.selectedFermentableAddition;
                 save = true;
             }
 
+            /*
+             * handles updating hop addition information
+             * */
             if(returnModel.selectedHopAddition != null)
             {
                 recipeDetails.hops[currentSelectedHop] = returnModel.selectedHopAddition;
                 save = true;
             }
+
+            /*
+             * handles updating adjunct addition information
+             * */
+            if (returnModel.selectedAdjunctAddition != null)
+            {
+                recipeDetails.adjuncts[currentSelectedAdjunct] = returnModel.selectedAdjunctAddition;
+                save = true;
+            }
+
+            /*
+             * if the dirty flag is set it saves the recipe information.
+             * */
             if (save)
             {
                 RecipeResponse RecipeStats = DataAccess.postRecipe(recipeDetails, AppSettings.apiAuthToken);
 
+                recipeDetails.idString = RecipeStats.idString;
+
                 recipeDetails.recipeStats = RecipeStats.recipeStats;
             }
-
-            var a = HttpContext.Session.Get("data");
+            
+            /*
+             * Sets and updates the viewmodel information
+             * */
             EditorViewModel e = new EditorViewModel();
             e.currentRecipe = recipeDetails;
 
@@ -388,10 +521,34 @@ namespace Brewforge.Controllers
             {
                 e.selectedFermentableAddition = makeEmptyFermentablAddition();
             }
+
+            if (recipeDetails.yeasts.Count > 0)
+            {
+                e.selectedYeastAddition = recipeDetails.yeasts[currentSelectedYeast];
+            }
+            else
+            {
+                e.selectedYeastAddition = makeEmptyYeast();
+            }
+
+            if (recipeDetails.adjuncts.Count > 0)
+            {
+                e.selectedAdjunctAddition = recipeDetails.adjuncts[currentSelectedAdjunct];
+            }
+            else
+            {
+                e.selectedAdjunctAddition = makeEmptyAdjunctAddition();
+            }
+
             e.selectedHopAdditionIndex = currentSelectedHop;
             e.selectedFermentableAdditionIndex = currentSelectedFermentable;
+            e.selectedYeastAdditionIndex = currentSelectedYeast;
+            e.selectedAdjunctAdditionIndex = currentSelectedAdjunct;
             e.hopOptions = hopOptions;
             e.fermentableOptions = fermentableOptions;
+            e.yeastOptions = yeastOptions;
+            e.adjunctOptions = adjunctOptions;
+
             return View("Views/Home/RecipeView.cshtml", e);
         }
 
@@ -418,6 +575,65 @@ namespace Brewforge.Controllers
             e.hop.aau = 0;
             e.hop.name = "";
             return e;
+        }
+
+        public yeast makeEmptyYeast()
+        {
+            yeast y = new yeast();
+            y.attenuation = 0;
+            y.name = "";
+            y.lab = "";
+            y.idString = "";
+            return y;
+        }
+
+        public adjunctAddition makeEmptyAdjunctAddition()
+        {
+            adjunctAddition e = new adjunctAddition();
+            e.adjunct = new adjunct();
+            e.adjunct.name = "";
+            e.adjunct.idString = "";
+            e.adjunctID = "";
+            e.amount = 0;
+            e.time = 0;
+            e.timeUnit = "";
+            e.type = "";
+            e.unit = "";
+            return e;
+        }
+
+        public recipe makeEmptyRecipe()
+        {
+            recipe emptyRecipe = new recipe();
+
+            emptyRecipe.name = "";
+            emptyRecipe.idString = "";
+            emptyRecipe.parentRecipe = "";
+            emptyRecipe.style = "";
+            emptyRecipe.styleID = "";
+            emptyRecipe.version = 0;
+            emptyRecipe.description = "";
+            emptyRecipe.clonedFrom = "";
+            //set recipeParameters
+            emptyRecipe.recipeParameters = new RecipeParameters();
+            emptyRecipe.recipeParameters.intoFermenterVolume = 1;
+            emptyRecipe.recipeParameters.ibuCalcType = "basic";
+            emptyRecipe.recipeParameters.fermentableCalcType = "basic";
+            emptyRecipe.recipeParameters.ibuBoilTimeCurveFit = -0.04;
+
+            emptyRecipe.adjuncts = new List<adjunctAddition>();
+            emptyRecipe.hops = new List<hopAddition>();
+            emptyRecipe.fermentables = new List<fermentableAddition>();
+            emptyRecipe.yeasts = new List<yeast>();
+
+            emptyRecipe.recipeStats = new RecipeStatistics();
+            emptyRecipe.recipeStats.abv = 0;
+            emptyRecipe.recipeStats.fg = 0;
+            emptyRecipe.recipeStats.ibu = 0;
+            emptyRecipe.recipeStats.og = 0;
+            emptyRecipe.recipeStats.srm = 0;
+
+            return emptyRecipe;
         }
     }
 }

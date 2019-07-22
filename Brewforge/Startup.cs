@@ -80,6 +80,16 @@ namespace Brewforge
                     template: "{controller}/{action}"
                     );
             });
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{idString?}");
+                routes.MapRoute(
+                    name: "actioncontroller",
+                    template: "{controller}/{action}"
+                    );
+            });
         }
     }
 }
