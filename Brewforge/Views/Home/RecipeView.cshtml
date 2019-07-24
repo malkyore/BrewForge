@@ -16,9 +16,9 @@
 <div id="toolbar" class="btn-group">
 </div>
 
-<div class="module grid" id="recipeInfo" style="height: auto; width:auto; min-height:250px;">
+<div class="module grid" id="recipeInfo" style="height: auto; width:auto; min-height:250px; min-width:600px;">
     <h3>Recipe Info</h3>
-    <div class="col-1-4">
+    <div class="col-1-4" style="min-width: 400px;">
         @using (Html.BeginForm("testThing", "Home", FormMethod.Get, new { returnModel = Model }))
         {
             <div class="editorListItem infogrid">

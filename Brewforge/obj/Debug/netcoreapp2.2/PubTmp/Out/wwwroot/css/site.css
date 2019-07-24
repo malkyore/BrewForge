@@ -16,6 +16,9 @@ html {
     height: 100%;
 }
 
+* {
+    font-family: 'Lato', sans-serif;
+}
 body {
   padding-top: 50px;
   padding-bottom: 20px;
@@ -136,6 +139,10 @@ textarea {
     background: #a7a7a7;
 }
 
+.widgetControlTextbox {
+    width:100%;
+}
+
 /* Opt-in outside padding */
 .grid-pad {
     padding: 20px 0 20px 20px;
@@ -149,10 +156,11 @@ textarea {
     height:100%;
 }
 body {
-    height:100%;
+    height: 100%;
     padding: 10px 50px 200px;
-    background: url(https://s.cdpn.io/3/dark_wall_@2X.png);
-    background-size: 300px 300px;
+    background-color: #767676;
+    /*background: url(https://s.cdpn.io/3/dark_wall_@2X.png);*/
+    /*background-size: 300px 300px;*/
 }
 
 h1 {
@@ -167,17 +175,19 @@ h1 {
 .hopListItem {
     display: block;
     padding: 7px;
-    height: 50px;
+    height: auto;
     border-radius: 5px;
     background-color: #dfdfdf;
+    box-shadow: 0px 4px #90dd8d;
 }
 
 .hopListItemSelected {
     display: block;
-    padding:7px;
-    height: 50px;
-    background-color: #c7c7c7; 
+    padding: 7px;
+    height: auto;
+    background-color: #c7c7c7;
     border-radius: 5px;
+    box-shadow: 0px 4px #75d072;
 }
 
 .editorListItem {
@@ -186,9 +196,10 @@ h1 {
 }
 
 .hopListItem:hover {
-    background-color: yellow;
+    background-color: #d2d2d2;
     display: block;
-    height: 50px;
+    height: auto;
+    box-shadow: 0px 4px #8cdf89;
 }
 
 .selectorWidget {
@@ -196,6 +207,107 @@ h1 {
     overflow-y: scroll;
 }
 
-.editorWidget {
-    height: 73.6%;
+.recipeWindow {
+    overflow-y: scroll;
 }
+
+.recipeWindowHeader {
+    height:auto;
+}
+
+.statWidget {
+    display: inline-block;
+    width: 10%;
+    height: 40%;
+    border-radius: 4px;
+    background-color: #dfdfdf;
+    margin: 15px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0px 4px green;
+    /*border-bottom: double;
+    border-bottom-color: black;*/
+}
+.statTop{
+    height:30px;
+    font-size:18px;
+}
+
+.statBottom{
+    height:40px;
+    font-size:18px;
+    color:forestgreen;
+}
+
+.statSection {
+    display: block;
+    padding: 7px;
+    height: auto;
+    border-radius: 4px;
+    background-color: #dfdfdf;
+}
+
+.recipeEditorWidget {
+    min-width: 400px;
+    height: 400px !important;
+    height: 25%;
+    box-shadow: 0px 4px green;
+}
+
+.recipeSelector {
+    height: 90%;
+    min-width: 1000px;
+    margin: 20px;
+    box-shadow: 0px 4px green;
+}
+
+.editorWidget {
+    height: 70%;
+}
+
+.statsWidget{
+    min-width:800px;
+}
+
+
+
+button {
+    background: #1AAB8A;
+    color: #fff;
+    border: none;
+    position: relative;
+    height: 60px;
+    font-size: 1.6em;
+    padding: 0 .6em;
+    cursor: pointer;
+    transition: 800ms ease all;
+    outline: none;
+}
+
+    button:hover {
+        background: #fff;
+        color: #1AAB8A;
+    }
+
+    button:before, button:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 2px;
+        width: 0;
+        background: #1AAB8A;
+        transition: 400ms ease all;
+    }
+
+    button:after {
+        right: inherit;
+        top: inherit;
+        left: 0;
+        bottom: 0;
+    }
+
+    button:hover:before, button:hover:after {
+        width: 100%;
+        transition: 800ms ease all;
+    }
