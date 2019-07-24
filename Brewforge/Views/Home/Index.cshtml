@@ -23,10 +23,10 @@
 <div style="height:100%">
     <h3 style="color:white">Select a Recipe</h3> <br />
 
-    <button onclick="openNewRecipe(this)">Add Recipe</button>
+    <button onclick="openNewRecipe(this)">New Recipe</button>
     @using (Html.BeginForm("Index", "Home", FormMethod.Get, new {@class = "selectRecipeForm", returnModel = Model}))
     {
-        <div class="grid grid-pad widgetItem" style="height:50%; margin:20px">
+        <div class="grid grid-pad widgetItem recipeSelector">
             <div class="col-1-2">
                 <div id="recipeSelector" class="module selectorWidget">
                     @{int index2 = 0;
@@ -56,26 +56,63 @@
                     }
                 </div>
             </div>
-            <div class="col-1-2">
+            <div class="col-1-2 recipeWindow">
                 <div class="module grid">
-                    <div class="col-1-3">
+                    <div style="font-size:18px;">
                         @Model.selectedRecipe.name
-                    </div>
-                    <div class="col-1-3">
-                        @Model.selectedRecipe.description
                     </div>
                     <div class="col-1-3">
                         <button type="button" onclick="openRecipe(this)" value="@Model.selectedRecipe.idString">Open Recipe</button>
                     </div>
                 </div>
                 <div class="module editorWidget">
-                    @Model.selectedRecipe.style
-                    <div>
-                        @Model.selectedRecipe.recipeStats.abv <br />
-                        @Model.selectedRecipe.recipeStats.og <br />
-                        @Model.selectedRecipe.recipeStats.fg <br />
-                        @Model.selectedRecipe.recipeStats.ibu <br />
-                        @Model.selectedRecipe.recipeStats.srm <br />
+                    <div class="statsWidget">
+                        <div class="statWidget">
+                            <div class="statTop">
+                                IBU
+                            </div>
+                            <div class="statBottom">
+                                @Math.Round(Model.selectedRecipe.recipeStats.ibu, 2)
+                            </div>
+                        </div>
+                        <div class="statWidget">
+                            <div class="statTop">
+                                ABV
+                            </div>
+                            <div class="statBottom">
+                                @Math.Round(Model.selectedRecipe.recipeStats.abv, 2)
+                            </div>
+                        </div>
+                        <div class="statWidget">
+                            <div class="statTop">
+                                FG
+                            </div>
+                            <div class="statBottom">
+                                @Math.Round(Model.selectedRecipe.recipeStats.fg, 2)
+                            </div>
+                        </div>
+                        <div class="statWidget">
+                            <div class="statTop">
+                                OG
+                            </div>
+                            <div class="statBottom">
+                                @Math.Round(Model.selectedRecipe.recipeStats.og, 2)
+                            </div>
+                        </div>
+                        <div class="statWidget">
+                            <div class="statTop">
+                                SRM
+                            </div>
+                            <div class="statBottom">
+                                @Math.Round(Model.selectedRecipe.recipeStats.srm, 2)
+                            </div>
+                        </div>
+                    </div>
+                    <div style="font-size:18px;">
+                        @Model.selectedRecipe.style
+                    </div>
+                    <div style="font-size:14px;">
+                        @Model.selectedRecipe.description
                     </div>
                 </div>
             </div>

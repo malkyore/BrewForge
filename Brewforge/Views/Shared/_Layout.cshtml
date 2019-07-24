@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - BeerNet Brew Forge</title>
     <link href="~/css/mvc-grid/mvc-grid.css" rel="stylesheet">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/css/site.css" />
-        <link rel ="stylesheet" href="~/Scripts/BForms/Bundles/css/stylesheets.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
 
 </head>
 <body>
@@ -34,18 +34,19 @@
   <div class="container-fluid body-content">
       @RenderBody()
       <script src="~/js/mvc-grid/mvc-grid.js"></script>
-     <!-- <script src="~/Scripts/BForms/Bundles/js/components.js"></script>
-      <script src="~/Scripts/BForms/Bundles/js/plugins.js"></script>
-      <script src="~/Scripts/BForms/Bundles/js/widgets.js"></script>-->
+      <!-- <script src="~/Scripts/BForms/Bundles/js/components.js"></script>
+     <script src="~/Scripts/BForms/Bundles/js/plugins.js"></script>
+     <script src="~/Scripts/BForms/Bundles/js/widgets.js"></script>-->
       <script>
           +[].forEach.call(document.getElementsByClassName('mvc-grid'), function (element) {
               new MvcGrid(element);
           });
       </script>
-      <hr />
-      <footer>
+
+      <!--      <hr />
+        <footer>
           <p style="color:white;">&copy; 2017 - Unacceptable Brewing</p>
-      </footer>
+      </footer>-->
   </div>
       <!-- <script src="~/lib/jquery/dist/jquery.js"></script>-->
 

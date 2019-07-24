@@ -16,9 +16,9 @@
 <div id="toolbar" class="btn-group">
 </div>
 
-<div class="module" id="recipeInfo" style="height: 21%;">
+<div class="module grid" id="recipeInfo" style="height: auto; width:auto; min-height:250px;">
     <h3>Recipe Info</h3>
-    <div style="width:25%;">
+    <div class="col-1-4">
         @using (Html.BeginForm("testThing", "Home", FormMethod.Get, new { returnModel = Model }))
         {
             <div class="editorListItem infogrid">
@@ -46,24 +46,66 @@
                     </label>
                 </div>
                 <div class="col-3-4">
-                    @Html.TextAreaFor(m => Model.currentRecipe.description, new { style = "width:100%", rows = "5" })
+                    @Html.TextAreaFor(m => Model.currentRecipe.description, new { style = "width:100%;height: auto;", rows = "3" })
                 </div>
             </div>
             <input type="submit" value="Save" />
         }
     </div>
+    <div class="col-3-4 statsWidget">
+        <div class="statWidget">
+            <div class="statTop">
+                IBU
+            </div>
+            <div class="statBottom">
+                @Math.Round(Model.currentRecipe.recipeStats.ibu, 2)
+            </div>
+        </div>
+        <div class="statWidget">
+            <div class="statTop">
+                ABV
+            </div>
+            <div class="statBottom">
+                @Math.Round(Model.currentRecipe.recipeStats.abv, 2)
+            </div>
+        </div>
+        <div class="statWidget">
+            <div class="statTop">
+                FG
+            </div>
+            <div class="statBottom">
+                @Math.Round(Model.currentRecipe.recipeStats.fg, 2)
+            </div>
+        </div>
+        <div class="statWidget">
+            <div class="statTop">
+                OG
+            </div>
+            <div class="statBottom">
+                @Math.Round(Model.currentRecipe.recipeStats.og, 2)
+            </div>
+        </div>
+        <div class="statWidget">
+            <div class="statTop">
+                SRM
+            </div>
+            <div class="statBottom">
+                @Math.Round(Model.currentRecipe.recipeStats.srm, 2)
+            </div>
+        </div>
+    </div>
 </div>
 
 
-<div class="grid" style="height: 86%;">
-    <div class="col-7-8">
+<div class="grid" style="height: 86%; width:100%; min-width: 1000px; min-height:700px;">
+    <div>
         <div class="grid">
             <div class="col-1-2 grid-pad">
                 <!--Hop Widget-->
                 <h3 style="color:white">Hops</h3>
                 @using (Html.BeginForm("testThing", "Home", FormMethod.Get, new { returnModel = Model }))
                 {
-                    <div class="grid grid-pad widgetItem" style="width:800px; height:400px; margin:20px">
+                    <div class="grid grid-pad widgetItem recipeEditorWidget">
                         <div class="col-1-2">
                             <div id="hopListSelector" class="module selectorWidget">
                                 @{int index2 = 0;
@@ -131,7 +173,7 @@
                                         <label>amount</label>
                                     </div>
                                     <div class="col-3-4">
-                                        @Html.TextBoxFor(m => m.selectedHopAddition.amount)
+                                        @Html.TextBoxFor(m => m.selectedHopAddition.amount, new {@class="widgetControlTextbox" })
                                     </div>
                                 </div>
                                 <div class="editorListItem infogrid">
@@ -151,7 +193,7 @@
                                         <label>time</label>
                                     </div>
                                     <div class="col-3-4">
-                                        @Html.TextBoxFor(m => m.selectedHopAddition.time)
+                                        @Html.TextBoxFor(m => m.selectedHopAddition.time, new { @class = "widgetControlTextbox" })
                                     </div>
                                 </div>
                                 <input type="submit" value="Save" />
@@ -165,7 +207,7 @@
             <div class="col-1-2 grid-pad">
                 <!--fermentable widget-->
                 <h3 style="color:white">Fermentables</h3>
-                <div class="grid grid-pad widgetItem" style="width:800px; height:400px; margin:20px;">
+                <div class="grid grid-pad widgetItem recipeEditorWidget">
                     <div class="col-1-2">
                         <div id="fermentableListSelector" class="module selectorWidget">
                             @{int index = 0;
@@ -247,7 +289,7 @@
                                         <label>amount</label>
                                     </div>
                                     <div class="col-3-4">
-                                        @Html.TextBoxFor(m => m.selectedFermentableAddition.weight)
+                                        @Html.TextBoxFor(m => m.selectedFermentableAddition.weight, new { @class = "widgetControlTextbox" })
                                     </div>
                                 </div>
                                 <div class="editorListItem infogrid">
@@ -255,7 +297,7 @@
                                         <label>use</label>
                                     </div>
                                     <div class="col-3-4">
-                                        @Html.TextBoxFor(m => m.selectedFermentableAddition.use)
+                                        @Html.TextBoxFor(m => m.selectedFermentableAddition.use, new { @class = "widgetControlTextbox" })
                                     </div>
                                 </div>
                                 <input type="submit" value="Save" />
@@ -269,7 +311,7 @@
                 <h3 style="color:white">Yeasts</h3>
                 @using (Html.BeginForm("testThing", "Home", FormMethod.Get, new { returnModel = Model }))
                 {
-                    <div class="grid grid-pad widgetItem" style="width:800px; height:400px; margin:20px">
+                    <div class="grid grid-pad widgetItem recipeEditorWidget">
                         <div class="col-1-2">
                             <div id="yeastListSelector" class="module selectorWidget">
                                 @{int index2 = 0;
@@ -347,7 +389,7 @@
             <div class="col-1-2 grid-pad">
                 <!--Yeast widget-->
                 <h3 style="color:white">Adjuncts</h3>
-                <div class="grid grid-pad widgetItem" style="width:800px; height:400px; margin:20px;">
+                <div class="grid grid-pad widgetItem recipeEditorWidget">
                     <div class="col-1-2">
                         <div id="adjunctListSelector" class="module selectorWidget">
                             @{ index = 0;
@@ -405,7 +447,7 @@
                                         <label>Amount: </label>
                                     </div>
                                     <div class="col-3-4">
-                                        @Html.TextBoxFor(m => m.selectedAdjunctAddition.amount)
+                                        @Html.TextBoxFor(m => m.selectedAdjunctAddition.amount, new { @class = "widgetControlTextbox" })
                                     </div>
                                 </div>
                                 <div class="editorListItem infogrid">
@@ -413,7 +455,7 @@
                                         <label>Unit: </label>
                                     </div>
                                     <div class="col-3-4">
-                                        @Html.TextBoxFor(m => m.selectedAdjunctAddition.unit)
+                                        @Html.TextBoxFor(m => m.selectedAdjunctAddition.unit, new { @class = "widgetControlTextbox" })
                                     </div>
                                 </div>
                                 <div class="editorListItem infogrid">
@@ -421,7 +463,7 @@
                                         <label>Time: </label>
                                     </div>
                                     <div class="col-3-4">
-                                        @Html.TextBoxFor(m => m.selectedAdjunctAddition.time)
+                                        @Html.TextBoxFor(m => m.selectedAdjunctAddition.time, new { @class = "widgetControlTextbox" })
                                     </div>
                                 </div>
                                 <div class="editorListItem infogrid">
@@ -429,7 +471,7 @@
                                         <label>Time Unit: </label>
                                     </div>
                                     <div class="col-3-4">
-                                        @Html.TextBoxFor(m => m.selectedAdjunctAddition.timeUnit)
+                                        @Html.TextBoxFor(m => m.selectedAdjunctAddition.timeUnit, new { @class = "widgetControlTextbox" })
                                     </div>
                                 </div>
                                 <div class="editorListItem infogrid">
@@ -437,7 +479,7 @@
                                         <label>Use: </label>
                                     </div>
                                     <div class="col-3-4">
-                                        @Html.TextBoxFor(m => m.selectedAdjunctAddition.type)
+                                        @Html.TextBoxFor(m => m.selectedAdjunctAddition.type, new { @class = "widgetControlTextbox" })
                                     </div>
                                 </div>
                                 <input type="submit" value="Save" />
@@ -448,7 +490,7 @@
             </div><!--End Yeast Widget-->
         </div>
         </div>
-        <div class="col-1-8 sideBar">
+        <!--<div class="col-1-8 sideBar">
             <h4>Statistics</h4>
             <div id="recipeStatistics">
                 IBU : @Model.currentRecipe.recipeStats.ibu<br />
@@ -457,7 +499,7 @@
                 OG : @Model.currentRecipe.recipeStats.og<br />
                 SRM : @Model.currentRecipe.recipeStats.srm<br />
             </div>
-        </div>
+        </div>-->
     </div>
 
     @section scripts {
