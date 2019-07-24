@@ -403,6 +403,8 @@ namespace Brewforge.Controllers
                 else
                 {
                     recipeDetails.hops.Add(new hopAddition { hop = hopOptions[updatedHop] });
+                    if(currentSelectedHop == -1)
+                        currentSelectedHop++;
                 }
                 save = true;
             }
@@ -420,6 +422,8 @@ namespace Brewforge.Controllers
                 else
                 {
                     recipeDetails.fermentables.Add(new fermentableAddition { fermentable = fermentableOptions[updatedFermentable] });
+                    if(currentSelectedFermentable == -1)
+                        currentSelectedFermentable++;
                 }
                 save = true;
             }
@@ -437,6 +441,8 @@ namespace Brewforge.Controllers
                 else
                 {
                     recipeDetails.yeasts.Add(yeastOptions[updatedYeast]);
+                    if(currentSelectedYeast == -1)
+                        currentSelectedYeast++;
                 }
                 save = true;
             }
@@ -454,6 +460,8 @@ namespace Brewforge.Controllers
                 else
                 {
                     recipeDetails.adjuncts.Add(new adjunctAddition { adjunct = adjunctOptions[updatedAdjunct] });
+                    if(currentSelectedAdjunct == -1)
+                        currentSelectedAdjunct++;
                 }
                 save = true;
             }
