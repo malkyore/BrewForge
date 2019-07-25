@@ -8,13 +8,13 @@ namespace Beernet_Lib.Tools
 {
     public class Auth
     {
-        public static string getAPIAuthToken(string apiLink, string authEndpoint)
+        public static string getAPIAuthToken(string apiLink, string authEndpoint, Dictionary<string, string> values)
         {
-            var values = new Dictionary<string, string>
-            {
-               { "Username", "" + "beer"},
-               { "Password", "" + "Poopbutt1" }
-            };
+            //var values = new Dictionary<string, string>
+            //{
+            //   { "Username", "" + "beer"},
+            //   { "Password", "" + "Poopbutt1" }
+            //};
 
             //string dataurl = "http://rest.unacceptable.beer:5123";
 

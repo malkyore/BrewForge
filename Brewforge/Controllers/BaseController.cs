@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using System.Configuration;
 using Microsoft.Extensions.Options;
 using Beernet_Lib.Tools;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Brewforge.Controllers
 {
@@ -21,27 +22,40 @@ namespace Brewforge.Controllers
         public BaseController(IOptions<AppSettings> settings)
         {
             AppSettings = settings.Value;
-            AppSettings.apiAuthToken = Auth.getAPIAuthToken(AppSettings.apiLink, AppSettings.loginEndpoint).Replace("\"", "");
         }
 
-  //  [HttpGet()]
-  //  public virtual IActionResult Index()
-  //  {
-  //    String path = Request.Path;
-  //
-  //    var controllerName = GetType().Name.Substring(0, GetType().Name.IndexOf("controller", StringComparison.CurrentCultureIgnoreCase));
-  //
-  //    if (path == "/")
-  //      path += controllerName;
-  //
-  //    if (path.IndexOf(@"/index", StringComparison.OrdinalIgnoreCase) == -1)
-  //      return Redirect((path + "/Index").Replace("//", "/"));
-  //
-  //    return View();
-  //  }
-      
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            // call the base method first
+            base.OnActionExecuting(filterContext);
+            if(!Request.Path.ToString().Contains("/Login"))
+            {
+                if (String.IsNullOrEmpty(AppSettings.apiAuthToken))
+                {
+                    filterContext.Result = new RedirectResult("/Login");
+                    // RedirectToAction("Index", "Login");
+                }
+            }     
+        }
 
-    protected String ItemsToJson(IQueryable items, List<String> columnNames, String sort, String order, Int32 limit, Int32 offset)
+        //  [HttpGet()]
+        //  public virtual IActionResult Index()
+        //  {
+        //    String path = Request.Path;
+        //
+        //    var controllerName = GetType().Name.Substring(0, GetType().Name.IndexOf("controller", StringComparison.CurrentCultureIgnoreCase));
+        //
+        //    if (path == "/")
+        //      path += controllerName;
+        //
+        //    if (path.IndexOf(@"/index", StringComparison.OrdinalIgnoreCase) == -1)
+        //      return Redirect((path + "/Index").Replace("//", "/"));
+        //
+        //    return View();
+        //  }
+
+
+        protected String ItemsToJson(IQueryable items, List<String> columnNames, String sort, String order, Int32 limit, Int32 offset)
     {
       try
       {
