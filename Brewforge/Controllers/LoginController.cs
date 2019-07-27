@@ -44,7 +44,7 @@ namespace BrewForge.Controllers
             else
             {
                 AppSettings.apiAuthToken = token;
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Dashboard", "Home");
             }
         }
     }

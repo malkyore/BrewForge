@@ -26,7 +26,7 @@
                     <label>Name: </label>
                 </div>
                 <div class="col-3-4">
-                    @Html.TextBoxFor(m => Model.currentRecipe.name, new {style ="width:100%" })
+                    @Html.TextBoxFor(m => Model.currentRecipe.name, new { style = "width:100%" })
                 </div>
             </div>
             <div class="editorListItem infogrid">
@@ -94,117 +94,16 @@
             </div>
         </div>
     </div>
+    <!--<button id="testbutton" onclick="ajaxThing()"> CLICK THIS</button>-->
 </div>
-
 
 <div class="grid" style="height: 86%; width:100%; min-width: 1000px; min-height:700px;">
     <div>
         <div class="grid">
+            <!--Start Hop Widget-->
             <div class="col-1-2 grid-pad">
-                <!--Hop Widget-->
                 <h3 style="color:white">Hops</h3>
-                @using (Html.BeginForm("testThing", "Home", FormMethod.Get, new { returnModel = Model }))
-                {
-                    <div class="grid grid-pad widgetItem recipeEditorWidget">
-                        <div class="col-1-2">
-                            <div id="hopListSelector" class="module selectorWidget">
-                                @{int index2 = 0;
-                                    foreach (hopAddition ha in Model.currentRecipe.hops)
-                                    {
-                                        string name = "h" + index2;
-                                        <div id=@name class="hopListItem grid" onclick="changeSelectedHop(this)">
-                                            <div class="col-1-3">
-                                                @ha.hop.name
-                                            </div>
-                                            <div class="col-1-3">
-                                                @ha.hop.aau
-                                            </div>
-                                            <div class="col-1-3">
-                                                @ha.amount
-                                            </div>
-                                        </div>
-                                        index2++;
-                                    }
-                                }
-                            </div>
-                        </div>
-                        <div class="col-1-2">
-                            <div class="module grid">
-                                <div class="col-1-2">
-                                    <button type="button" onclick="addHop(this)">Add Hop</button>
-                                </div>
-                                <div class="col-1-2">
-                                    <button type="button" onclick="deleteHop(this)">Delete Hop</button>
-                                </div>
-                            </div>
-                            <div class="module editorWidget">
-                                <div style="display:none">
-                                    @Html.TextBoxFor(m => m.selectedHopAddition.hopID)
-                                    @Html.EditorFor(m => m.selectedHopAddition.hop)
-                                    @Html.TextBoxFor(m => m.selectedHopAddition.type, new { id = "HopTypeHidden" })
-                                </div>
-                                <h4 style="padding-top:0;">Edit Hop</h4>
-                                <div class="editorListItem infogrid">
-                                    <div class="col-1-4">
-                                        <label>Hop: </label>
-                                    </div>
-                                    <div class="col-3-4">
-                                        <select id="HopSelector" class="ingredientSelector" style="width:100%;">
-                                            @{int i = 0;
-                                                @foreach (hopbase h in Model.hopOptions)
-                                                {
-                                                    <option value="@h.name">@h.name</option>
-                                                    i++;
-                                                }
-                                            }
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="editorListItem infogrid">
-                                    <div class="col-1-4">
-                                        <label>AAU: </label>
-                                    </div>
-                                    <div class="col-3-4">
-                                        <label>@Model.selectedHopAddition.hop.aau</label>
-                                    </div>
-                                </div>
-                                <div class="editorListItem infogrid">
-                                    <div class="col-1-4">
-                                        <label>amount</label>
-                                    </div>
-                                    <div class="col-3-4">
-                                            @Html.TextBoxFor(m => m.selectedHopAddition.amount, new { id = "tbHopAmount", @class = "widgetControlTextbox" })
-                                        
-                                    </div>
-                                </div>
-                                <div class="editorListItem infogrid">
-                                    <div class="col-1-4">
-                                        <label>Type</label>
-                                    </div>
-                                    <div class="col-3-4">
-                                        
-                                        <select id="HopTypeSelector" class="ingredientSelector" style="width:100%;" onchange="">
-                                            <option value="Boil">Boil</option>
-                                            <option value="Whirlpool">Whirlpool</option>
-                                            <option value="Dry Hop">Dry Hop</option>
-                                        </select>
-                                        
-                                    </div>
-                                </div>
-                                <div class="editorListItem infogrid">
-                                    <div class="col-1-4">
-                                        <label>time</label>
-                                    </div>
-                                    <div class="col-3-4">
-                                        @Html.TextBoxFor(m => m.selectedHopAddition.time, new {id = "tbHopTime", @class = "widgetControlTextbox" })
-                                    </div>
-                                </div>
-                                <input type="submit" value="Save" />
-                            </div>
-                        </div>
-                    </div>
-                }
-
+                @Html.Partial("~/Views/Shared/HopGrid.cshtml", new HopEditorViewModel { hopOptions = Model.hopOptions, allHops = Model.currentRecipe.hops, selectedHopAddition = Model.selectedHopAddition });
             </div><!--End Hop Widget-->
 
             <div class="col-1-2 grid-pad">
@@ -219,13 +118,16 @@
                                     string name = "f" + index;
                                     <div id=@name class="hopListItem grid" onclick="changeSelectedFermentable(this)">
                                         <div class="col-1-3">
-                                            @fa.fermentable.name
+                                            <div>@fa.fermentable.name</div>
+                                            <div class="ingredientUnit">name</div>
                                         </div>
                                         <div class="col-1-3">
-                                            @fa.fermentable.maltster
+                                            <div>@fa.fermentable.maltster</div>
+                                            <div class="ingredientUnit">maltster</div>
                                         </div>
                                         <div class="col-1-3">
-                                            @fa.weight
+                                            <div>@fa.weight</div>
+                                            <div class="ingredientUnit">lbs</div>
                                         </div>
                                     </div>
                                     index++;
@@ -300,7 +202,7 @@
                                         <label>use</label>
                                     </div>
                                     <div class="col-3-4">
-                                        @Html.TextBoxFor(m => m.selectedFermentableAddition.use, new {id = "tbFermentableUse", @class = "widgetControlTextbox" })
+                                        @Html.TextBoxFor(m => m.selectedFermentableAddition.use, new { id = "tbFermentableUse", @class = "widgetControlTextbox" })
                                     </div>
                                 </div>
                                 <input type="submit" value="Save" />
@@ -309,6 +211,8 @@
                     </div>
                 </div>
             </div><!--End Fermentable Widget-->
+            </div>
+        <div class="grid">
             <div class="col-1-2 grid-pad">
                 <!--Yeast Widget-->
                 <h3 style="color:white">Yeasts</h3>
@@ -323,13 +227,16 @@
                                         string name = "y" + index2;
                                         <div id=@name class="hopListItem grid" onclick="changeSelectedYeast(this)">
                                             <div class="col-1-3">
-                                                @y.name
+                                                <div>@y.name</div>
+                                                <div class="ingredientUnit">name</div>
                                             </div>
                                             <div class="col-1-3">
-                                                @y.lab
+                                                <div>@y.lab</div>
+                                                <div class="ingredientUnit">lab</div>
                                             </div>
                                             <div class="col-1-3">
-                                                @y.attenuation
+                                                <div>@y.attenuation</div>
+                                                <div class="ingredientUnit">attenuation</div>
                                             </div>
                                         </div>
                                         index2++;
@@ -390,7 +297,7 @@
                 }
             </div> <!--End Yeast Widget-->
             <div class="col-1-2 grid-pad">
-                <!--Yeast widget-->
+                <!--Adjunct widget-->
                 <h3 style="color:white">Adjuncts</h3>
                 <div class="grid grid-pad widgetItem recipeEditorWidget">
                     <div class="col-1-2">
@@ -401,13 +308,16 @@
                                     string name = "a" + index;
                                     <div id=@name class="hopListItem grid" onclick="changeSelectedAdjunct(this)">
                                         <div class="col-1-3">
-                                            @aa.adjunct.name
+                                            <div>@aa.adjunct.name</div>
+                                            <div class="ingredientUnit">name</div>
                                         </div>
                                         <div class="col-1-3">
-                                            @aa.amount
+                                            <div>@aa.amount</div>
+                                            <div class="ingredientUnit">@aa.unit</div>
                                         </div>
                                         <div class="col-1-3">
-                                            @aa.time
+                                            <div>@aa.time</div>
+                                            <div class="ingredientUnit">@aa.timeUnit</div>
                                         </div>
                                     </div>
                                     index++;
@@ -427,10 +337,10 @@
                         <div class="module editorWidget">
                             @using (Html.BeginForm("testThing", "Home", FormMethod.Get, new { returnModel = Model }))
                             {
-                            <div style="display:none">
+                                <div style="display:none">
 
-                                @Html.TextBoxFor(m => m.selectedAdjunctAddition.adjunct.idString);
-                            </div>
+                                    @Html.TextBoxFor(m => m.selectedAdjunctAddition.adjunct.idString);
+                                </div>
                                 <h4 style="padding-top:0;">Edit Adjunct</h4>
                                 <div class="editorListItem infogrid">
                                     <div class="col-1-4">
@@ -450,7 +360,7 @@
                                         <label>Amount: </label>
                                     </div>
                                     <div class="col-3-4">
-                                        @Html.TextBoxFor(m => m.selectedAdjunctAddition.amount, new {id= "tbAdjunctAmount", @class = "widgetControlTextbox" })
+                                        @Html.TextBoxFor(m => m.selectedAdjunctAddition.amount, new { id = "tbAdjunctAmount", @class = "widgetControlTextbox" })
                                     </div>
                                 </div>
                                 <div class="editorListItem infogrid">
@@ -492,30 +402,31 @@
                 </div>
             </div><!--End Yeast Widget-->
         </div>
-        </div>
-        <!--<div class="col-1-8 sideBar">
-            <h4>Statistics</h4>
-            <div id="recipeStatistics">
-                IBU : @Model.currentRecipe.recipeStats.ibu<br />
-                ABV : @Model.currentRecipe.recipeStats.abv<br />
-                FG : @Model.currentRecipe.recipeStats.fg<br />
-                OG : @Model.currentRecipe.recipeStats.og<br />
-                SRM : @Model.currentRecipe.recipeStats.srm<br />
-            </div>
-        </div>-->
     </div>
+    <!--<div class="col-1-8 sideBar">
+        <h4>Statistics</h4>
+        <div id="recipeStatistics">
+            IBU : @Model.currentRecipe.recipeStats.ibu<br />
+            ABV : @Model.currentRecipe.recipeStats.abv<br />
+            FG : @Model.currentRecipe.recipeStats.fg<br />
+            OG : @Model.currentRecipe.recipeStats.og<br />
+            SRM : @Model.currentRecipe.recipeStats.srm<br />
+        </div>
+    </div>-->
+</div>
 
-    @section scripts {
-        <script type="text/javascript">
+@section scripts {
+    <script type="text/javascript">
 
         $('#HopTypeSelector').on('select2:select', function (e) {
             $('#HopTypeHidden').val(e.target.value);
         });
 
-        $('#HopSelector').on('select2:select', function (e) {
+            $('#HopSelector').on('select2:select', function (e) {
+              //  ajaxThing(e.target.selectedIndex);
             window.location = '/Home/testThing?updatedHop=' + e.target.selectedIndex;
         });
-            
+
         $('#FermentableSelector').on('select2:select', function (e) {
             window.location = '/Home/testThing?updatedFermentable=' + e.target.selectedIndex;
             });
@@ -627,7 +538,7 @@
             function deleteAdjunct(el) {
                 window.location = '/Home/testThing?selectedAdjunct=' + -3;
             }
-        
+
             function setDropDowns() {
             $('#HopTypeSelector').val('@Model.selectedHopAddition.type');
             $('#HopTypeSelector').trigger('change');
@@ -684,8 +595,8 @@
             function disableControlsForEmptyItems() {
                 if (@Model.currentRecipe.hops.Count == 0) {
                     $("#HopTypeSelector").prop('disabled', true);
-                    $("#tbHopAmount").prop('disabled', true); 
-                    $("#tbHopTime").prop('disabled', true); 
+                    $("#tbHopAmount").prop('disabled', true);
+                    $("#tbHopTime").prop('disabled', true);
                 }
 
 
@@ -703,5 +614,24 @@
                     $("#tbAdjunctAmount").prop('disabled', true);
                 }
             }
-        </script>
-    }
+
+            function ajaxThing(el) {
+                var hop = { "name": "Centennial", "aau": "14.1" };
+                var hopIndex = el;
+                $.ajax({
+                    url: '/Home/ajaxthingtest',
+                    type: 'POST',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(hopIndex)
+                }).done(function (result) {
+                    console.log(result);
+                });
+            }
+
+            function resetRecipeAndRefresh(recipe) {
+                @Model.currentRecipe = recipe;
+                $('#hopListSelector').re
+            }
+
+    </script>
+}

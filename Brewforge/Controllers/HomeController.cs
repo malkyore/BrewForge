@@ -37,11 +37,13 @@ namespace Brewforge.Controllers
         public static List<fermentable> fermentableOptions { get; set; }
         public static List<yeast> yeastOptions { get; set; }
         public static List<adjunct> adjunctOptions { get; set; }
-        
+
+        public static MainDashboardModel dashboardModel = new MainDashboardModel();
+
         /*
          * loads all the data for all the recipes.
          * */
-            [HttpGet]
+        [HttpGet]
             public virtual ActionResult LoadRecipes(String sort, String order, String search, Int32 limit, Int32 offset, String ExtraParam)
             {
                 // Get entity fieldnames
@@ -181,6 +183,49 @@ namespace Brewforge.Controllers
             return View("Views/Home/RecipeView.cshtml", e);
         }
 
+        public virtual IActionResult Dashboard(string gridName, string selectedRecipe)
+        {
+            recipe selectedRecipeDetails = new recipe();
+            List<recipe> allRecipes = new List<recipe>();
+            
+            
+
+            if (!String.IsNullOrEmpty(selectedRecipe))
+            {
+                selectedRecipeDetails = DataAccess.getRecipeDetails(AppSettings.apiLink + AppSettings.recipeEndpoint, AppSettings.apiAuthToken, selectedRecipe);
+                switch (gridName)
+                {
+                    case "myRecipes":
+                        allRecipes = (List<recipe>)DataAccess.getRecipes(AppSettings.apiLink + AppSettings.recipeEndpoint, AppSettings.apiAuthToken).Where(x => x.fermentables.Count > 3).ToList<recipe>();
+                        dashboardModel.myRecipes = allRecipes;
+                        dashboardModel.selectedMyRecipe = selectedRecipeDetails;
+                        dashboardModel.selectedMyRecipeIndex = selectedRecipe;
+                        break;
+                    case "publicRecipes":
+                        allRecipes = (List<recipe>)DataAccess.getRecipes(AppSettings.apiLink + AppSettings.recipeEndpoint, AppSettings.apiAuthToken);
+                        selectedRecipeDetails = DataAccess.getRecipeDetails(AppSettings.apiLink + AppSettings.recipeEndpoint, AppSettings.apiAuthToken, selectedRecipe);
+                        dashboardModel.publicRecipes = allRecipes;
+                        dashboardModel.selectedPublicRecipe = selectedRecipeDetails;
+                        dashboardModel.selectedPublicRecipeIndex = selectedRecipe;
+                        break;
+                }
+               
+               
+            }
+            else
+            {
+                allRecipes = (List<recipe>)DataAccess.getRecipes(AppSettings.apiLink + AppSettings.recipeEndpoint, AppSettings.apiAuthToken);
+                List<recipe> allMyRecipes = (List<recipe>)DataAccess.getRecipes(AppSettings.apiLink + AppSettings.recipeEndpoint, AppSettings.apiAuthToken).Where(x => x.fermentables.Count > 3).ToList<recipe>();
+                dashboardModel.myRecipes = allMyRecipes;
+                dashboardModel.publicRecipes = allRecipes;
+                dashboardModel.selectedMyRecipe = allMyRecipes[0];
+                dashboardModel.selectedPublicRecipe = allRecipes[0];
+                dashboardModel.selectedMyRecipeIndex = allMyRecipes[0].idString;
+                dashboardModel.selectedPublicRecipeIndex = allRecipes[0].idString;
+            }
+
+            return View(dashboardModel);
+        }
 
         public virtual IActionResult testThing (
             EditorViewModel returnModel, 
@@ -642,6 +687,13 @@ namespace Brewforge.Controllers
             emptyRecipe.recipeStats.srm = 0;
 
             return emptyRecipe;
+        }
+
+        [HttpPost]
+        public ActionResult ajaxthingtest([FromBody]int hop)
+        {
+            recipeDetails.hops[currentSelectedHop].hop = hopOptions[hop];
+            return View("/Shared/HopGrid", new HopEditorViewModel {hopOptions = hopOptions, allHops = recipeDetails.hops, selectedHopAddition = recipeDetails.hops[currentSelectedHop] });
         }
     }
 }

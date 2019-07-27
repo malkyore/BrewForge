@@ -311,7 +311,15 @@ button {
         width: 100%;
         transition: 800ms ease all;
     }
-.navbar-inverse {
-    background-color: #47bd4f;
-    border-color: #47bd4f;
+
+.ingredientUnit {
+    font-size: 9px;
+}
+
+.ingredientUnitParent {
+    text-align:center;
+}
+
+.displayRecipeGrid-1-2{
+    height:600px;
 }
