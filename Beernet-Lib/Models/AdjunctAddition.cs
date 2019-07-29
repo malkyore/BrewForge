@@ -12,6 +12,8 @@ namespace Beernet_Lib.Models
         //[BsonElement("Id")]
         //public string Id { get; set; }
         //public string recipeID { get; set; }
+        [BsonElement("additionGuid")]
+        public string additionGuid { get; set; }
         [BsonElement("adjunctID")]
         public string adjunctID { get; set; }
         [BsonElement("amount")]

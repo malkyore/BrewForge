@@ -12,18 +12,32 @@ namespace Beernet_Lib.Models
 {
     public class recipe
     {
-        //[BsonId]
-        //[BsonRepresentation(BsonType.ObjectId)]
-        //public string Id { get; set; }
-        //public id id { get; set; }
+        // public ObjectId Id { get; set; }
+        // public string idString
+        // {
+        //     get
+        //     {
+        //         return Id.ToString();
+        //     }
+        // }
         public string idString
         {
             get; set;
         }
         [BsonElement("name")]
         public string name { get; set; }
-        [BsonElement("style")]
-        public string style { get; set; }
+        [BsonElement("lastModifiedGuid")]
+        public Guid lastModifiedGuid { get; set; }
+        [BsonElement("createdByUserID")]
+        public string createdByUserID { get; set; }
+        [BsonElement("groupID")]
+        public string groupID { get; set; }
+        [BsonElement("isGroupEditable")]
+        public bool isGroupEditable { get; set; }
+        [BsonElement("isPublic")]
+        public bool isPublic { get; set; }
+        [BsonElement("deleted")]
+        public bool deleted { get; set; }
         [BsonElement("description")]
         public string description { get; set; }
         [BsonElement("recipeStats")]
@@ -32,8 +46,6 @@ namespace Beernet_Lib.Models
         public RecipeParameters recipeParameters { get; set; }
         [BsonElement("version")]
         public double version { get; set; }
-        [BsonElement("parentRecipe")]
-        public string parentRecipe { get; set; }
         [BsonElement("clonedFrom")]
         public string clonedFrom { get; set; }
         [BsonElement("hidden")]
@@ -43,12 +55,26 @@ namespace Beernet_Lib.Models
         [BsonElement("fermentables")]
         public List<fermentableAddition> fermentables { get; set; }
         [BsonElement("yeasts")]
-        public List<yeast> yeasts { get; set; }
+        public List<yeastAddition> yeasts { get; set; }
         [BsonElement("adjuncts")]
         public List<adjunctAddition> adjuncts { get; set; }
-        [BsonElement("styleID")]
-        public string styleID { get; set; }
-        
+        [BsonElement("style")]
+        public styleBase style { get; set; }
+        [BsonElement("boilVolume")]
+        public float boilVolume { get; set; }
+        [BsonElement("equipmentProfile")]
+        public equipmentProfileBase equipmentProfile { get; set; }
+
+       // public double grainsInPounds()
+       // {
+       //     double lbs = 0;
+       //     foreach (fermentableAddition fa in fermentables)
+       //     {
+       //         lbs += fa.weight;
+       //     }
+       //
+       //     return lbs;
+       // }
     }
 
 }

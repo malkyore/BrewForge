@@ -111,7 +111,7 @@ namespace Brewforge.Controllers
                 e.selectedHopAddition = makeEmptyHopAddition();
 
                 e.selectedFermentableAddition = makeEmptyFermentablAddition();
-                e.selectedYeastAddition = makeEmptyYeast();
+                e.selectedYeastAddition = makeEmptyYeastAddition();
 
                 e.selectedAdjunctAddition = makeEmptyAdjunctAddition();
                 e.selectedHopAdditionIndex = currentSelectedHop;
@@ -155,7 +155,7 @@ namespace Brewforge.Controllers
                 }
                 else
                 {
-                    e.selectedYeastAddition = makeEmptyYeast();
+                    e.selectedYeastAddition = makeEmptyYeastAddition();
                 }
 
                 if (recipeDetails.adjuncts.Count > 0)
@@ -218,10 +218,21 @@ namespace Brewforge.Controllers
                 List<recipe> allMyRecipes = (List<recipe>)DataAccess.getRecipes(AppSettings.apiLink + AppSettings.recipeEndpoint, AppSettings.apiAuthToken).Where(x => x.fermentables.Count > 3).ToList<recipe>();
                 dashboardModel.myRecipes = allMyRecipes;
                 dashboardModel.publicRecipes = allRecipes;
-                dashboardModel.selectedMyRecipe = allMyRecipes[0];
-                dashboardModel.selectedPublicRecipe = allRecipes[0];
-                dashboardModel.selectedMyRecipeIndex = allMyRecipes[0].idString;
-                dashboardModel.selectedPublicRecipeIndex = allRecipes[0].idString;
+                if(allMyRecipes.Count > 0)
+                {
+                    dashboardModel.selectedMyRecipe = allMyRecipes[0];
+                    dashboardModel.selectedPublicRecipe = allRecipes[0];
+                    dashboardModel.selectedMyRecipeIndex = allMyRecipes[0].idString;
+                    dashboardModel.selectedPublicRecipeIndex = allRecipes[0].idString;
+                } 
+                else
+                {
+                    dashboardModel.selectedMyRecipe = makeEmptyRecipe();
+                    dashboardModel.selectedPublicRecipe = makeEmptyRecipe();
+                    dashboardModel.selectedMyRecipeIndex = "";
+                    dashboardModel.selectedPublicRecipeIndex = "";
+                }
+                
             }
 
             return View(dashboardModel);
@@ -382,7 +393,7 @@ namespace Brewforge.Controllers
             //Add yeast
             else if (selectedYeast == -2)
             {
-                recipeDetails.yeasts.Add(makeEmptyYeast());
+                recipeDetails.yeasts.Add(makeEmptyYeastAddition());
                 currentSelectedYeast = recipeDetails.yeasts.Count - 1;
                 save = true;
             }
@@ -481,11 +492,11 @@ namespace Brewforge.Controllers
                 if (recipeDetails.yeasts.Count > 0)
                 {
 
-                    recipeDetails.yeasts[currentSelectedYeast] = yeastOptions[updatedYeast];
+                    recipeDetails.yeasts[currentSelectedYeast].yeast = yeastOptions[updatedYeast];
                 }
                 else
                 {
-                    recipeDetails.yeasts.Add(yeastOptions[updatedYeast]);
+                    recipeDetails.yeasts.Add(new yeastAddition { additionGuid = Guid.NewGuid().ToString(), yeast = yeastOptions[updatedYeast] });
                     if(currentSelectedYeast == -1)
                         currentSelectedYeast++;
                 }
@@ -581,7 +592,7 @@ namespace Brewforge.Controllers
             }
             else
             {
-                e.selectedYeastAddition = makeEmptyYeast();
+                e.selectedYeastAddition = makeEmptyYeastAddition();
             }
 
             if (recipeDetails.adjuncts.Count > 0)
@@ -613,7 +624,7 @@ namespace Brewforge.Controllers
             e.fermentable = new fermentable();
             e.fermentable.name = "";
             e.fermentable.maltster = "";
-            e.fermentable.ppg = 0;
+            e.fermentable.yield = 0;
             e.fermentable.type = "";
             return e;
         }
@@ -630,14 +641,17 @@ namespace Brewforge.Controllers
             return e;
         }
 
-        public yeast makeEmptyYeast()
+        public yeastAddition makeEmptyYeastAddition()
         {
+            yeastAddition addition = new yeastAddition();
+            addition.additionGuid = Guid.NewGuid().ToString();
             yeast y = new yeast();
             y.attenuation = 0;
             y.name = "";
             y.lab = "";
             y.idString = "";
-            return y;
+            addition.yeast = y;
+            return addition;
         }
 
         public adjunctAddition makeEmptyAdjunctAddition()
@@ -661,9 +675,7 @@ namespace Brewforge.Controllers
 
             emptyRecipe.name = "";
             emptyRecipe.idString = "";
-            emptyRecipe.parentRecipe = "";
-            emptyRecipe.style = "";
-            emptyRecipe.styleID = "";
+            emptyRecipe.style = new styleBase();
             emptyRecipe.version = 0;
             emptyRecipe.description = "";
             emptyRecipe.clonedFrom = "";
@@ -677,7 +689,7 @@ namespace Brewforge.Controllers
             emptyRecipe.adjuncts = new List<adjunctAddition>();
             emptyRecipe.hops = new List<hopAddition>();
             emptyRecipe.fermentables = new List<fermentableAddition>();
-            emptyRecipe.yeasts = new List<yeast>();
+            emptyRecipe.yeasts = new List<yeastAddition>();
 
             emptyRecipe.recipeStats = new RecipeStatistics();
             emptyRecipe.recipeStats.abv = 0;
@@ -685,6 +697,26 @@ namespace Brewforge.Controllers
             emptyRecipe.recipeStats.ibu = 0;
             emptyRecipe.recipeStats.og = 0;
             emptyRecipe.recipeStats.srm = 0;
+
+            emptyRecipe.style.category = "";
+            emptyRecipe.style.description = "";
+            emptyRecipe.style.examples = "";
+            emptyRecipe.style.idString = "";
+            emptyRecipe.style.ingredients = "";
+            emptyRecipe.style.maxABV = 0;
+            emptyRecipe.style.maxCarb = 0;
+            emptyRecipe.style.maxColor = 0;
+            emptyRecipe.style.maxFG = 0;
+            emptyRecipe.style.maxIBU = 0;
+            emptyRecipe.style.maxOG = 0;
+            emptyRecipe.style.minABV = 0;
+            emptyRecipe.style.minCarb = 0;
+            emptyRecipe.style.minColor = 0;
+            emptyRecipe.style.minFG = 0;
+            emptyRecipe.style.minIBU = 0;
+            emptyRecipe.style.minOG = 0;
+            emptyRecipe.style.name = "";
+            emptyRecipe.style.profile = "";
 
             return emptyRecipe;
         }

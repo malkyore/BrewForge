@@ -27,7 +27,7 @@ namespace Brewforge.Models
         /// <summary>
         /// The selected Yeast Additon (It is just a yeast object though).  Used to populated the yeast editor form secton.
         /// </summary>
-        public yeast selectedYeastAddition { get; set; }
+        public yeastAddition selectedYeastAddition { get; set; }
 
         /// <summary>
         /// The selected Yeast Additon (It is just a yeast object though).  Used to populated the yeast editor form secton.

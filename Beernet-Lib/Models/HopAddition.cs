@@ -1,4 +1,5 @@
 ﻿//using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +9,13 @@ namespace Beernet_Lib.Models
 {
     public class hopAddition
     {
-       // [BsonElement("Id")]
-      //  public string Id { get; set; }
+        // [BsonElement("Id")]
+        //  public string Id { get; set; }
         //[BsonElement("recipeID")]
         //public string recipeID { get; set; }
-      //  [BsonElement("hopID")]
+        //  [BsonElement("hopID")]
+        [BsonElement("additionGuid")]
+        public string additionGuid { get; set; }
         public string hopID { get; set; }
       //  [BsonElement("amount")]
         public float amount { get; set; }
