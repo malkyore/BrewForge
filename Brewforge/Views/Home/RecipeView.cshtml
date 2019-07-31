@@ -36,7 +36,12 @@
                     </label>
                 </div>
                 <div class="col-3-4">
-                    @Html.TextBoxFor(m => Model.currentRecipe.style, new { style = "width:100%" })
+                    <select id="StyleSelector" class="ingredientSelector" style="width:100%;">
+                        @foreach (style s in Model.styleOptions)
+                        {
+                            <option value="@s.idString">@s.name</option>
+                        }
+                    </select>
                 </div>
             </div>
             <div class="editorListItem infogrid">
@@ -403,16 +408,6 @@
             </div><!--End Yeast Widget-->
         </div>
     </div>
-    <!--<div class="col-1-8 sideBar">
-        <h4>Statistics</h4>
-        <div id="recipeStatistics">
-            IBU : @Model.currentRecipe.recipeStats.ibu<br />
-            ABV : @Model.currentRecipe.recipeStats.abv<br />
-            FG : @Model.currentRecipe.recipeStats.fg<br />
-            OG : @Model.currentRecipe.recipeStats.og<br />
-            SRM : @Model.currentRecipe.recipeStats.srm<br />
-        </div>
-    </div>-->
 </div>
 
 @section scripts {
@@ -420,6 +415,11 @@
 
         $('#HopTypeSelector').on('select2:select', function (e) {
             $('#HopTypeHidden').val(e.target.value);
+        });
+
+        $('#StyleSelector').on('select2:select', function (e) {
+            //window.location = '/Home/testThing?updatedHop=' + e.target.selectedIndex;
+            console.log(e);
         });
 
             $('#HopSelector').on('select2:select', function (e) {

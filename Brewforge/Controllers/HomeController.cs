@@ -37,6 +37,7 @@ namespace Brewforge.Controllers
         public static List<fermentable> fermentableOptions { get; set; }
         public static List<yeast> yeastOptions { get; set; }
         public static List<adjunct> adjunctOptions { get; set; }
+        public static List<style> styleOptions { get; set; }
 
         public static MainDashboardModel dashboardModel = new MainDashboardModel();
 
@@ -106,7 +107,9 @@ namespace Brewforge.Controllers
                 fermentableOptions = DataAccess.getAllFermentables(AppSettings.apiAuthToken);
                 yeastOptions = DataAccess.getAllYeasts(AppSettings.apiAuthToken);
                 adjunctOptions = DataAccess.getAllAdjuncts(AppSettings.apiAuthToken);
-                
+                styleOptions = DataAccess.getAllStyles(AppSettings.apiAuthToken);
+
+                e.styleOptions = styleOptions;
                 e.currentRecipe = recipeDetails;
                 e.selectedHopAddition = makeEmptyHopAddition();
 
@@ -120,6 +123,8 @@ namespace Brewforge.Controllers
                 e.fermentableOptions = fermentableOptions;
                 e.yeastOptions = yeastOptions;
                 e.adjunctOptions = adjunctOptions;
+
+                e.style = styleOptions[0];
             }
             else
             {
@@ -171,7 +176,9 @@ namespace Brewforge.Controllers
                 fermentableOptions = DataAccess.getAllFermentables(AppSettings.apiAuthToken);
                 yeastOptions = DataAccess.getAllYeasts(AppSettings.apiAuthToken);
                 adjunctOptions = DataAccess.getAllAdjuncts(AppSettings.apiAuthToken);
+                styleOptions = DataAccess.getAllStyles(AppSettings.apiAuthToken);
 
+                e.styleOptions = styleOptions;
                 e.selectedHopAdditionIndex = currentSelectedHop;
                 e.selectedFermentableAdditionIndex = currentSelectedFermentable;
                 e.hopOptions = hopOptions;
@@ -296,6 +303,16 @@ namespace Brewforge.Controllers
                 recipeDetails.recipeParameters.ibuBoilTimeCurveFit = -0.04; 
             }
 
+            if(recipeDetails.equipmentProfile == null)
+            {
+                recipeDetails.equipmentProfile = getDefaultEquipmentProfile();
+            }
+
+
+            if(recipeDetails.recipeStats == null)
+            {
+                recipeDetails.recipeStats = makeEmptyRecipeStats();
+            }
             /*
              * handles selected hop change states.
              * 
@@ -458,7 +475,9 @@ namespace Brewforge.Controllers
                 }
                 else
                 {
-                    recipeDetails.hops.Add(new hopAddition { hop = hopOptions[updatedHop] });
+                    hopAddition h = makeEmptyHopAddition();
+                    h.hop = hopOptions[updatedHop];
+                    recipeDetails.hops.Add(h);
                     if(currentSelectedHop == -1)
                         currentSelectedHop++;
                 }
@@ -477,7 +496,9 @@ namespace Brewforge.Controllers
                 }
                 else
                 {
-                    recipeDetails.fermentables.Add(new fermentableAddition { fermentable = fermentableOptions[updatedFermentable] });
+                    fermentableAddition f = makeEmptyFermentablAddition();
+                    f.fermentable = fermentableOptions[updatedFermentable];
+                    recipeDetails.fermentables.Add(f);
                     if(currentSelectedFermentable == -1)
                         currentSelectedFermentable++;
                 }
@@ -496,7 +517,9 @@ namespace Brewforge.Controllers
                 }
                 else
                 {
-                    recipeDetails.yeasts.Add(new yeastAddition { additionGuid = Guid.NewGuid().ToString(), yeast = yeastOptions[updatedYeast] });
+                    yeastAddition y = makeEmptyYeastAddition();
+                    y.yeast = yeastOptions[updatedYeast];
+                    recipeDetails.yeasts.Add(y);
                     if(currentSelectedYeast == -1)
                         currentSelectedYeast++;
                 }
@@ -515,7 +538,9 @@ namespace Brewforge.Controllers
                 }
                 else
                 {
-                    recipeDetails.adjuncts.Add(new adjunctAddition { adjunct = adjunctOptions[updatedAdjunct] });
+                    adjunctAddition a = makeEmptyAdjunctAddition();
+                    a.adjunct = adjunctOptions[updatedAdjunct];
+                    recipeDetails.adjuncts.Add(a);
                     if(currentSelectedAdjunct == -1)
                         currentSelectedAdjunct++;
                 }
@@ -527,7 +552,7 @@ namespace Brewforge.Controllers
              * */
             if (returnModel.selectedFermentableAddition != null)
             {
-                recipeDetails.fermentables[currentSelectedFermentable] = returnModel.selectedFermentableAddition;
+                recipeDetails.fermentables[currentSelectedFermentable] = updateFermentableAddition(recipeDetails.fermentables[currentSelectedFermentable], returnModel.selectedFermentableAddition);
                 save = true;
             }
 
@@ -536,7 +561,7 @@ namespace Brewforge.Controllers
              * */
             if(returnModel.selectedHopAddition != null)
             {
-                recipeDetails.hops[currentSelectedHop] = returnModel.selectedHopAddition;
+                recipeDetails.hops[currentSelectedHop] = updateHopAddition(recipeDetails.hops[currentSelectedHop], returnModel.selectedHopAddition);
                 save = true;
             }
 
@@ -545,7 +570,7 @@ namespace Brewforge.Controllers
              * */
             if (returnModel.selectedAdjunctAddition != null)
             {
-                recipeDetails.adjuncts[currentSelectedAdjunct] = returnModel.selectedAdjunctAddition;
+                recipeDetails.adjuncts[currentSelectedAdjunct] = updateAdjunctAddition(recipeDetails.adjuncts[currentSelectedAdjunct], returnModel.selectedAdjunctAddition);
                 save = true;
             }
 
@@ -557,8 +582,11 @@ namespace Brewforge.Controllers
                 RecipeResponse RecipeStats = DataAccess.postRecipe(recipeDetails, AppSettings.apiAuthToken);
 
                 recipeDetails.idString = RecipeStats.idString;
-
-                recipeDetails.recipeStats = RecipeStats.recipeStats;
+                if(RecipeStats != null)
+                {
+                    recipeDetails.recipeStats = RecipeStats.recipeStats;
+                    recipeDetails.lastModifiedGuid = RecipeStats.lastModifiedGuid;
+                }
             }
             
             /*
@@ -616,9 +644,35 @@ namespace Brewforge.Controllers
             return View("Views/Home/RecipeView.cshtml", e);
         }
 
+        public hopAddition updateHopAddition(hopAddition oldAddition, hopAddition newAddition)
+        {
+            oldAddition.amount = newAddition.amount;
+            oldAddition.time = newAddition.time;
+            oldAddition.type = newAddition.type;
+            return oldAddition;
+        }
+
+        public fermentableAddition updateFermentableAddition(fermentableAddition oldAddition, fermentableAddition newAddition)
+        {
+            oldAddition.use = newAddition.use;
+            oldAddition.weight = newAddition.weight;
+            return oldAddition;
+        }
+
+        public adjunctAddition updateAdjunctAddition(adjunctAddition oldAddition, adjunctAddition newAddition)
+        {
+            oldAddition.amount = newAddition.amount;
+            oldAddition.time = newAddition.time;
+            oldAddition.timeUnit = newAddition.timeUnit;
+            oldAddition.type = newAddition.type;
+            oldAddition.unit = newAddition.unit;
+            return oldAddition;
+        }
+
         public fermentableAddition makeEmptyFermentablAddition()
         {
             fermentableAddition e = new fermentableAddition();
+            e.additionGuid = Guid.NewGuid().ToString();
             e.use = "";
             e.weight = 0;
             e.fermentable = new fermentable();
@@ -632,6 +686,7 @@ namespace Brewforge.Controllers
         public hopAddition makeEmptyHopAddition()
         {
             hopAddition e = new hopAddition();
+            e.additionGuid = Guid.NewGuid().ToString();
             e.amount = 0;
             e.time = 0;
             e.type = "";
@@ -657,6 +712,7 @@ namespace Brewforge.Controllers
         public adjunctAddition makeEmptyAdjunctAddition()
         {
             adjunctAddition e = new adjunctAddition();
+            e.additionGuid = Guid.NewGuid().ToString();
             e.adjunct = new adjunct();
             e.adjunct.name = "";
             e.adjunct.idString = "";
@@ -691,12 +747,7 @@ namespace Brewforge.Controllers
             emptyRecipe.fermentables = new List<fermentableAddition>();
             emptyRecipe.yeasts = new List<yeastAddition>();
 
-            emptyRecipe.recipeStats = new RecipeStatistics();
-            emptyRecipe.recipeStats.abv = 0;
-            emptyRecipe.recipeStats.fg = 0;
-            emptyRecipe.recipeStats.ibu = 0;
-            emptyRecipe.recipeStats.og = 0;
-            emptyRecipe.recipeStats.srm = 0;
+            emptyRecipe.recipeStats = makeEmptyRecipeStats();
 
             emptyRecipe.style.category = "";
             emptyRecipe.style.description = "";
@@ -718,7 +769,32 @@ namespace Brewforge.Controllers
             emptyRecipe.style.name = "";
             emptyRecipe.style.profile = "";
 
+            emptyRecipe.equipmentProfile = getDefaultEquipmentProfile();
+
             return emptyRecipe;
+        }
+
+        public RecipeStatistics makeEmptyRecipeStats()
+        {
+            RecipeStatistics recipeStats = new RecipeStatistics();
+            recipeStats.abv = 0;
+            recipeStats.fg = 0;
+            recipeStats.ibu = 0;
+            recipeStats.og = 0;
+            recipeStats.srm = 0;
+            return recipeStats;
+        }
+
+        public equipmentProfile getDefaultEquipmentProfile()
+        {
+            equipmentProfile e = new equipmentProfile();
+            e.batchSize = (float)5.5;
+            e.boilSize = (float)5.5;
+            e.createdByUserId = "";
+            e.efficiency = (float)75;
+            e.intoFermenterVolume = (float)5.5;
+            e.name = "default";
+            return e;
         }
 
         [HttpPost]

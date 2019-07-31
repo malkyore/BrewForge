@@ -9,6 +9,7 @@ namespace Beernet_Lib.Models
     {
         public RecipeStatistics recipeStats { get; set; }
         public string idString { get; set; }
+        public Guid lastModifiedGuid { get; set; }
         string success { get; set; }
         string message { get; set; }
     }

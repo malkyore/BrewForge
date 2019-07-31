@@ -181,6 +181,27 @@ namespace Beernet_Lib.Tools
             return adjuncts;
         }
 
+        /*
+       * Get all styles
+       * */
+        public static List<style> getAllStyles(string apiAuthToken)
+        {
+            string dataurl = "http://localhost:50422";
+            string jsonurl = dataurl + "/beernet/style";
+
+            List<style> styles = new List<style>();
+
+            var restClient = new RestClient(jsonurl);
+            var request = new RestRequest(Method.GET);
+
+            request.AddHeader("Authorization", "bearer " + apiAuthToken);
+
+            var response = restClient.Execute(request);
+            styles = JsonConvert.DeserializeObject<List<style>>(response.Content);
+            return styles;
+        }
+
+
         public static RecipeResponse postRecipe(recipe recipe, string apiAuthToken)
         {
             string dataurl = "http://localhost:50422";

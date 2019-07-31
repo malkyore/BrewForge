@@ -47,5 +47,11 @@ namespace BrewForge.Controllers
                 return RedirectToAction("Dashboard", "Home");
             }
         }
+
+        public IActionResult Logout(LoginViewModel returnModel)
+        {
+                AppSettings.apiAuthToken = "";
+                return RedirectToAction("Dashboard", "Home");
+        }
     }
 }

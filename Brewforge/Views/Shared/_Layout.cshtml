@@ -3,12 +3,15 @@
 @using Microsoft.AspNetCore.Hosting;
 @using Microsoft.AspNetCore.Mvc;
 @using Microsoft.Extensions.Options;
+@using Microsoft.AspNetCore.Mvc.Razor;
+@using Microsoft.AspNetCore.Mvc.Rendering;
 <!DOCTYPE html>
 
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="~/css/Menu.css">.
     <title>@ViewData["Title"] - Craftly.Beer</title>
     <link href="~/css/mvc-grid/mvc-grid.css" rel="stylesheet">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -20,23 +23,102 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
 </head>
 <body>
-   
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Dashboard" class="navbar-brand">Craftly.Beer</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav"></ul>
-            </div>
-        </div>
-    </div>
+    @if (((RazorView)ViewContext.View).Path != "/Views/Login/Index.cshtml")
+    {
+    <nav class="main-menu">
+        <ul>
+            <li>
+                <a href="@Url.Action("Dashboard","Home")">
+                    <img src="~/images/hop.png" style="width: 50px; height:50px; padding:4px;">
+                    <span class="nav-text" style="padding-top:17px;Padding-left:7px;">
+                        <h3>Craftly.Beer</h3>
+                    </span>
+                </a>
+
+            </li>
+            <li>
+                <a onclick="openNewRecipe(this)">
+                    <i class="fa fa-plus-circle fa-2x"></i>
+                    <span class="nav-text" >
+                        New Recipe
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Dashboard","Home")">
+                    <i class="fa fa-bar-chart-o fa-2x"></i>
+                    <span class="nav-text">
+                        Dashboard
+                    </span>
+                </a>
+
+            </li>
+            <li class="has-subnav">
+                <a onclick="viewRecipes(this)">
+                    <i class="fa fa-list fa-2x"></i>
+                    <span class="nav-text">
+                        Recipes
+                    </span>
+                </a>
+
+            </li>
+            <li class="has-subnav">
+                <a href="#">
+                    <i class="fa fa-clipboard fa-2x"></i>
+                    <span class="nav-text">
+                        Brew Logs
+                    </span>
+                </a>
+
+            </li>
+            <li class="has-subnav">
+                <a href="#">
+                    <i class="fa fa-folder-open fa-2x"></i>
+                    <span class="nav-text">
+                        Account
+                    </span>
+                </a>
+
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-cogs fa-2x"></i>
+                    <span class="nav-text">
+                        Admin
+                    </span>
+                </a>
+            </li>
+        </ul>
+
+        <ul class="logout">
+            <li>
+                <a href="@Url.Action("Logout","Login")">
+                    <i class="fa fa-power-off fa-2x"></i>
+                    <span class="nav-text">
+                        Logout
+                    </span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    }
+    <!--  <div class="navbar navbar-inverse navbar-fixed-top">
+          <div class="container-fluid">
+              <div class="navbar-header">
+                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                      <span class="sr-only">Toggle navigation</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                  </button>
+                  <a asp-area="" asp-controller="Home" asp-action="Dashboard" class="navbar-brand">Craftly.Beer</a>
+              </div>
+              <div class="navbar-collapse collapse">
+                  <ul class="nav navbar-nav"></ul>
+              </div>
+          </div>
+      </div>-->
     <div class="container-fluid body-content">
         @RenderBody()
         <script src="~/js/mvc-grid/mvc-grid.js"></script>
@@ -56,9 +138,9 @@
     </div>
     <!-- <script src="~/lib/jquery/dist/jquery.js"></script>-->
 
-    
+
     <script src="~/js/site.js" asp-append-version="true"></script>
-   
+
     @RenderSection("scripts", required: false)
 
 </body>

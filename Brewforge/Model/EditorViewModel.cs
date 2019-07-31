@@ -94,5 +94,16 @@ namespace Brewforge.Models
         /// </summary>
         public int selectedAdjunctAdditionIndex { get; set; }
 
+        /// <summary>
+        /// The selected style of the current beer.
+        /// </summary>
+        public style style { get; set; }
+
+
+        /// <summary>
+        /// The different style options.
+        /// </summary>
+        public List<style> styleOptions { get; set; }
+
     }
 }
