@@ -23,7 +23,7 @@
 <div style="height:100%">
     <h3 style="color:white">Select a Recipe</h3> <br />
 
-    <button onclick="openNewRecipe(this)">New Recipe</button>
+    <!--<button onclick="openNewRecipe(this)">New Recipe</button>-->
 
     @Html.Partial("~/Views/Shared/RecipeGrid.cshtml", new RecipeGridModel { recipes = Model.allRecipes, selectedRecipe = Model.selectedRecipe, selectedRecipeIndex = Model.selectedRecipeIndex });
 </div>

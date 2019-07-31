@@ -641,6 +641,8 @@ namespace Brewforge.Controllers
             e.yeastOptions = yeastOptions;
             e.adjunctOptions = adjunctOptions;
 
+            e.styleOptions = styleOptions;
+
             return View("Views/Home/RecipeView.cshtml", e);
         }
 
