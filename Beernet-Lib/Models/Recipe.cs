@@ -59,7 +59,7 @@ namespace Beernet_Lib.Models
         [BsonElement("adjuncts")]
         public List<adjunctAddition> adjuncts { get; set; }
         [BsonElement("style")]
-        public styleBase style { get; set; }
+        public style style { get; set; }
         [BsonElement("boilVolume")]
         public float boilVolume { get; set; }
         [BsonElement("equipmentProfile")]

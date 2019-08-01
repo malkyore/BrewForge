@@ -33,6 +33,7 @@ namespace Brewforge.Controllers
         public static int currentSelectedYeast { get; set; }
         public static int currentSelectedAdjunct { get; set; }
         public static string currentSelectedRecipe { get; set; }
+        public static string currentSelectedStyle { get; set; }
         public static List<hopbase> hopOptions { get; set; }
         public static List<fermentable> fermentableOptions { get; set; }
         public static List<yeast> yeastOptions { get; set; }
@@ -134,6 +135,7 @@ namespace Brewforge.Controllers
                 currentSelectedYeast = 0;
                 currentSelectedAdjunct = 0;
                 
+                
                 recipeDetails = DataAccess.getRecipeDetails(AppSettings.apiLink + AppSettings.recipeEndpoint, AppSettings.apiAuthToken, openRecipe);
                 e.currentRecipe = recipeDetails;
                 if (recipeDetails.hops.Count > 0)
@@ -178,6 +180,7 @@ namespace Brewforge.Controllers
                 adjunctOptions = DataAccess.getAllAdjuncts(AppSettings.apiAuthToken);
                 styleOptions = DataAccess.getAllStyles(AppSettings.apiAuthToken);
 
+                currentSelectedStyle = styleOptions[0].idString;
                 e.styleOptions = styleOptions;
                 e.selectedHopAdditionIndex = currentSelectedHop;
                 e.selectedFermentableAdditionIndex = currentSelectedFermentable;
@@ -185,7 +188,14 @@ namespace Brewforge.Controllers
                 e.fermentableOptions = fermentableOptions;
                 e.yeastOptions = yeastOptions;
                 e.adjunctOptions = adjunctOptions;
-
+                if(recipeDetails.style == null)
+                {
+                    e.style = styleOptions[0];
+                }
+                else
+                {
+                    e.style = recipeDetails.style;
+                }
             }
             return View("Views/Home/RecipeView.cshtml", e);
         }
@@ -285,6 +295,12 @@ namespace Brewforge.Controllers
                 if (returnModel.currentRecipe.description != recipeDetails.description)
                 {
                     recipeDetails.description = returnModel.currentRecipe.description;
+                    save = true;
+                }
+                if(returnModel.selectedStyle != currentSelectedStyle)
+                {
+                    currentSelectedStyle = returnModel.selectedStyle;
+                    recipeDetails.style = styleOptions.Where(s => s.idString == currentSelectedStyle).FirstOrDefault();
                     save = true;
                 }
             }
@@ -642,6 +658,8 @@ namespace Brewforge.Controllers
             e.adjunctOptions = adjunctOptions;
 
             e.styleOptions = styleOptions;
+            e.style = styleOptions.Where(s => s.idString == currentSelectedStyle).FirstOrDefault();
+            e.selectedStyle = currentSelectedStyle;
 
             return View("Views/Home/RecipeView.cshtml", e);
         }
@@ -733,7 +751,7 @@ namespace Brewforge.Controllers
 
             emptyRecipe.name = "";
             emptyRecipe.idString = "";
-            emptyRecipe.style = new styleBase();
+            emptyRecipe.style = new style();
             emptyRecipe.version = 0;
             emptyRecipe.description = "";
             emptyRecipe.clonedFrom = "";

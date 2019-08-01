@@ -105,5 +105,7 @@ namespace Brewforge.Models
         /// </summary>
         public List<style> styleOptions { get; set; }
 
+        public string selectedStyle { get; set; }
+
     }
 }

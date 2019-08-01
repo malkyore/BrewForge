@@ -15,11 +15,27 @@
 </div>
 <div id="toolbar" class="btn-group">
 </div>
-
+<nav class="menu" tabindex="0">
+    <div class="smartphone-menu-trigger"></div>
+    <header class="avatar">
+        <h2>@Model.currentRecipe.name</h2>
+        <h4>@Model.style.name</h4>
+        <div>
+            @Model.currentRecipe.description
+        </div>
+    </header>
+    <ul>
+        <li id="recipeListItem" tabindex="0" class="icon-dashboard"><span>Recipe</span></li>
+        <li id="mashEditorListItem" tabindex="0" class="icon-customers"><span>Mash Editor</span></li>
+        <li id="brewLogListItem" tabindex="0" class="icon-users"><span>Brew Logs</span></li>
+        <li id="recipeParametersListItem" tabindex="0" class="icon-settings"><span>Recipe Parameters</span></li>
+    </ul>
+</nav>
+<div class="recipe-Editor-body-content">
 <div class="module grid" id="recipeInfo" style="height: auto; width:auto; min-height:250px; min-width:600px;">
     <h3>Recipe Info</h3>
     <div class="col-1-4" style="min-width: 400px;">
-        @using (Html.BeginForm("testThing", "Home", FormMethod.Get, new { returnModel = Model }))
+        @using (Html.BeginForm("testThing", "Home", FormMethod.Get, new { id = "recipeInfoModel", returnModel = Model }))
         {
             <div class="editorListItem infogrid">
                 <div class="col-1-4">
@@ -34,6 +50,9 @@
                     <label>
                         Style:
                     </label>
+                </div>
+                <div style="display:none">
+                    @Html.TextBoxFor(m => Model.selectedStyle, new { id = "selectedstyleIndex" })
                 </div>
                 <div class="col-3-4">
                     <select id="StyleSelector" class="ingredientSelector" style="width:100%;">
@@ -58,44 +77,104 @@
         }
     </div>
     <div class="col-3-4 statsWidget">
-        <div class="statWidget">
+        <div id="ibuStatWidget" class="statWidget">
             <div class="statTop">
                 IBU
             </div>
             <div class="statBottom">
-                @Math.Round(Model.currentRecipe.recipeStats.ibu, 2)
+                <div id="ibuLabel" class="statLabelText">
+                    @Math.Round(Model.currentRecipe.recipeStats.ibu, 2)
+                </div>
+                <div class="grid">
+                    <div class="col-1-2" style="font-size:10px; text-align:left;">
+                        <div>MIN</div>
+                        <div class="statLabelText">@Model.style.minIBU</div>
+                    </div>
+                    <div class="col-1-2" style="font-size:10px; text-align:right;">
+                        <div>MAX</div>
+                        <div class="statLabelText">@Model.style.maxIBU</div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="statWidget">
+        <div id="abvStatWidget" class="statWidget">
             <div class="statTop">
                 ABV
             </div>
             <div class="statBottom">
-                @Math.Round(Model.currentRecipe.recipeStats.abv, 2)
+                <div id="abvLabel" class="statLabelText">
+                    @Math.Round(Model.currentRecipe.recipeStats.abv, 2)
+                </div>
+                <div class="grid">
+                    <div class="col-1-2" style="font-size:10px; text-align:left;">
+                        <div>MIN</div>
+                        <div class="statLabelText">@Model.style.minABV</div>
+                    </div>
+                    <div class="col-1-2" style="font-size:10px; text-align:right;">
+                        <div>MAX</div>
+                        <div class="statLabelText">@Model.style.maxABV</div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="statWidget">
+        <div id="fgStatWidget" class="statWidget">
             <div class="statTop">
                 FG
             </div>
             <div class="statBottom">
-                @Math.Round(Model.currentRecipe.recipeStats.fg, 2)
+                <div id="fgLabel" class="statLabelText">
+                    @Math.Round(Model.currentRecipe.recipeStats.fg, 2)
+                </div>
+                <div class="grid">
+                    <div class="col-1-2" style="font-size:10px; text-align:left;">
+                        <div>MIN</div>
+                        <div class="statLabelText">@Model.style.minFG</div>
+                    </div>
+                    <div class="col-1-2" style="font-size:10px; text-align:right;">
+                        <div>MAX</div>
+                        <div class="statLabelText">@Model.style.maxFG</div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="statWidget">
+        <div id="ogStatWidget" class="statWidget">
             <div class="statTop">
                 OG
             </div>
             <div class="statBottom">
-                @Math.Round(Model.currentRecipe.recipeStats.og, 2)
+                <div id="ogLabel" class="statLabelText">
+                    @Math.Round(Model.currentRecipe.recipeStats.og, 2)
+                </div>
+                <div class="grid">
+                    <div class="col-1-2" style="font-size:10px; text-align:left;">
+                        <div>MIN</div>
+                        <div class="statLabelText">@Model.style.minOG</div>
+                    </div>
+                    <div class="col-1-2" style="font-size:10px; text-align:right;">
+                        <div>MAX</div>
+                        <div class="statLabelText">@Model.style.maxOG</div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="statWidget">
+        <div id="srmStatWidget" class="statWidget">
             <div class="statTop">
                 SRM
             </div>
             <div class="statBottom">
-                @Math.Round(Model.currentRecipe.recipeStats.srm, 2)
+                <div id="srmLabel" class="statLabelText">
+                    @Math.Round(Model.currentRecipe.recipeStats.srm, 2)
+                </div>
+                <div class="grid">
+                    <div class="col-1-2" style="font-size:10px; text-align:left;">
+                        <div>MIN</div>
+                        <div class="statLabelText">@Model.style.minColor</div>
+                    </div>
+                    <div class="col-1-2" style="font-size:10px; text-align:right;">
+                        <div>MAX</div>
+                        <div class="statLabelText">@Model.style.maxColor</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -299,7 +378,7 @@
                             </div>
                         </div>
                     </div>
-                }
+                                                }
             </div> <!--End Yeast Widget-->
             <div class="col-1-2 grid-pad">
                 <!--Adjunct widget-->
@@ -409,7 +488,7 @@
         </div>
     </div>
 </div>
-
+</div>
 @section scripts {
     <script type="text/javascript">
 
@@ -418,7 +497,8 @@
         });
 
         $('#StyleSelector').on('select2:select', function (e) {
-            //window.location = '/Home/testThing?updatedHop=' + e.target.selectedIndex;
+           $("#selectedstyleIndex").val(e.target.value);
+            $("#recipeInfoModel").submit();
             console.log(e);
         });
 
@@ -437,7 +517,12 @@
 
             $('#AdjunctSelector').on('select2:select', function (e) {
                 window.location = '/Home/testThing?updatedAdjunct=' + e.target.selectedIndex;
-            });
+        });
+
+        $("#selectedstyleIndex").change(function () {
+            console.log("AJSAJSJAS");
+        });
+
 
         function changeSelectedHopType(el) {
 
@@ -503,6 +588,7 @@
                 localStorage['adjunctScrollTop'] = $("#adjunctListSelector").scrollTop();
             });
 
+        
         //add hop
         function addHop(el) {
             window.location = '/Home/testThing?selectedHop=' + -2;
@@ -553,7 +639,10 @@
             $('#YeastSelector').trigger('change');
 
             $('#AdjunctSelector').val('@Model.selectedAdjunctAddition.adjunct.name');
-            $('#AdjunctSelector').trigger('change');
+                $('#AdjunctSelector').trigger('change');
+
+                $('#StyleSelector').val('@Model.selectedStyle');
+                $('#StyleSelector').trigger('change');
         }
 
 
@@ -561,6 +650,9 @@
             $('.ingredientSelector').select2();
             setDropDowns();
             setSelectedCSS();
+            updateLabelColors();
+            $("#recipeListItem").addClass("currentMenuSelection");
+            
 
             //Set Scroll Positions
             if (@Model.selectedHopAdditionIndex == 0) {
@@ -631,7 +723,36 @@
             function resetRecipeAndRefresh(recipe) {
                 @Model.currentRecipe = recipe;
                 $('#hopListSelector').re
+        }
+
+        function updateLabelColors() {
+            if (@Model.currentRecipe.recipeStats.ibu < @Model.style.minIBU || @Model.currentRecipe.recipeStats.ibu > @Model.style.maxIBU) {
+                $("#ibuLabel").addClass("statLabelTextBad");
+                $("#ibuLabel").removeClass("statLabelText");
+                $("#ibuStatWidget").addClass("statwidgetBad");
+                //$("#ibuStatWidget").removeClass("statLabelText");
             }
+            if (@Model.currentRecipe.recipeStats.abv < @Model.style.minABV || @Model.currentRecipe.recipeStats.abv > @Model.style.maxABV) {
+                $("#abvLabel").addClass("statLabelTextBad");
+                $("#abvLabel").removeClass("statLabelText");
+                $("#abvStatWidget").addClass("statwidgetBad");
+            }
+            if (@Model.currentRecipe.recipeStats.og < @Model.style.minOG || @Model.currentRecipe.recipeStats.og > @Model.style.maxOG) {
+                $("#ogLabel").addClass("statLabelTextBad");
+                $("#ogLabel").removeClass("statLabelText");
+                $("#ogStatWidget").addClass("statwidgetBad");
+            }
+            if (@Model.currentRecipe.recipeStats.fg < @Model.style.minFG || @Model.currentRecipe.recipeStats.fg > @Model.style.maxFG) {
+                $("#fgLabel").addClass("statLabelTextBad");
+                $("#fgLabel").removeClass("statLabelText");
+                $("#fgStatWidget").addClass("statwidgetBad");
+            }
+            if (@Model.currentRecipe.recipeStats.srm < @Model.style.minColor || @Model.currentRecipe.recipeStats.srm > @Model.style.maxColor) {
+                $("#srmLabel").addClass("statLabelTextBad");
+                $("#srmLabel").removeClass("statLabelText");
+                $("#srmStatWidget").addClass("statwidgetBad");
+            }
+        }
 
     </script>
 }
