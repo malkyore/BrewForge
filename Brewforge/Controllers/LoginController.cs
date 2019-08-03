@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Beernet_Lib.Models;
 using Beernet_Lib.Tools;
 using Brewforge;
 using Brewforge.Controllers;
@@ -43,7 +44,9 @@ namespace BrewForge.Controllers
             }
             else
             {
+                userSettings settings = DataAccess.getUserSettings(token, AppSettings.apiLink);
                 AppSettings.apiAuthToken = token;
+                AppSettings.userSettings = settings;
                 return RedirectToAction("Dashboard", "Home");
             }
         }

@@ -46,67 +46,66 @@ namespace Beernet_Lib.Tools
             return recipes;
         }
 
-        /*
-         * Get the hops for a recipe.
-         * 
-         * These suck and they waste a bunch of time getting the whole recipe like 4 times.
-         * 
-         * */
-        public static IList<hopAddition> getRecipeHops(string idString)
-        {
-            string dataurl = "http://localhost:50422";
-            string jsonurl = dataurl + "/beernet/recipe/" + idString;
-            recipe recipes = new recipe();
-            var json = new WebClient().DownloadString(jsonurl);
-            recipes = JsonConvert.DeserializeObject<recipe>(json);
-            return recipes.hops;
-        }
-
-        /*
-         * Get Fermentables for a recipe
-         * */
-        public static IList<fermentableAddition> getRecipeFermentables(string idString)
-        {
-            string dataurl = "http://localhost:50422";
-            string jsonurl = dataurl + "/beernet/recipe/" + idString;
-            recipe recipes = new recipe();
-            var json = new WebClient().DownloadString(jsonurl);
-            recipes = JsonConvert.DeserializeObject<recipe>(json);
-            return recipes.fermentables;
-        }
-
-        /*
-         * Get yeasts for a recipe.
-         * */
-        public static IList<yeastAddition> getRecipeYeasts(string idString)
-        {
-            string dataurl = "http://localhost:50422";
-            string jsonurl = dataurl + "/beernet/recipe/" + idString;
-            recipe recipes = new recipe();
-            var json = new WebClient().DownloadString(jsonurl);
-            recipes = JsonConvert.DeserializeObject<recipe>(json);
-            return recipes.yeasts.ToList<yeastAddition>();
-        }
-
-        /*
-         * Get Adjuncts for a recipe
-         * */
-        public static IList<adjunctAddition> getRecipeAdjuncts(string idString)
-        {
-            string dataurl = "http://localhost:50422";
-            string jsonurl = dataurl + "/beernet/recipe/" + idString;
-            recipe recipes = new recipe();
-            var json = new WebClient().DownloadString(jsonurl);
-            recipes = JsonConvert.DeserializeObject<recipe>(json);
-            return recipes.adjuncts;
-        }
+      //  /*
+      //   * Get the hops for a recipe.
+      //   * 
+      //   * These suck and they waste a bunch of time getting the whole recipe like 4 times.
+      //   * 
+      //   * */
+      //  public static IList<hopAddition> getRecipeHops(string idString)
+      //  {
+      //      string dataurl = "http://localhost:50422";
+      //      string jsonurl = dataurl + "/beernet/recipe/" + idString;
+      //      recipe recipes = new recipe();
+      //      var json = new WebClient().DownloadString(jsonurl);
+      //      recipes = JsonConvert.DeserializeObject<recipe>(json);
+      //      return recipes.hops;
+      //  }
+      //
+      //  /*
+      //   * Get Fermentables for a recipe
+      //   * */
+      //  public static IList<fermentableAddition> getRecipeFermentables(string idString)
+      //  {
+      //      string dataurl = "http://localhost:50422";
+      //      string jsonurl = dataurl + "/beernet/recipe/" + idString;
+      //      recipe recipes = new recipe();
+      //      var json = new WebClient().DownloadString(jsonurl);
+      //      recipes = JsonConvert.DeserializeObject<recipe>(json);
+      //      return recipes.fermentables;
+      //  }
+      //
+      //  /*
+      //   * Get yeasts for a recipe.
+      //   * */
+      //  public static IList<yeastAddition> getRecipeYeasts(string idString)
+      //  {
+      //      string dataurl = "http://localhost:50422";
+      //      string jsonurl = dataurl + "/beernet/recipe/" + idString;
+      //      recipe recipes = new recipe();
+      //      var json = new WebClient().DownloadString(jsonurl);
+      //      recipes = JsonConvert.DeserializeObject<recipe>(json);
+      //      return recipes.yeasts.ToList<yeastAddition>();
+      //  }
+      //
+      //  /*
+      //   * Get Adjuncts for a recipe
+      //   * */
+      //  public static IList<adjunctAddition> getRecipeAdjuncts(string idString)
+      //  {
+      //      string dataurl = "http://localhost:50422";
+      //      string jsonurl = dataurl + "/beernet/recipe/" + idString;
+      //      recipe recipes = new recipe();
+      //      var json = new WebClient().DownloadString(jsonurl);
+      //      recipes = JsonConvert.DeserializeObject<recipe>(json);
+      //      return recipes.adjuncts;
+      //  }
 
         /*
          * Get all hops
          * */
-        public static List<hopbase> getAllHops(string apiAuthToken)
+        public static List<hopbase> getAllHops(string dataurl, string apiAuthToken)
         {
-            string dataurl = "http://localhost:50422";
             string jsonurl = dataurl + "/beernet/hop";
 
             List<hopbase> hops = new List<hopbase>();
@@ -124,9 +123,8 @@ namespace Beernet_Lib.Tools
         /*
          * Get all fermentables
          * */
-        public static List<fermentable> getAllFermentables (string apiAuthToken)
+        public static List<fermentable> getAllFermentables (string dataurl, string apiAuthToken)
         {
-            string dataurl = "http://localhost:50422";
             string jsonurl = dataurl + "/beernet/fermentable";
 
             List<fermentable> fermentables = new List<fermentable>();
@@ -144,9 +142,8 @@ namespace Beernet_Lib.Tools
         /*
         * Get all yeasts
         * */
-        public static List<yeast> getAllYeasts(string apiAuthToken)
+        public static List<yeast> getAllYeasts(string dataurl, string apiAuthToken)
         {
-            string dataurl = "http://localhost:50422";
             string jsonurl = dataurl + "/beernet/yeast";
 
             List<yeast> yeasts = new List<yeast>();
@@ -164,9 +161,8 @@ namespace Beernet_Lib.Tools
         /*
         * Get all adjuncts
         * */
-        public static List<adjunct> getAllAdjuncts(string apiAuthToken)
+        public static List<adjunct> getAllAdjuncts(string dataurl, string apiAuthToken)
         {
-            string dataurl = "http://localhost:50422";
             string jsonurl = dataurl + "/beernet/adjunct";
 
             List<adjunct> adjuncts = new List<adjunct>();
@@ -184,9 +180,8 @@ namespace Beernet_Lib.Tools
         /*
        * Get all styles
        * */
-        public static List<style> getAllStyles(string apiAuthToken)
+        public static List<style> getAllStyles(string dataurl, string apiAuthToken)
         {
-            string dataurl = "http://localhost:50422";
             string jsonurl = dataurl + "/beernet/style";
 
             List<style> styles = new List<style>();
@@ -201,10 +196,23 @@ namespace Beernet_Lib.Tools
             return styles;
         }
 
-
-        public static RecipeResponse postRecipe(recipe recipe, string apiAuthToken)
+        public static userSettings getUserSettings(string apiAuthToken, string apiEndpoint)
         {
-            string dataurl = "http://localhost:50422";
+            string jsonurl = apiEndpoint + "/beernet/userSettings/";
+
+            var client = new RestClient("" + jsonurl);
+            var request = new RestRequest(Method.GET);
+
+            request.AddHeader("Authorization", "bearer " + apiAuthToken);
+            var response = client.Execute(request);
+            userSettings returnable = JsonConvert.DeserializeObject<userSettings>(response.Content);
+            return returnable;
+
+            //BeerNet/userSettings
+        }
+
+        public static RecipeResponse postRecipe(recipe recipe, string dataurl, string apiAuthToken)
+        {
             string jsonurl = dataurl + "/beernet/recipe/" + recipe.idString;
 
 

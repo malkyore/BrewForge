@@ -104,11 +104,11 @@ namespace Brewforge.Controllers
             if (openRecipe == "NEW")
             {
                 recipeDetails = makeEmptyRecipe();
-                hopOptions = DataAccess.getAllHops(AppSettings.apiAuthToken);
-                fermentableOptions = DataAccess.getAllFermentables(AppSettings.apiAuthToken);
-                yeastOptions = DataAccess.getAllYeasts(AppSettings.apiAuthToken);
-                adjunctOptions = DataAccess.getAllAdjuncts(AppSettings.apiAuthToken);
-                styleOptions = DataAccess.getAllStyles(AppSettings.apiAuthToken);
+                hopOptions = DataAccess.getAllHops(AppSettings.apiLink, AppSettings.apiAuthToken);
+                fermentableOptions = DataAccess.getAllFermentables(AppSettings.apiLink, AppSettings.apiAuthToken);
+                yeastOptions = DataAccess.getAllYeasts(AppSettings.apiLink, AppSettings.apiAuthToken);
+                adjunctOptions = DataAccess.getAllAdjuncts(AppSettings.apiLink, AppSettings.apiAuthToken);
+                styleOptions = DataAccess.getAllStyles(AppSettings.apiLink, AppSettings.apiAuthToken);
 
                 e.styleOptions = styleOptions;
                 e.currentRecipe = recipeDetails;
@@ -174,11 +174,11 @@ namespace Brewforge.Controllers
                     e.selectedAdjunctAddition = makeEmptyAdjunctAddition();
                 }
 
-                hopOptions = DataAccess.getAllHops(AppSettings.apiAuthToken);
-                fermentableOptions = DataAccess.getAllFermentables(AppSettings.apiAuthToken);
-                yeastOptions = DataAccess.getAllYeasts(AppSettings.apiAuthToken);
-                adjunctOptions = DataAccess.getAllAdjuncts(AppSettings.apiAuthToken);
-                styleOptions = DataAccess.getAllStyles(AppSettings.apiAuthToken);
+                hopOptions = DataAccess.getAllHops(AppSettings.apiLink, AppSettings.apiAuthToken);
+                fermentableOptions = DataAccess.getAllFermentables(AppSettings.apiLink, AppSettings.apiAuthToken);
+                yeastOptions = DataAccess.getAllYeasts(AppSettings.apiLink, AppSettings.apiAuthToken);
+                adjunctOptions = DataAccess.getAllAdjuncts(AppSettings.apiLink, AppSettings.apiAuthToken);
+                styleOptions = DataAccess.getAllStyles(AppSettings.apiLink, AppSettings.apiAuthToken);
 
                 currentSelectedStyle = styleOptions[0].idString;
                 e.styleOptions = styleOptions;
@@ -191,10 +191,12 @@ namespace Brewforge.Controllers
                 if(recipeDetails.style == null)
                 {
                     e.style = styleOptions[0];
+                    e.selectedStyle = styleOptions[0].idString;
                 }
                 else
                 {
                     e.style = recipeDetails.style;
+                    e.selectedStyle = recipeDetails.style.idString;
                 }
             }
             return View("Views/Home/RecipeView.cshtml", e);
@@ -203,9 +205,10 @@ namespace Brewforge.Controllers
         public virtual IActionResult Dashboard(string gridName, string selectedRecipe)
         {
             recipe selectedRecipeDetails = new recipe();
-            List<recipe> allRecipes = new List<recipe>();
-            
-            
+            List<recipe> myRecipes = myRecipes = (List<recipe>)DataAccess.getRecipes(AppSettings.apiLink + AppSettings.recipeEndpoint, AppSettings.apiAuthToken).Where(x => x.createdByUserID == AppSettings.userSettings.userID).ToList<recipe>();
+            List<recipe> publicRecipes = (List<recipe>)DataAccess.getRecipes(AppSettings.apiLink + AppSettings.recipeEndpoint, AppSettings.apiAuthToken).Where(x => x.isPublic == true).ToList<recipe>();
+
+
 
             if (!String.IsNullOrEmpty(selectedRecipe))
             {
@@ -213,15 +216,13 @@ namespace Brewforge.Controllers
                 switch (gridName)
                 {
                     case "myRecipes":
-                        allRecipes = (List<recipe>)DataAccess.getRecipes(AppSettings.apiLink + AppSettings.recipeEndpoint, AppSettings.apiAuthToken).Where(x => x.fermentables.Count > 3).ToList<recipe>();
-                        dashboardModel.myRecipes = allRecipes;
+                        dashboardModel.myRecipes = myRecipes;
                         dashboardModel.selectedMyRecipe = selectedRecipeDetails;
                         dashboardModel.selectedMyRecipeIndex = selectedRecipe;
                         break;
                     case "publicRecipes":
-                        allRecipes = (List<recipe>)DataAccess.getRecipes(AppSettings.apiLink + AppSettings.recipeEndpoint, AppSettings.apiAuthToken);
                         selectedRecipeDetails = DataAccess.getRecipeDetails(AppSettings.apiLink + AppSettings.recipeEndpoint, AppSettings.apiAuthToken, selectedRecipe);
-                        dashboardModel.publicRecipes = allRecipes;
+                        dashboardModel.publicRecipes = publicRecipes;
                         dashboardModel.selectedPublicRecipe = selectedRecipeDetails;
                         dashboardModel.selectedPublicRecipeIndex = selectedRecipe;
                         break;
@@ -231,16 +232,14 @@ namespace Brewforge.Controllers
             }
             else
             {
-                allRecipes = (List<recipe>)DataAccess.getRecipes(AppSettings.apiLink + AppSettings.recipeEndpoint, AppSettings.apiAuthToken);
-                List<recipe> allMyRecipes = (List<recipe>)DataAccess.getRecipes(AppSettings.apiLink + AppSettings.recipeEndpoint, AppSettings.apiAuthToken).Where(x => x.fermentables.Count > 3).ToList<recipe>();
-                dashboardModel.myRecipes = allMyRecipes;
-                dashboardModel.publicRecipes = allRecipes;
-                if(allMyRecipes.Count > 0)
+                dashboardModel.myRecipes = myRecipes;
+                dashboardModel.publicRecipes = publicRecipes;
+                if(myRecipes.Count > 0)
                 {
-                    dashboardModel.selectedMyRecipe = allMyRecipes[0];
-                    dashboardModel.selectedPublicRecipe = allRecipes[0];
-                    dashboardModel.selectedMyRecipeIndex = allMyRecipes[0].idString;
-                    dashboardModel.selectedPublicRecipeIndex = allRecipes[0].idString;
+                    dashboardModel.selectedMyRecipe = myRecipes[0];
+                    dashboardModel.selectedPublicRecipe = myRecipes[0];
+                    dashboardModel.selectedMyRecipeIndex = myRecipes[0].idString;
+                    dashboardModel.selectedPublicRecipeIndex = myRecipes[0].idString;
                 } 
                 else
                 {
@@ -595,7 +594,7 @@ namespace Brewforge.Controllers
              * */
             if (save)
             {
-                RecipeResponse RecipeStats = DataAccess.postRecipe(recipeDetails, AppSettings.apiAuthToken);
+                RecipeResponse RecipeStats = DataAccess.postRecipe(recipeDetails, AppSettings.apiLink, AppSettings.apiAuthToken);
 
                 recipeDetails.idString = RecipeStats.idString;
                 if(RecipeStats != null)
@@ -748,6 +747,8 @@ namespace Brewforge.Controllers
         public recipe makeEmptyRecipe()
         {
             recipe emptyRecipe = new recipe();
+
+            emptyRecipe.createdByUserID = AppSettings.userSettings.userID;
 
             emptyRecipe.name = "";
             emptyRecipe.idString = "";
