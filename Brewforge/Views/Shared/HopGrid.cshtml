@@ -7,7 +7,7 @@
 
 @using (Html.BeginForm("testThing", "Home", FormMethod.Get, new { returnModel = Model }))
 {
-    <div id="idontknow" class="grid grid-pad widgetItem recipeEditorWidget">
+    <div id="hopWidgetWrapper" class="grid grid-pad widgetItem recipeEditorWidget">
         <div class="col-1-2">
             <div id="hopListSelector" class="module selectorWidget">
                 @{int index2 = 0;
@@ -51,6 +51,7 @@
                     @Html.TextBoxFor(m => m.selectedHopAddition.hopID)
                     @Html.EditorFor(m => m.selectedHopAddition.hop)
                     @Html.TextBoxFor(m => m.selectedHopAddition.type, new { id = "HopTypeHidden" })
+                    @Html.TextBoxFor(m => m.selectedHopAddition.additionGuid);
                 </div>
                 <h4 style="padding-top:0;">Edit Hop</h4>
                 <div class="editorListItem infogrid">

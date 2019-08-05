@@ -1,0 +1,209 @@
+﻿@using NonFactors.Mvc.Grid;
+@using Beernet_Lib.Models;
+@using Microsoft.AspNetCore.Http;
+@using Beernet_Lib;
+@using Brewforge.Models;
+
+@model IngredientManagerViewModel
+<nav class="menu" tabindex="0">
+    <div class="smartphone-menu-trigger"></div>
+    <header class="avatar">
+        <h2>Craftly.Beer</h2>
+        <h4>Admin Section</h4>
+    </header>
+    <ul>
+        <li id="ingredientEditor" tabindex="0" class="icon-dashboard"><span>Edit Ingredients</span></li>
+        <li id="mashEditorListItem" tabindex="0" class="icon-users"><span>Manage Users</span></li>
+        <li id="brewLogListItem" tabindex="0" class="icon-customers"><span>Manage Deleted Recipes</span></li>
+    </ul>
+</nav>
+@using (Html.BeginForm("IngredientManager", "Admin", FormMethod.Get, new { returnModel = Model, updatedHop = Model.hopOptions[Model.selectedHopIndex] }))
+{
+    <div class="grid" style="height: 86%; width:100%; min-width: 1000px; min-height:900px;">
+        <div class="grid recipe-Editor-body-content">
+            <div class="header">
+                <h3>Edit Public Ingredients</h3>
+            </div>
+            <h4 style="color:white;">Hops</h4>
+            <div id="hopWidgetWrapper" class="grid grid-pad widgetItem ingredientManagerWidget">
+                <div class="col-1-2">
+                    <div id="hopListSelector" class="module selectorWidget">
+                        @{int index2 = 0;
+                            foreach (hopbase h in Model.hopOptions)
+                            {
+                                string name = "h" + index2;
+                                <div id=@name class="hopListItem grid" onclick="changeSelectedHop(this)">
+                                    <div class="col-1-4">
+                                        <div>@h.name</div>
+                                        <div class="ingredientUnit">name</div>
+                                    </div>
+                                    <div class="col-1-4 ingredientUnitParent">
+                                        <div>@h.aau</div>
+                                        <div class="ingredientUnit">aau</div>
+                                    </div>
+                                    <div class="col-1-4 ingredientUnitParent">
+                                        <div>@h.beta</div>
+                                        <div class="ingredientUnit">beta</div>
+                                    </div>
+                                </div>
+                                index2++;
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="col-1-2">
+                    <div class="module grid">
+                        <div class="col-1-2">
+                            <button type="button" onclick="addHop(this)">Add Hop</button>
+                        </div>
+                        <div class="col-1-2">
+                            <button type="button" onclick="deleteHop(this)">Delete Hop</button>
+                        </div>
+                    </div>
+                    <div class="module ingredientEditorWidget">
+                        <div style="display:none">
+                            @Html.TextBoxFor(m => m.hopOptions[Model.selectedHopIndex].idString, new { id = "tbIdString", @class = "widgetControlTextbox" })
+                            @Html.TextBoxFor(m => m.hopOptions[Model.selectedHopIndex].createdByUserId, new { id = "tbIdString", @class = "widgetControlTextbox" })
+                        </div>
+                        <h4 style="padding-top:0;">Edit Hop</h4>
+                        <div class="editorListItem infogrid">
+                            <div class="col-1-4">
+                                <label>Name</label>
+                            </div>
+                            <div class="col-3-4">
+                                @Html.TextBoxFor(m => m.hopOptions[Model.selectedHopIndex].name, new { id = "tbbeta", @class = "widgetControlTextbox" })
+                            </div>
+                        </div>
+                        <div class="editorListItem infogrid">
+                            <div class="col-1-4">
+                                <label>AAU</label>
+                            </div>
+                            <div class="col-3-4">
+                                @Html.TextBoxFor(m => m.hopOptions[Model.selectedHopIndex].aau, new { id = "tbbeta", @class = "widgetControlTextbox" })
+                            </div>
+                        </div>
+                        <div class="editorListItem infogrid">
+                            <div class="col-1-4">
+                                <label>beta</label>
+                            </div>
+                            <div class="col-3-4">
+                                @Html.TextBoxFor(m => m.hopOptions[Model.selectedHopIndex].beta, new { id = "tbbeta", @class = "widgetControlTextbox" })
+
+                            </div>
+                        </div>
+                        <div class="editorListItem infogrid">
+                            <div class="col-1-4">
+                                <label>type</label>
+                            </div>
+                            <div class="col-3-4">
+                                @Html.TextBoxFor(m => m.hopOptions[Model.selectedHopIndex].type, new { id = "tbtype", @class = "widgetControlTextbox" })
+
+                            </div>
+                        </div>
+                        <div class="editorListItem infogrid">
+                            <div class="col-1-4">
+                                <label>hsi</label>
+                            </div>
+                            <div class="col-3-4">
+                                @Html.TextBoxFor(m => m.hopOptions[Model.selectedHopIndex].hsi, new { id = "tbhsi", @class = "widgetControlTextbox" })
+
+                            </div>
+                        </div>
+                        <div class="editorListItem infogrid">
+                            <div class="col-1-4">
+                                <label>origin</label>
+                            </div>
+                            <div class="col-3-4">
+                                @Html.TextBoxFor(m => m.hopOptions[Model.selectedHopIndex].origin, new { id = "tborigin", @class = "widgetControlTextbox" })
+
+                            </div>
+                        </div>
+                        <div class="editorListItem infogrid">
+                            <div class="col-1-4">
+                                <label>substitues</label>
+                            </div>
+                            <div class="col-3-4">
+                                @Html.TextBoxFor(m => m.hopOptions[Model.selectedHopIndex].substitutes, new { id = "tbsubstitutes", @class = "widgetControlTextbox" })
+
+                            </div>
+                        </div>
+                        <div class="editorListItem infogrid">
+                            <div class="col-1-4">
+                                <label>humulene</label>
+                            </div>
+                            <div class="col-3-4">
+                                @Html.TextBoxFor(m => m.hopOptions[Model.selectedHopIndex].humulene, new { id = "tbhumulene", @class = "widgetControlTextbox" })
+
+                            </div>
+                        </div>
+                        <div class="editorListItem infogrid">
+                            <div class="col-1-4">
+                                <label>caryophyllene</label>
+                            </div>
+                            <div class="col-3-4">
+                                @Html.TextBoxFor(m => m.hopOptions[Model.selectedHopIndex].caryophyllene, new { id = "tbcaryophyllene", @class = "widgetControlTextbox" })
+
+                            </div>
+                        </div>
+                        <div class="editorListItem infogrid">
+                            <div class="col-1-4">
+                                <label>cohumulone</label>
+                            </div>
+                            <div class="col-3-4">
+                                @Html.TextBoxFor(m => m.hopOptions[Model.selectedHopIndex].cohumulone, new { id = "tbcohumulone", @class = "widgetControlTextbox" })
+
+                            </div>
+                        </div>
+                        <div class="editorListItem infogrid">
+                            <div class="col-1-4">
+                                <label>myrcene</label>
+                            </div>
+                            <div class="col-3-4">
+                                @Html.TextBoxFor(m => m.hopOptions[Model.selectedHopIndex].myrcene, new { id = "tbmyrcene", @class = "widgetControlTextbox" })
+
+                            </div>
+                        </div>
+                        <div class="editorListItem infogrid">
+                            <div class="col-1-4">
+                                <label>notes</label>
+                            </div>
+                            <div class="col-3-4">
+                                @Html.TextAreaFor(m => m.hopOptions[Model.selectedHopIndex].notes, new { id = "tbnotes", @class = "widgetControlTextbox", rows = "3" })
+
+                            </div>
+                        </div>
+                        <input type="submit" value="Save" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script>
+    $(document).ready(function () {
+        $("#ingredientEditor").addClass("currentMenuSelection");
+        setSelectedCSS();
+
+        if (@Model.selectedHopIndex == 0) {
+                localStorage['hopScrollTop'] = 0;
+            } else {
+                $("#hopListSelector").scrollTop(localStorage['hopScrollTop']);
+        }
+    });
+    function setSelectedCSS() {
+            //set hop selection
+            $("#h" +@Model.selectedHopIndex).removeClass("hopListItem");
+            $("#h" +@Model.selectedHopIndex).addClass("hopListItemSelected");
+    }
+    function changeSelectedHop(el) {
+        window.location = '/Admin/IngredientManager?selectedHop=' + el.id.replace("h", "");
+        console.log(el.id);
+    }
+    //save hop scroll position
+    $("#hopListSelector").scroll(function () {
+        localStorage['page'] = document.URL;
+        localStorage['hopScrollTop'] = $("#hopListSelector").scrollTop();
+    });
+
+
+</script>

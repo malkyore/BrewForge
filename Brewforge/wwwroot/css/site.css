@@ -379,6 +379,17 @@ button {
     padding-left: 30px;
 }
 
+.ingredientManagerWidget {
+    min-width: 400px;
+    height: 600px !important;
+    height: 25%;
+    box-shadow: 0px 4px green;
+}
+
+.ingredientEditorWidget {
+    height: 80%;
+}
+
 /****
 second navigation stuff
 **/
