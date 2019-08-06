@@ -38,7 +38,7 @@ namespace BrewForge.Controllers
             string token = Auth.getAPIAuthToken(AppSettings.apiLink, AppSettings.loginEndpoint, values).Replace("\"", "");
             if(token == "error")
             {
-                returnModel.password = "";
+                returnModel = new LoginViewModel();
                 returnModel.errorMessage = "Invalid Credentials";
                 return View("Index",returnModel);
             }
@@ -47,14 +47,14 @@ namespace BrewForge.Controllers
                 userSettings settings = DataAccess.getUserSettings(token, AppSettings.apiLink);
                 AppSettings.apiAuthToken = token;
                 AppSettings.userSettings = settings;
-                return RedirectToAction("Dashboard", "Home");
+                return RedirectToAction("Index", "Home");
             }
         }
 
         public IActionResult Logout(LoginViewModel returnModel)
         {
                 AppSettings.apiAuthToken = "";
-                return RedirectToAction("Dashboard", "Home");
+                return RedirectToAction("Index", "Home");
         }
     }
 }

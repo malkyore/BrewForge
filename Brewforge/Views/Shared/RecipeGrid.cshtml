@@ -125,12 +125,12 @@
             }
 
             function openNewRecipe(el) {
-                window.location = '/Home/openRecipe?openRecipe=NEW';
+                window.location = '/Recipe/openRecipe?openRecipe=NEW';
                 console.log("New recipe");
             }
 
             function openRecipe(el) {
-                window.location = '/Home/openRecipe?openRecipe=' + el.value;
+                window.location = '/Recipe/openRecipe?openRecipe=' + el.value;
             }
 
             $("#recipeSelector").scroll(function () {

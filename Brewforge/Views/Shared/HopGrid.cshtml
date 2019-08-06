@@ -5,7 +5,7 @@
 @using Brewforge.Models;
 @model HopEditorViewModel
 
-@using (Html.BeginForm("testThing", "Home", FormMethod.Get, new { returnModel = Model }))
+@using (Html.BeginForm("editRecipe", "Recipe", FormMethod.Get, new { returnModel = Model }))
 {
     <div id="hopWidgetWrapper" class="grid grid-pad widgetItem recipeEditorWidget">
         <div class="col-1-2">
