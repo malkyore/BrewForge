@@ -23,108 +23,14 @@
     <div class="col-1-4">
         <div class="module" style="height:100%">
             <div>
-                Currently Brewing!
+                <h4>Currently Brewing!</h4>
             </div>
             <div class="grid">
-                <div class="inverseModule" style="margin:5px">
-                    <h4>Beer 1</h4>
-                    <b>Target</b>
-                    <div>
-                        <div class="miniStatWidget">
-                            <div class="miniStatTop">
-                                IBU
-                            </div>
-                            <div class="miniStatBottom">
-                                10
-                            </div>
-                        </div>
-                        <div class="miniStatWidget">
-                            <div class="miniStatTop">
-                                ABV
-                            </div>
-                            <div class="miniStatBottom">
-                                45
-                            </div>
-                        </div>
-                        <div class="miniStatWidget">
-                            <div class="miniStatTop">
-                                FG
-                            </div>
-                            <div class="miniStatBottom">
-                                1.098
-                            </div>
-                        </div>
-                        <div class="miniStatWidget">
-                            <div class="miniStatTop">
-                                OG
-                            </div>
-                            <div class="miniStatBottom">
-                                1.200
-                            </div>
-                        </div>
-                        <div class="miniStatWidget">
-                            <div class="miniStatTop">
-                                SRM
-                            </div>
-                            <div class="miniStatBottom">
-                                99
-                            </div>
-                        </div>
-                    </div>
-                    <b>Actual</b>
-                    <div>
-                        <div class="miniStatWidget">
-                            <div class="miniStatTop">
-                                IBU
-                            </div>
-                            <div class="miniStatBottom">
-                                23
-                            </div>
-                        </div>
-                        <div class="miniStatWidget">
-                            <div class="miniStatTop">
-                                ABV
-                            </div>
-                            <div class="miniStatBottom">
-                                9
-                            </div>
-                        </div>
-                        <div class="miniStatWidget">
-                            <div class="miniStatTop">
-                                FG
-                            </div>
-                            <div class="miniStatBottom">
-                                1.098
-                            </div>
-                        </div>
-                        <div class="miniStatWidget">
-                            <div class="miniStatTop">
-                                OG
-                            </div>
-                            <div class="miniStatBottom">
-                                1.010
-                            </div>
-                        </div>
-                        <div class="miniStatWidget">
-                            <div class="miniStatTop">
-                                SRM
-                            </div>
-                            <div class="miniStatBottom">
-                                99
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <br />
-                        <b>Next Steps:</b><br />
-                        <b>Rack to secondary.</b>
-                    </div>
-                </div>
-                <div class="inverseModule" style="margin:5px">
-                    Beer 2
-                    beer 2
-                    Beer 2
-                </div>
+                @{ foreach (BrewLog a in Model.activeBrewLogs)
+                    {
+                        @Html.Partial("~/Views/Shared/MiniStatWidget.cshtml", new MiniStatsWidgetViewModel { BrewlogName = a.name, originalRecipe = a.originalRecipe, rectifiedRecipe = a.rectifiedRecipe })
+                    }
+                }
             </div>
         </div>
         <!--<div>

@@ -18,15 +18,24 @@ using Microsoft.AspNetCore.Http;
 
 namespace Brewforge.Controllers
 {
-    public class RecipeController : BaseController
+    public class BrewlogController : BaseController
     {
         private IHostingEnvironment hostingEnvironment;
 
-        public RecipeController(IOptions<AppSettings> settings, IHostingEnvironment env) : base(settings)
+        public BrewlogController(IOptions<AppSettings> settings, IHostingEnvironment env) : base(settings)
         {
-
+            
         }
+        
+        //Original Recipe from recipe list
+        public static recipe originalRecipeDetails { get; set; }
+
+        //Rectified Recipe 
         public static recipe recipeDetails { get; set; }
+
+        public static BrewLog brewlogDetails { get; set; }
+
+        public static List<BrewLog> allBrewLogs { get; set; }
 
         public static int currentSelectedHop { get; set; }
         public static int currentSelectedFermentable { get; set; }
@@ -40,55 +49,41 @@ namespace Brewforge.Controllers
         public static List<adjunct> adjunctOptions { get; set; }
         public static List<style> styleOptions { get; set; }
 
-        public static MainDashboardModel dashboardModel = new MainDashboardModel();
-
         [HttpGet()]
         public virtual IActionResult Index(string selectedRecipe = "-1")
         {
-            return RedirectToAction("Index", "Home");
+            allBrewLogs = DataAccess.getAllBrewLogs(AppSettings.apiLink, AppSettings.apiAuthToken);
+
+            BrewlogDashboardModel model = new BrewlogDashboardModel();
+            model.brewLogs = allBrewLogs;
+            return View(model);
         }
+
+        public virtual IActionResult openBrewLog()
+        {
+            allBrewLogs = DataAccess.getAllBrewLogs(AppSettings.apiLink, AppSettings.apiAuthToken);
+            BrewloggerModel model = new BrewloggerModel();
+            model.brewLog = allBrewLogs[0];
+
+            return View("Views/Brewlog/Brewlogger.cshtml", model);
+        }
+
+
         /*
          * Opens the selected recipe 
          * */
-        public virtual ActionResult openRecipe(String openRecipe)
+        public virtual ActionResult openRectifiedRecipe()
         {
-            EditorViewModel e = new EditorViewModel();
-            if (openRecipe == "NEW")
-            {
-                recipeDetails = RecipeTools.makeEmptyRecipe(AppSettings.userSettings.userID);
-                hopOptions = DataAccess.getAllHops(AppSettings.apiLink, AppSettings.apiAuthToken);
-                fermentableOptions = DataAccess.getAllFermentables(AppSettings.apiLink, AppSettings.apiAuthToken);
-                yeastOptions = DataAccess.getAllYeasts(AppSettings.apiLink, AppSettings.apiAuthToken);
-                adjunctOptions = DataAccess.getAllAdjuncts(AppSettings.apiLink, AppSettings.apiAuthToken);
-                styleOptions = DataAccess.getAllStyles(AppSettings.apiLink, AppSettings.apiAuthToken);
-
-                e.styleOptions = styleOptions;
-                e.currentRecipe = recipeDetails;
-                e.selectedHopAddition = RecipeTools.makeEmptyHopAddition();
-
-                e.selectedFermentableAddition = RecipeTools.makeEmptyFermentablAddition();
-                e.selectedYeastAddition = RecipeTools.makeEmptyYeastAddition();
-
-                e.selectedAdjunctAddition = RecipeTools.makeEmptyAdjunctAddition();
-                e.selectedHopAdditionIndex = currentSelectedHop;
-                e.selectedFermentableAdditionIndex = currentSelectedFermentable;
-                e.hopOptions = hopOptions;
-                e.fermentableOptions = fermentableOptions;
-                e.yeastOptions = yeastOptions;
-                e.adjunctOptions = adjunctOptions;
-
-                e.style = styleOptions[0];
-            }
-            else
-            {
-
+                EditorViewModel e = new EditorViewModel();
                 currentSelectedFermentable = 0;
                 currentSelectedHop = 0;
                 currentSelectedYeast = 0;
                 currentSelectedAdjunct = 0;
-                
-                
-                recipeDetails = DataAccess.getRecipeDetails(AppSettings.apiLink + AppSettings.recipeEndpoint, AppSettings.apiAuthToken, openRecipe);
+
+
+            //recipeDetails = DataAccess.getRecipeDetails(AppSettings.apiLink + AppSettings.recipeEndpoint, AppSettings.apiAuthToken, openRecipe);
+
+            allBrewLogs = DataAccess.getAllBrewLogs(AppSettings.apiLink, AppSettings.apiAuthToken);
                 e.currentRecipe = recipeDetails;
                 if (recipeDetails.hops.Count > 0)
                 {
@@ -126,23 +121,13 @@ namespace Brewforge.Controllers
                     e.selectedAdjunctAddition = RecipeTools.makeEmptyAdjunctAddition();
                 }
 
-                styleOptions = DataAccess.getAllStyles(AppSettings.apiLink, AppSettings.apiAuthToken);
-
-                if (recipeDetails.style != null)
-                {
-                    e.selectedStyle = recipeDetails.style.idString;
-                }
-                else
-                {
-                    e.selectedStyle = styleOptions[0].idString;
-                }
-
                 hopOptions = DataAccess.getAllHops(AppSettings.apiLink, AppSettings.apiAuthToken);
                 fermentableOptions = DataAccess.getAllFermentables(AppSettings.apiLink, AppSettings.apiAuthToken);
                 yeastOptions = DataAccess.getAllYeasts(AppSettings.apiLink, AppSettings.apiAuthToken);
                 adjunctOptions = DataAccess.getAllAdjuncts(AppSettings.apiLink, AppSettings.apiAuthToken);
-                
-                
+                styleOptions = DataAccess.getAllStyles(AppSettings.apiLink, AppSettings.apiAuthToken);
+
+                currentSelectedStyle = styleOptions[0].idString;
                 e.styleOptions = styleOptions;
                 e.selectedHopAdditionIndex = currentSelectedHop;
                 e.selectedFermentableAdditionIndex = currentSelectedFermentable;
@@ -160,7 +145,6 @@ namespace Brewforge.Controllers
                     e.style = recipeDetails.style;
                     e.selectedStyle = recipeDetails.style.idString;
                 }
-            }
             return View("Views/Recipe/Editor.cshtml", e);
         }
 
@@ -194,6 +178,11 @@ namespace Brewforge.Controllers
                 if (returnModel.currentRecipe.name != recipeDetails.name)
                 {
                     recipeDetails.name = returnModel.currentRecipe.name;
+                    save = true;
+                }
+                if (returnModel.currentRecipe.style != recipeDetails.style)
+                {
+                    recipeDetails.style = returnModel.currentRecipe.style;
                     save = true;
                 }
                 if (returnModel.currentRecipe.description != recipeDetails.description)

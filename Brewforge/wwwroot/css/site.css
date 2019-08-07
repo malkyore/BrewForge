@@ -195,16 +195,20 @@ h1 {
     padding: 20px;
     background-color: #dfdfdf;
     border-radius: 5px;
+    
 }
+    .inverseModule:hover {
+        background-color: #cccccc;
+    }
 
-.hopListItemSelected {
-    display: block;
-    padding: 7px;
-    height: auto;
-    background-color: #c7c7c7;
-    border-radius: 5px;
-    box-shadow: 0px 4px #75d072;
-}
+    .hopListItemSelected {
+        display: block;
+        padding: 7px;
+        height: auto;
+        background-color: #c7c7c7;
+        border-radius: 5px;
+        box-shadow: 0px 4px #75d072;
+    }
 
 .editorListItem {
     display: block;

@@ -41,6 +41,8 @@ namespace Brewforge.Controllers
         public static List<style> styleOptions { get; set; }
 
         public static MainDashboardModel dashboardModel = new MainDashboardModel();
+        public static List<BrewLog> activeBrewLogs = new List<BrewLog>();
+
 
         [HttpGet()]
         public virtual IActionResult RecipeViewer(string selectedRecipe = "-1")
@@ -83,7 +85,7 @@ namespace Brewforge.Controllers
             recipe selectedRecipeDetails = new recipe();
             List<recipe> myRecipes = myRecipes = (List<recipe>)DataAccess.getRecipes(AppSettings.apiLink + AppSettings.recipeEndpoint, AppSettings.apiAuthToken).Where(x => x.createdByUserID == AppSettings.userSettings.userID).ToList<recipe>();
             List<recipe> publicRecipes = (List<recipe>)DataAccess.getRecipes(AppSettings.apiLink + AppSettings.recipeEndpoint, AppSettings.apiAuthToken).Where(x => x.isPublic == true).ToList<recipe>();
-
+            activeBrewLogs = DataAccess.getAllBrewLogs(AppSettings.apiLink, AppSettings.apiAuthToken);
 
 
             if (!String.IsNullOrEmpty(selectedRecipe))
@@ -126,6 +128,7 @@ namespace Brewforge.Controllers
                 }
                 
             }
+            dashboardModel.activeBrewLogs = activeBrewLogs;
 
             return View(dashboardModel);
         }

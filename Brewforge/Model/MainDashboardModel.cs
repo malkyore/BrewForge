@@ -17,5 +17,7 @@ namespace Brewforge.Models
         public recipe selectedPublicRecipe { get; set; }
 
         public string selectedPublicRecipeIndex { get; set; }
+
+        public List<BrewLog> activeBrewLogs { get; set; }
     }
 }
