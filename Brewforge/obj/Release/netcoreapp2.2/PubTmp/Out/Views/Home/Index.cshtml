@@ -6,121 +6,81 @@
 @using Microsoft.AspNetCore.Http;
 @using Beernet_Lib;
 @using Brewforge.Models;
-<div id="header">
+
+@model MainDashboardModel
+<div id="header" class="header">
     <!--&nbsp;Select a recipe...-->
-    @model RecipeSelectorViewModel
-    <br />
-    <br />
-    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    @*<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>*@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
+    <h2 style="padding:30px">Dashboard</h2>
 </div>
 <div id="toolbar" class="btn-group">
     
 </div>
-
-<div style="height:100%">
-    <h3 style="color:white">Select a Recipe</h3> <br />
-
-    <button onclick="openNewRecipe(this)">Add Recipe</button>
-    @using (Html.BeginForm("Index", "Home", FormMethod.Get, new {@class = "selectRecipeForm", returnModel = Model}))
-    {
-        <div class="grid grid-pad widgetItem" style="height:50%; margin:20px">
-            <div class="col-1-2">
-                <div id="recipeSelector" class="module selectorWidget">
-                    @{int index2 = 0;
-                        foreach (recipe r in Model.allRecipes)
-                        {
-                            string name = r.idString;
-                            if (index2 == 0)
-                            {
-                                <script>
-                                    localStorage['firstRecipeID'] = '@name';
-                                </script>
-                            }
-                            
-                            <div id=@name class="hopListItem grid" onclick="loadRecipe(this)">
-                                <div class="col-1-3">
-                                    @r.name
-                                </div>
-                                <div class="col-1-3">
-                                    @r.style
-                                </div>
-                                <div class="col-1-3">
-                                    @r.description
-                                </div>
-                            </div>
-                            index2++;
-                        }
-                    }
-                </div>
+<div class="grid dashboardBody">
+    <div class="col-1-4">
+        <div class="module currentlyBrewing" style="height:100%">
+            <div>
+                <h4>Currently Brewing!</h4>
             </div>
-            <div class="col-1-2">
-                <div class="module grid">
-                    <div class="col-1-3">
-                        @Model.selectedRecipe.name
-                    </div>
-                    <div class="col-1-3">
-                        @Model.selectedRecipe.description
-                    </div>
-                    <div class="col-1-3">
-                        <button type="button" onclick="openRecipe(this)" value="@Model.selectedRecipe.idString">Open Recipe</button>
-                    </div>
-                </div>
-                <div class="module editorWidget">
-                    @Model.selectedRecipe.style
-                    <div>
-                        @Model.selectedRecipe.recipeStats.abv <br />
-                        @Model.selectedRecipe.recipeStats.og <br />
-                        @Model.selectedRecipe.recipeStats.fg <br />
-                        @Model.selectedRecipe.recipeStats.ibu <br />
-                        @Model.selectedRecipe.recipeStats.srm <br />
-                    </div>
-                </div>
+            <div class="grid">
+                @{ foreach (BrewLog a in Model.activeBrewLogs)
+                    {
+                        @Html.Partial("~/Views/Shared/MiniStatWidget.cshtml", new MiniStatsWidgetViewModel { BrewlogName = a.name, originalRecipe = a.originalRecipe, rectifiedRecipe = a.rectifiedRecipe })
+                    }
+                }
             </div>
         </div>
-    }
-</div>
+        <!--<div>
+        <button onclick="openNewRecipe(this)">New Recipe</button>
+    </div>
+    <br />
+    <div>
+        <button onclick="viewRecipes(this)">View All Recipes</button>
+    </div>-->
+    </div>
+    <div class="col-3-4">
+        <div class="module">
+            <div class="displayRecipeGrid-1-2">
+                <div>
+                    <h4>My Recipies</h4>
+                </div>
+                @Html.Partial("~/Views/Shared/RecipeGrid.cshtml", new RecipeGridModel { recipes = Model.myRecipes, selectedRecipe = Model.selectedMyRecipe, selectedRecipeIndex = Model.selectedMyRecipeIndex, gridName = "myRecipes" })
+            </div>
+        </div>
+        <div class="module" style="margin-top:10px;">
+            <div class="displayRecipeGrid-1-2">
+                <div>
+                    <h4>Popular Recipes</h4>
+                </div>
+                @Html.Partial("~/Views/Shared/RecipeGrid.cshtml", new RecipeGridModel { recipes = Model.publicRecipes, selectedRecipe = Model.selectedPublicRecipe, selectedRecipeIndex = Model.selectedPublicRecipeIndex, gridName = "publicRecipes" })
+            </div>
+        </div>
+    </div>
 
-        <script type="text/javascript">
 
 
-            function loadRecipe(el) {
-                window.location = '/Home/Index?selectedRecipe=' + el.id;
-                console.log(el.id);
-            }
+<script type="text/javascript">
 
             function openNewRecipe(el) {
-                window.location = '/Home/openRecipe?openRecipe=NEW';
+                window.location = '/Recipe/openRecipe?openRecipe=NEW';
                 console.log("New recipe");
             }
 
-            function openRecipe(el) {
-                window.location = '/Home/openRecipe?openRecipe=' + el.value;
-            }
+    function viewRecipes(el) {
+        window.location = '/Home/RecipeViewer';
+    }
+    function setSelectedCSS() {
+        $('#myRecipes' + '@Model.selectedMyRecipeIndex').removeClass("hopListItem");
+        $('#myRecipes' + '@Model.selectedMyRecipeIndex').addClass("hopListItemSelected");
+        $('#publicRecipes' + '@Model.selectedPublicRecipeIndex').removeClass("hopListItem");
+        $('#publicRecipes' + '@Model.selectedPublicRecipeIndex').addClass("hopListItemSelected");
+    }
 
-            function setSelectedCSS() {
-               $("#" + '@Model.selectedRecipeIndex').removeClass("hopListItem");
-               $("#" + '@Model.selectedRecipeIndex').addClass("hopListItemSelected");
-        }
+    $(document).ready(function () {
+        setSelectedCSS();
+    });
+</script>
 
-            $("#recipeSelector").scroll(function () {
-          localStorage['page'] = document.URL;
-                localStorage['scrollTop'] = $("#recipeSelector").scrollTop();
-      });
-
-      $(document).ready(function () {
-          setSelectedCSS();
-          //console.log('@Model.selectedRecipeIndex');
-          if (localStorage['firstRecipeID'] == null || localStorage['firstRecipeID'] == '@Model.selectedRecipeIndex') {
-              localStorage['scrollTop'] = 0;
-          }
-          else {
-              $("#recipeSelector").scrollTop(localStorage['scrollTop']);
-          }
-      });
-
-        </script>
-
-    

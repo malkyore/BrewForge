@@ -3,7 +3,6 @@ F:\_Repos\BrewForge\Brewforge\bin\Debug\netcoreapp2.2\Beernet-Lib.pdb
 F:\_Repos\BrewForge\Brewforge\obj\Debug\netcoreapp2.2\Beernet-BrewForge.csprojAssemblyReference.cache
 F:\_Repos\BrewForge\Brewforge\obj\Debug\netcoreapp2.2\Beernet-BrewForge.Properties.Resources.resources
 F:\_Repos\BrewForge\Brewforge\obj\Debug\netcoreapp2.2\Beernet-BrewForge.csproj.GenerateResource.cache
-F:\_Repos\BrewForge\Brewforge\obj\Debug\netcoreapp2.2\Beernet-BrewForge.csproj.CoreCompileInputs.cache
 F:\_Repos\BrewForge\Brewforge\obj\Debug\netcoreapp2.2\Beernet-BrewForge.AssemblyInfoInputs.cache
 F:\_Repos\BrewForge\Brewforge\obj\Debug\netcoreapp2.2\Beernet-BrewForge.AssemblyInfo.cs
 F:\_Repos\BrewForge\Brewforge\obj\Debug\netcoreapp2.2\Beernet-BrewForge.csproj.CopyComplete
@@ -14,3 +13,8 @@ F:\_Repos\BrewForge\Brewforge\bin\Debug\netcoreapp2.2\BrewForge.dll
 F:\_Repos\BrewForge\Brewforge\bin\Debug\netcoreapp2.2\BrewForge.pdb
 F:\_Repos\BrewForge\Brewforge\obj\Debug\netcoreapp2.2\BrewForge.dll
 F:\_Repos\BrewForge\Brewforge\obj\Debug\netcoreapp2.2\BrewForge.pdb
+F:\_Repos\BrewForge\Brewforge\bin\Debug\netcoreapp2.2\web.config
+F:\_Repos\BrewForge\Brewforge\bin\Debug\netcoreapp2.2\appsettings.json
+F:\_Repos\BrewForge\Brewforge\bin\Debug\netcoreapp2.2\bower.json
+F:\_Repos\BrewForge\Brewforge\bin\Debug\netcoreapp2.2\bundleconfig.json
+F:\_Repos\BrewForge\Brewforge\bin\Debug\netcoreapp2.2\Properties\launchSettings.json

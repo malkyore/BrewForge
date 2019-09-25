@@ -40,7 +40,7 @@ body {
 input,
 select,
 textarea {
-  max-width: 280px;
+  /*max-width: 280px;*/
 }
 
 /* Carousel */
@@ -118,7 +118,7 @@ textarea {
 }
 
 .col-3-4 {
-    width: 75%;
+    width: 74%;
     height: 100%;
 }
 
@@ -195,16 +195,20 @@ h1 {
     padding: 20px;
     background-color: #dfdfdf;
     border-radius: 5px;
+    
 }
+    .inverseModule:hover {
+        background-color: #cccccc;
+    }
 
-.hopListItemSelected {
-    display: block;
-    padding: 7px;
-    height: auto;
-    background-color: #c7c7c7;
-    border-radius: 5px;
-    box-shadow: 0px 4px #75d072;
-}
+    .hopListItemSelected {
+        display: block;
+        padding: 7px;
+        height: auto;
+        background-color: #c7c7c7;
+        border-radius: 5px;
+        box-shadow: 0px 4px #75d072;
+    }
 
 .editorListItem {
     display: block;
@@ -231,19 +235,6 @@ h1 {
     height:auto;
 }
 
-.statWidget {
-    display: inline-block;
-    width: 10%;
-    height: 40%;
-    border-radius: 4px;
-    background-color: #dfdfdf;
-    margin: 15px;
-    padding: 10px;
-    text-align: center;
-    box-shadow: 0px 4px green;
-    /*border-bottom: double;
-    border-bottom-color: black;*/
-}
 .statTop {
     height: 30px;
     font-size: 18px;
@@ -314,13 +305,8 @@ h1 {
 
 .editorWidget {
     height: 70%;
+    overflow:scroll;
 }
-
-.statsWidget{
-    min-width:800px;
-}
-
-
 
 button {
     background: #1AAB8A;
@@ -379,6 +365,17 @@ button {
     padding-left: 30px;
 }
 
+.ingredientManagerWidget {
+    min-width: 400px;
+    height: 600px !important;
+    height: 25%;
+    box-shadow: 0px 4px green;
+}
+
+.ingredientEditorWidget {
+    height: 80%;
+}
+
 /****
 second navigation stuff
 **/
@@ -388,7 +385,9 @@ body {
     margin: 0;
     font-family: "Open Sans", Helvetica Neue, Helvetica, Arial, sans-serif;
     /*color: #fff;*/
-    padding-left: 240px;
+    /*padding-left: 240px;*/
+
+    min-width:120em;
 }
 
 main {
@@ -618,4 +617,64 @@ main {
 
 .currentMenuSelection {
     background-color: rgba(0, 0, 0, 0.1);
+}
+
+/**  STYLE 11 */
+-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: rgba(0,0,0,0.1);
+    border: 1px solid #ccc;
+}
+
+-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: linear-gradient(left, #fff, #e4e4e4);
+    border: 1px solid #aaa;
+}
+
+    -webkit-scrollbar-thumb:hover {
+        background: #fff;
+    }
+
+    -webkit-scrollbar-thumb:active {
+        background: linear-gradient(left, #22ADD4, #1E98BA);
+    }
+
+    .currentlyBrewing {
+        min-width:20em;
+        display:block;
+    }
+
+.editorBody
+{
+    padding-left:230px;
+}
+
+.bodywrapper {
+    padding-left: 10px;
+}
+
+.statWidget {
+    display: inline-block;
+    /*width: 17.3%;*/
+    min-width: 11.3em;
+    height: 40%;
+    border-radius: 4px;
+    background-color: #dfdfdf;
+    margin: 15px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0px 4px green;
+}
+
+.statsWidget {
+    
+}
+
+.statsWidgetSection {
+    min-width: 15em;
+}
+
+.editorLabel {
+    white-space: nowrap;
 }

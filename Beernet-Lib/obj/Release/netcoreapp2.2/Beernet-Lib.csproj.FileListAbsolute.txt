@@ -2,7 +2,6 @@ F:\_Repos\BrewForge\Beernet-Lib\bin\Release\netcoreapp2.2\Beernet-Lib.deps.json
 F:\_Repos\BrewForge\Beernet-Lib\bin\Release\netcoreapp2.2\Beernet-Lib.dll
 F:\_Repos\BrewForge\Beernet-Lib\bin\Release\netcoreapp2.2\Beernet-Lib.pdb
 F:\_Repos\BrewForge\Beernet-Lib\obj\Release\netcoreapp2.2\Beernet-Lib.csprojAssemblyReference.cache
-F:\_Repos\BrewForge\Beernet-Lib\obj\Release\netcoreapp2.2\Beernet-Lib.csproj.CoreCompileInputs.cache
 F:\_Repos\BrewForge\Beernet-Lib\obj\Release\netcoreapp2.2\Beernet-Lib.AssemblyInfoInputs.cache
 F:\_Repos\BrewForge\Beernet-Lib\obj\Release\netcoreapp2.2\Beernet-Lib.AssemblyInfo.cs
 F:\_Repos\BrewForge\Beernet-Lib\obj\Release\netcoreapp2.2\Beernet-Lib.dll
