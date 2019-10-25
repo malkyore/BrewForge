@@ -17,6 +17,7 @@ namespace Brewforge
         .Build();
             var host = new WebHostBuilder()
           .UseConfiguration(config)
+          //.UseUrls("http://*:1666") //for dev
           .UseUrls("http://*:1684")
           .UseKestrel()
           .UseContentRoot(Directory.GetCurrentDirectory())
