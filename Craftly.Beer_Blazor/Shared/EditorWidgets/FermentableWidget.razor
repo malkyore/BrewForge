@@ -1,0 +1,90 @@
+﻿@using Beernet_Lib.Models;
+@using Craftly.Beer_Blazor.ComponentClasses.EditorComponents;
+@inherits FermentableEditor;
+
+    <div id="fermentableWidgetWrapper" class="grid grid-pad widgetItem recipeEditorWidget">
+        <div class="col-1-2">
+            <div id="fermentableListSelector" class="module selectorWidget">
+                @{int index = 0;
+                    foreach (fermentableAddition fa in Model.fermentables)
+                    {
+                        string name = "f" + index;
+                        <div id=@name class="hopListItem grid" onclick="changeSelectedFermentable(this)">
+                            <div class="col-1-3">
+                                <div>@fa.fermentable.name</div>
+                                <div class="ingredientUnit">name</div>
+                            </div>
+                            <div class="col-1-3">
+                                <div>@fa.fermentable.maltster</div>
+                                <div class="ingredientUnit">maltster</div>
+                            </div>
+                            <div class="col-1-3">
+                                <div>@fa.weight</div>
+                                <div class="ingredientUnit">lbs</div>
+                            </div>
+                        </div>
+                        index++;
+                    }
+                }
+            </div>
+        </div>
+        <div class="col-1-2">
+            <div class="module grid">
+                <div class="col-1-2">
+                    <button type="button" onclick="addFermentable(this)">Add Fermentable</button>
+                </div>
+                <div class="col-1-2">
+                    <button type="button" onclick="deleteFermentable(this)">Delete Fermentable</button>
+                </div>
+            </div>
+            <div class="module editorWidget">
+                    <h4 style="padding-top:0;">Edit Fermentable</h4>
+                    <div class="editorListItem infogrid">
+                        <div class="col-1-4 editorLabel">
+                            <label>Fermentable: </label>
+                        </div>
+                        <div class="col-3-4">
+                            <select id="FermentableSelector" class="ingredientSelector" style="width:100%;">
+                                <option value="fermentable1">fermentable1</option>
+                                <option value="fermentable2">fermentable2</option>
+                                <option value="fermentable3">fermentable3</option>
+                                <option value="fermentable4">fermentable4</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="editorListItem infogrid">
+                        <div class="col-1-4 editorLabel">
+                            <label>PPG: </label>
+                        </div>
+                        <div class="col-3-4">
+                            <label>@Model.fermentables[selectedFermentableAddition].fermentable.yield</label>
+                        </div>
+                    </div>
+                    <div class="editorListItem infogrid">
+                        <div class="col-1-4 editorLabel">
+                            <label>Type: </label>
+                        </div>
+                        <div class="col-3-4">
+                            <label>@Model.fermentables[selectedFermentableAddition].fermentable.type</label>
+                        </div>
+                    </div>
+                    <div class="editorListItem infogrid">
+                        <div class="col-1-4 editorLabel">
+                            <label>Maltster: </label>
+                        </div>
+                        <div class="col-3-4">
+                            <label>@Model.fermentables[selectedFermentableAddition].fermentable.maltster</label>
+                        </div>
+                    </div>
+                    <div class="editorListItem infogrid">
+                        <div class="col-1-4 editorLabel">
+                            <label>amount</label>
+                        </div>
+                        <div class="col-3-4">
+                            <input type="text" @bind="Model.fermentables[selectedFermentableAddition].weight" />
+                        </div>
+                    </div>
+                    <input type="submit" value="Save" />
+            </div>
+        </div>
+    </div>

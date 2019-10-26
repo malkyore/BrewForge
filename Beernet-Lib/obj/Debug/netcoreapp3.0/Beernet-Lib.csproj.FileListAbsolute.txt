@@ -1,0 +1,8 @@
+F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Beernet-Lib\bin\Debug\netcoreapp3.0\Beernet-Lib.deps.json
+F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Beernet-Lib\bin\Debug\netcoreapp3.0\Beernet-Lib.dll
+F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Beernet-Lib\bin\Debug\netcoreapp3.0\Beernet-Lib.pdb
+F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Beernet-Lib\obj\Debug\netcoreapp3.0\Beernet-Lib.csprojAssemblyReference.cache
+F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Beernet-Lib\obj\Debug\netcoreapp3.0\Beernet-Lib.AssemblyInfoInputs.cache
+F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Beernet-Lib\obj\Debug\netcoreapp3.0\Beernet-Lib.AssemblyInfo.cs
+F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Beernet-Lib\obj\Debug\netcoreapp3.0\Beernet-Lib.dll
+F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Beernet-Lib\obj\Debug\netcoreapp3.0\Beernet-Lib.pdb

@@ -1,0 +1,30 @@
+﻿@inherits LayoutComponentBase
+@using Craftly.Beer_Blazor.ComponentClasses;
+@using Beernet_Lib.Models;
+@*@if (((RazorView)ViewContext.View).Path != "/Views/Login/Index.cshtml")
+    {*@
+<MainNav />
+
+@*}*@
+<div class="container-fluid body-content">
+    <div class="bodywrapper">
+        <Craftly.Beer_Blazor.Shared.EditorWidgets.RecipeSelectorWidget Model=@Model recipes=@recipes> </Craftly.Beer_Blazor.Shared.EditorWidgets.RecipeSelectorWidget>
+        <br />
+        <Craftly.Beer_Blazor.Shared.EditorWidgets.HopWidget Model=@Model> </Craftly.Beer_Blazor.Shared.EditorWidgets.HopWidget>
+        <br />
+        <Craftly.Beer_Blazor.Shared.EditorWidgets.FermentableWidget Model=@Model> </Craftly.Beer_Blazor.Shared.EditorWidgets.FermentableWidget>
+        <br />
+        <Craftly.Beer_Blazor.Shared.EditorWidgets.YeastWidget Model=@Model> </Craftly.Beer_Blazor.Shared.EditorWidgets.YeastWidget>
+        <br />
+        <Craftly.Beer_Blazor.Shared.EditorWidgets.AdjunctWidget Model=@Model> </Craftly.Beer_Blazor.Shared.EditorWidgets.AdjunctWidget>
+
+        @Body
+    </div>
+
+</div>
+
+@code
+{
+    public static recipe Model = RecipeHelper.initializeBlankRecipe();
+    public static List<recipe> recipes = new List<recipe> {Model};
+}
