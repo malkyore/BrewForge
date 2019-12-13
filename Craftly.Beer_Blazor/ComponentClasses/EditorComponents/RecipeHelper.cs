@@ -3,11 +3,43 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Beernet_Lib.Models;
+using Beernet_Lib.Tools;
 
 namespace Craftly.Beer_Blazor.ComponentClasses
 {
     public static class RecipeHelper
     {
+        public static string currentRecipeId { get; set; }
+
+        static Dictionary<string, string> values = new Dictionary<string, string>
+            {
+               { "Username", "" + "beer"},
+               { "Password", "" + "Poopbutt1" }
+            };
+
+        static string apiLink = "http://rest.unacceptable.beer:5123";
+        static string loginEndpoint = "/Beernet/Login/";
+
+        public async static Task<List<recipe>> GetRecipes()
+        {
+            string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
+
+            List<recipe> allRecipes = DataAccess.getRecipes(apiLink + "/beernet/recipe/", token).ToList();
+            return allRecipes;
+
+        }
+
+        public static recipe GetRecipeDetails(string recipeID)
+        {
+            string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
+
+            currentRecipeId = recipeID;
+
+            recipe RecipeDetail = DataAccess.getRecipeDetails(apiLink + "/beernet/recipe/", token, recipeID);
+            return RecipeDetail;
+
+        }
+
         public static recipe initializeBlankRecipe()
         {
             recipe newRecipe = new recipe();

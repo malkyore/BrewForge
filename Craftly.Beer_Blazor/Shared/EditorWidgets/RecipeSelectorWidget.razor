@@ -1,6 +1,7 @@
 ﻿@using Beernet_Lib.Models;
 @using Craftly.Beer_Blazor.ComponentClasses.EditorComponents;
 @inherits RecipeSelector;
+@inject NavigationManager NavigationManager;
 
 @{ if (Model == null)
     {
@@ -18,86 +19,90 @@
 }
 
 
-    <div  class="grid grid-pad widgetItem recipeSelector">
-        <div class="col-1-2">
-            <div id="recipeSelector" class="module selectorWidget recipeScrollbar">
-                @{int index2 = 0;
-                    foreach (recipe r in recipes)
-                    {
-                        <div class="hopListItem grid" onclick="loadRecipe(this)">
-                            <div class="col-1-3">
-                                @r.name
-                            </div>
-                            <div class="col-1-3">
-                                @r.style.name
-                            </div>
-                            <div class="col-1-3">
-                                @r.description
-                            </div>
+<div class="grid grid-pad widgetItem recipeSelector">
+    <div class="col-1-2">
+        <div id="recipeSelector" class="module selectorWidget recipeScrollbar">
+            @{int index2 = 0;
+                foreach (recipe r in recipes)
+                {
+                    <div class="hopListItem grid" @onclick="@(() => loadRecipe(r.idString))">
+                        <div class="col-1-3">
+                            @r.name
                         </div>
-                        index2++;
-                    }
+                        <div class="col-1-3">
+                            @if (@r.style != null)
+                            {
+                                @r.style.name
+                            }
+                        </div>
+                        <div class="col-1-3">
+                            @r.description
+                        </div>
+                    </div>
+                    index2++;
                 }
+            }
+        </div>
+    </div>
+    <div class="col-1-2 recipeWindow recipeScrollbar">
+        <div class="module grid">
+            <div style="font-size:18px;">
+                @Model.name
+            </div>
+            <div class="col-1-3">
+                <NavLink href="Editor">Open Recipe</NavLink>
+                @*<button type="button" @onclick="" value="@Model.idString">Open Recipe</button>*@
             </div>
         </div>
-        <div class="col-1-2 recipeWindow recipeScrollbar">
-            <div class="module grid">
-                <div style="font-size:18px;">
-                    @Model.name
+        <div class="module editorWidget">
+            <div class="statsWidgetSection">
+                <div class="statWidget">
+                    <div class="statTop">
+                        IBU
+                    </div>
+                    <div class="statBottom">
+                        @Math.Round(Model.recipeStats.ibu, 2)
+                    </div>
                 </div>
-                <div class="col-1-3">
-                    <button type="button" onclick="openRecipe(this)" value="@Model.idString">Open Recipe</button>
+                <div class="statWidget">
+                    <div class="statTop">
+                        ABV
+                    </div>
+                    <div class="statBottom">
+                        @Math.Round(Model.recipeStats.abv, 2)
+                    </div>
+                </div>
+                <div class="statWidget">
+                    <div class="statTop">
+                        FG
+                    </div>
+                    <div class="statBottom">
+                        @Math.Round(Model.recipeStats.fg, 2)
+                    </div>
+                </div>
+                <div class="statWidget">
+                    <div class="statTop">
+                        OG
+                    </div>
+                    <div class="statBottom">
+                        @Math.Round(Model.recipeStats.og, 2)
+                    </div>
+                </div>
+                <div class="statWidget">
+                    <div class="statTop">
+                        SRM
+                    </div>
+                    <div class="statBottom">
+                        @Math.Round(Model.recipeStats.srm, 2)
+                    </div>
                 </div>
             </div>
-            <div class="module editorWidget">
-                <div class="statsWidgetSection">
-                    <div class="statWidget">
-                        <div class="statTop">
-                            IBU
-                        </div>
-                        <div class="statBottom">
-                            @Math.Round(Model.recipeStats.ibu, 2)
-                        </div>
-                    </div>
-                    <div class="statWidget">
-                        <div class="statTop">
-                            ABV
-                        </div>
-                        <div class="statBottom">
-                            @Math.Round(Model.recipeStats.abv, 2)
-                        </div>
-                    </div>
-                    <div class="statWidget">
-                        <div class="statTop">
-                            FG
-                        </div>
-                        <div class="statBottom">
-                            @Math.Round(Model.recipeStats.fg, 2)
-                        </div>
-                    </div>
-                    <div class="statWidget">
-                        <div class="statTop">
-                            OG
-                        </div>
-                        <div class="statBottom">
-                            @Math.Round(Model.recipeStats.og, 2)
-                        </div>
-                    </div>
-                    <div class="statWidget">
-                        <div class="statTop">
-                            SRM
-                        </div>
-                        <div class="statBottom">
-                            @Math.Round(Model.recipeStats.srm, 2)
-                        </div>
-                    </div>
-                </div>
-                <div style="font-size:18px;">
-                    @Model.style.name
-                </div>
-                <div style="font-size:14px;">
-                    @Model.description
-                </div>
+            <div style="font-size:18px;">
+                @Model.style.name
+            </div>
+            <div style="font-size:14px;">
+                @Model.description
             </div>
         </div>
     </div>
+</div>

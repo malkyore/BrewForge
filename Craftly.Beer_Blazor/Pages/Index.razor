@@ -1,5 +1,23 @@
-﻿@page "/"
+﻿@using Craftly.Beer_Blazor.ComponentClasses;
+@using Beernet_Lib.Models;
+@page "/"
 
-<h1>Hello, world!</h1>
+@if (recipes == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <Craftly.Beer_Blazor.Shared.EditorWidgets.RecipeSelectorWidget Model=@Model recipes=@recipes> </Craftly.Beer_Blazor.Shared.EditorWidgets.RecipeSelectorWidget>
+}
 
-Welcome to your new app.
+@code
+{
+    public static recipe Model = RecipeHelper.initializeBlankRecipe();
+    public static List<recipe> recipes = new List<recipe>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        recipes = await RecipeHelper.GetRecipes();
+    }
+}

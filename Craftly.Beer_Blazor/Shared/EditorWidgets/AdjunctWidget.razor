@@ -22,6 +22,7 @@
                             </div>
                         </div>
                     }
+
             </div>
         </div>
         <div class="col-1-2">
@@ -52,7 +53,15 @@
                             <label>Amount: </label>
                         </div>
                         <div class="col-3-4">
-                            <input type="text" @bind="Model.adjuncts[selectedAdjunctAddition].amount" />
+                            @if (Model.adjuncts.Count != 0)
+                            {
+                                <input type="text" @bind="Model.adjuncts[selectedAdjunctAddition].amount" />
+                            }
+                            else
+                            {
+                                <input type="text" />
+                            }
+
                         </div>
                     </div>
                     <div class="editorListItem infogrid">
@@ -60,7 +69,15 @@
                             <label>Unit: </label>
                         </div>
                         <div class="col-3-4">
+                            @if (Model.adjuncts.Count != 0)
+                            {
                             <input type="text" @bind="Model.adjuncts[selectedAdjunctAddition].unit" />
+                            }
+                            else
+                            {
+                                <input type="text" />
+                            }
+                            
                         </div>
                     </div>
                     <div class="editorListItem infogrid">
@@ -68,7 +85,15 @@
                             <label>Time: </label>
                         </div>
                         <div class="col-3-4">
+                            @if (Model.adjuncts.Count != 0)
+                            {
                             <input type="text" @bind="Model.adjuncts[selectedAdjunctAddition].time" />
+                            }
+                            else
+                            {
+                                <input type="text" />
+                            }
+                            
                         </div>
                     </div>
                     <div class="editorListItem infogrid">
@@ -76,7 +101,15 @@
                             <label>Time Unit: </label>
                         </div>
                         <div class="col-3-4">
+                            @if (Model.adjuncts.Count != 0)
+                            {
                             <input type="text" @bind="Model.adjuncts[selectedAdjunctAddition].timeUnit" />
+                            }
+                            else
+                            {
+                                <input type="text" />
+                            }
+                            
                         </div>
                     </div>
                     <div class="editorListItem infogrid">
@@ -84,7 +117,15 @@
                             <label>Use: </label>
                         </div>
                         <div class="col-3-4">
+                            @if (Model.adjuncts.Count != 0)
+                            {
                             <input type="text" @bind="Model.adjuncts[selectedAdjunctAddition].type" />
+                            }
+                            else
+                            {
+                                <input type="text" />
+                            }
+                            
                         </div>
                     </div>
                     <input type="submit" value="Save" />

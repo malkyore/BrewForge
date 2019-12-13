@@ -69,3 +69,7 @@ F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\Razor\Shared\EditorWidgets\AdjunctWidget.razor.g.cs
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\RazorDeclaration\Shared\EditorWidgets\RecipeSelectorWidget.razor.g.cs
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\Razor\Shared\EditorWidgets\RecipeSelectorWidget.razor.g.cs
+F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\RazorDeclaration\Shared\RecipeEditor.razor.g.cs
+F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\Razor\Shared\RecipeEditor.razor.g.cs
+F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\RazorDeclaration\Pages\Editor.razor.g.cs
+F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\Razor\Pages\Editor.razor.g.cs
