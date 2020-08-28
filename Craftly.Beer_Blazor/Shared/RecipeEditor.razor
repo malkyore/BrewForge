@@ -1,7 +1,7 @@
 ﻿@using Beernet_Lib.Models;
 @using Craftly.Beer_Blazor.ComponentClasses.EditorComponents;
 @inherits Craftly.Beer_Blazor.ComponentClasses.EditorComponents.RecipeEditor;
-
+@inject IJSRuntime JSRuntime
 
 <div class="editorBody">
     <div id="header">
@@ -29,47 +29,47 @@
         <div class="module grid" id="recipeInfo" style="height: auto; width:auto; min-height:250px; min-width:600px;">
             <h3>Recipe Info</h3>
             <div class="col-1-4">
-                    <div class="editorListItem infogrid">
-                        <div class="col-1-4 editorLabel">
-                            <label>Name: </label>
-                        </div>
-                        <div class="col-3-4">
-                            <input type="text" @bind="Model.name" />
-                            @*@Html.TextBoxFor(m => Model.currentRecipe.name, new { style = "width:100%" })*@
-                        </div>
+                <div class="editorListItem infogrid">
+                    <div class="col-1-4 editorLabel">
+                        <label>Name: </label>
                     </div>
-                    <div class="editorListItem infogrid">
-                        <div class="col-1-4 editorLabel">
-                            <label>
-                                Style:
-                            </label>
-                        </div>
-                        @*<div style="display:none">
+                    <div class="col-3-4">
+                        <input type="text" @bind="Model.name" />
+                        @*@Html.TextBoxFor(m => Model.currentRecipe.name, new { style = "width:100%" })*@
+                    </div>
+                </div>
+                <div class="editorListItem infogrid">
+                    <div class="col-1-4 editorLabel">
+                        <label>
+                            Style:
+                        </label>
+                    </div>
+                    @*<div style="display:none">
                             @Html.TextBoxFor(m => Model.selectedStyle, new { id = "selectedstyleIndex" })
                         </div>*@
-                        <div class="col-3-4">
-                            <select id="StyleSelector" class="ingredientSelector" style="width:100%;">
-                                @foreach (style s in styleOptions)
-                                {
-                                    <option value="@s.idString">@s.name</option>
-                                }
-                            </select>
-                        </div>
+                    <div class="col-3-4">
+                        <select id="StyleSelector" class="ingredientSelector" style="width:100%;">
+                            @foreach (style s in styleOptions)
+                            {
+                                <option value="@s.idString">@s.name</option>
+                            }
+                        </select>
                     </div>
-                    <div class="editorListItem infogrid">
-                        <div class="col-1-4 editorLabel">
-                            <label>
-                                Description:
-                            </label>
-                        </div>
-                        <div class="col-3-4">
-                            <EditForm Model="Model.description">
-                                <InputTextArea @bind-Value="Model.description"> </InputTextArea>
-                            </EditForm>
-                            @*@Html.TextAreaFor(m => Model.currentRecipe.description, new { style = "width:100%;height: auto;", rows = "3" })*@
-                        </div>
+                </div>
+                <div class="editorListItem infogrid">
+                    <div class="col-1-4 editorLabel">
+                        <label>
+                            Description:
+                        </label>
                     </div>
-                    <input type="submit" value="Save" />
+                    <div class="col-3-4">
+                        <EditForm Model="Model.description">
+                            <InputTextArea @bind-Value="Model.description"> </InputTextArea>
+                        </EditForm>
+                        @*@Html.TextAreaFor(m => Model.currentRecipe.description, new { style = "width:100%;height: auto;", rows = "3" })*@
+                    </div>
+                </div>
+                <input type="submit" value="Save" />
             </div>
             <div class="col-3-4 statsWidgetSection">
                 <div id="ibuStatWidget" class="statWidget">
@@ -210,3 +210,13 @@
         </div>
     </div>
 </div>
+
+@code
+{
+    private async Task LoadDropdowns()
+    {
+        var text =
+            await JSRuntime.InvokeAsync<string>("dropdowns",null);
+
+    }
+}

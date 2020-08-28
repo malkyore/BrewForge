@@ -40,6 +40,56 @@ namespace Craftly.Beer_Blazor.ComponentClasses
 
         }
 
+        public static List<hopbase> GetAllHops()
+        {
+            string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
+
+            //currentRecipeId = recipeID;
+
+            List<hopbase> listOfHops = new List<hopbase>();
+
+            listOfHops = DataAccess.getAllHops(apiLink, token);
+
+            return listOfHops;
+
+        }
+        
+        public static List<fermentable> GetAllFermentables()
+        {
+            string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
+
+            List<fermentable> listOfFermentables = new List<fermentable>();
+
+            listOfFermentables = DataAccess.getAllFermentables(apiLink, token);
+
+            return listOfFermentables;
+
+        }
+
+        public static List<yeast> GetAllYeasts()
+        {
+            string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
+
+            List<yeast> listOfYeasts = new List<yeast>();
+
+            listOfYeasts = DataAccess.getAllYeasts(apiLink, token);
+
+            return listOfYeasts;
+
+        }
+
+        public static List<adjunct> GetAllAdjuncts()
+        {
+            string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
+
+            List<adjunct> listOfadjuncts = new List<adjunct>();
+
+            listOfadjuncts = DataAccess.getAllAdjuncts(apiLink, token);
+
+            return listOfadjuncts;
+
+        }
+
         public static recipe initializeBlankRecipe()
         {
             recipe newRecipe = new recipe();

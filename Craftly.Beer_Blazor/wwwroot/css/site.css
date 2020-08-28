@@ -365,7 +365,7 @@ h1 {
 
 .editorListItem {
     display: block;
-    height: 20px;
+    height: 25px;
 }
 
 .hopListItem:hover {
@@ -377,7 +377,7 @@ h1 {
 
 .selectorWidget {
     height: 100%;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .recipeWindow {
@@ -459,7 +459,7 @@ h1 {
 
 .editorWidget {
     height: 70%;
-    overflow: scroll;
+    overflow: auto;
 }
 
 button {
@@ -578,6 +578,19 @@ main {
     z-index: 5;
     outline: none;
 }
+
+    .menu:not(.profile-menu) {
+        background: #5bc995;
+        height: 100vh;
+        width: 240px;
+        position: fixed;
+        top: 0;
+        left: 60px;
+        z-index: 5;
+        outline: none;
+        display: block;
+        background-color: #5bc995;
+    }
 
     .menu .avatar {
         background: rgba(0, 0, 0, 0.1);
@@ -773,7 +786,7 @@ main {
 }
 
 /**  STYLE 11 */
--webkit-scrollbar-track {
+        -webkit-scrollbar-track {
     border-radius: 10px;
     background: rgba(0,0,0,0.1);
     border: 1px solid #ccc;

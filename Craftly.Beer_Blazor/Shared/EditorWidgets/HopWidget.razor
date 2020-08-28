@@ -1,6 +1,8 @@
 ﻿@using Beernet_Lib.Models;
 @using Craftly.Beer_Blazor.ComponentClasses.EditorComponents;
+@using Radzen;
 @inherits HopEditor;
+
 
 <div id="hopWidgetWrapper" class="grid grid-pad widgetItem recipeEditorWidget">
     <div class="col-1-2">
@@ -11,9 +13,10 @@
             }
             else
             {
+                int i = 0;
                 foreach (hopAddition ha in Model.hops)
                 {
-                    <div id="te" class="hopListItem grid" onclick="changeSelectedHop(this)">
+                    <div class="hopListItem grid" @onclick="(() => changeSelectedHop(ha.additionGuid))">
                         <div class="col-1-4">
                             <div>@ha.hop.name</div>
                             <div class="ingredientUnit">name</div>
@@ -31,6 +34,7 @@
                             <div class="ingredientUnit"> @(ha.type == "Dry Hop" ? "days" : "min")</div>
                         </div>
                     </div>
+                    i++;
                 }
             }
         </div>
@@ -38,10 +42,10 @@
     <div class="col-1-2">
         <div class="module grid">
             <div class="col-1-2">
-                <button type="button" onclick="addHop(this)">Add Hop</button>
+                <button type="button" @onclick="(() => AddHop())">Add Hop</button>
             </div>
             <div class="col-1-2">
-                <button type="button" onclick="deleteHop(this)">Delete Hop</button>
+                <button type="button" @onclick="(() => DeleteHop())">Delete Hop</button>
             </div>
         </div>
         <div class="module editorWidget">
@@ -51,11 +55,11 @@
                     <label>Hop: </label>
                 </div>
                 <div class="col-3-4">
-                    <select id="HopSelector" class="ingredientSelector" style="width:100%;">
-                        <option value="hop1">hop1</option>
-                        <option value="hop2">hop2</option>
-                        <option value="hop3">hop3</option>
-                    </select>
+                    <RadzenDropDown AllowClear="true" TValue="string"
+                                    LoadData="@LoadData" AllowFiltering="true"
+                                    Data="@HopList" TextProperty="name" Value="@selectedHopID" Placeholder="@Model.hops[selectedHopAddition].hop.name" ValueProperty="idString" Style="margin-bottom: 30px" 
+                                    Change="@(args => Change(args, "DropDown with custom filtering"))" />
+
                 </div>
             </div>
             <div class="editorListItem infogrid">
@@ -71,7 +75,7 @@
                     <label>amount</label>
                 </div>
                 <div class="col-3-4">
-                    <input type="text" @bind="Model.hops[selectedHopAddition].amount"/>
+                    <input type="text" @bind="Model.hops[selectedHopAddition].amount" />
                 </div>
             </div>
             <div class="editorListItem infogrid">

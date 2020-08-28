@@ -7,6 +7,7 @@ using Beernet_Lib.Models;
 
 namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
 {
+
     public class RecipeEditor : ComponentBase
     {
         [Parameter]

@@ -61,6 +61,10 @@
               "target": "Package",
               "version": "[12.0.1, )"
             },
+            "Radzen.Blazor": {
+              "target": "Package",
+              "version": "[2.11.14, )"
+            },
             "RestSharp": {
               "target": "Package",
               "version": "[106.6.7, )"
