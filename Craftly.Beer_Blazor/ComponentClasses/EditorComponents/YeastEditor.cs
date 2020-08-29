@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Beernet_Lib.Models;
 using Radzen;
+using Beernet_Lib.Tools;
 
 namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
 {
@@ -12,14 +13,16 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
     {
         [Parameter]
         public  recipe Model { get; set; }
+        [Parameter] public EventCallback<string> refreshParent { get; set; }
         public static int selectedYeastAddition { get; set; } = 0;
 
         IEnumerable<yeast> AllYeasts;
         public IEnumerable<yeast> YeastList;
 
         public string selectedHopID = "";
+        public string yeastName = "";
 
-        public async void changeSelectedYeast(string id)
+        public void changeSelectedYeast(string id)
         {
             int i = 0;
             int indexOfYeast = -1;
@@ -28,6 +31,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
                 if (id == ya.additionGuid)
                 {
                     indexOfYeast = i;
+                    yeastName = ya.yeast.name;
                     break;
                 }
                 i++;
@@ -39,12 +43,38 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
             }
 
         }
+        public void Save(bool save)
+        {
+            RecipeResponse r = RecipeHelper.SaveRecipe(Model, save);
+            Model.recipeStats = r.recipeStats;
+            Model.lastModifiedGuid = r.lastModifiedGuid;
+            refreshParent.InvokeAsync("");
+        }
 
         protected override void OnInitialized()
         {
+            if (Model.yeasts.Count > 0)
+            {
+                selectedYeastAddition = 0;
+            }
+            else
+            {
+                selectedYeastAddition = -1;
+            }
+            resetSelector();
             AllYeasts = RecipeHelper.GetAllYeasts();
             YeastList = AllYeasts;
-            selectedHopID = findHopIDFromSelecteHop();
+            selectedHopID = findYeastIDFromSelectedYeast();
+           
+
+            if (Model.yeasts.Count != 0 && selectedYeastAddition != -1)
+            {
+                yeastName = Model.yeasts[selectedYeastAddition].yeast.name;
+            }
+            else
+            {
+                yeastName = "";
+            }
         }
 
         public List<hopbase> loadAllHops()
@@ -56,27 +86,58 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
         {
             var str = value is IEnumerable<object> ? string.Join(", ", (IEnumerable<object>)value) : value;
 
-            Model.yeasts[selectedYeastAddition].yeast = AllYeasts.Where(x => x.idString == value).FirstOrDefault();
+            if(Model.yeasts[selectedYeastAddition].yeast != null)
+            {
+                Model.yeasts[selectedYeastAddition].yeast = AllYeasts.Where(x => x.idString == value).FirstOrDefault();
+            }
+
+            if (Model.yeasts.Count != 0)
+            {
+                yeastName = Model.yeasts[selectedYeastAddition].yeast.name;
+            }
+            else
+            {
+                yeastName = "";
+            }
 
             //save to api
-
+            Save(false);
 
             StateHasChanged();
         }
-
-        public string findHopIDFromSelecteHop()
+        public string findYeastIDFromSelectedYeast()
         {
-            var query = AllYeasts.AsQueryable();
-
-            query = query.Where(x => x.name == Model.yeasts[selectedYeastAddition].yeast.name);
-
-            if (query.Count() != 0)
+            resetSelector();
+            if (selectedYeastAddition != -1 && Model.yeasts.Count != 0)
             {
-                return query.FirstOrDefault().idString;
+                yeast currentSelection = AllYeasts.Where(x => x.name == Model.yeasts[selectedYeastAddition].yeast.name).FirstOrDefault();
+                if (currentSelection == null)
+                {
+                    return "-1";
+                }
+                else
+                {
+                    return currentSelection.idString;
+                }
             }
             else
             {
                 return "-1";
+            }
+        }
+
+        public void resetSelector()
+        {
+            if (selectedYeastAddition > Model.yeasts.Count - 1)
+            {
+                if (Model.yeasts.Count > 0)
+                {
+                    selectedYeastAddition = 0;
+                }
+                else
+                {
+                    selectedYeastAddition = -1;
+                }
             }
         }
 
@@ -96,9 +157,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
 
         public void AddYeast()
         {
-            yeastAddition ya = new yeastAddition();
-            yeast yeast = new yeast();
-            ya.yeast = yeast;
+            yeastAddition ya = RecipeTools.makeEmptyYeastAddition();
             selectedHopID = "";
 
             if (Model.yeasts.Count > 0)
@@ -109,29 +168,21 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
             else
             {
                 Model.yeasts.Add(ya);
+                selectedYeastAddition++;
             }
+            Save(false);
         }
 
         public void DeleteYeast()
         {
             if (Model.yeasts.Count == 0)
             { return; }
-            //if its the only one
-            if (selectedYeastAddition == (Model.adjuncts.Count - 1) && selectedYeastAddition == 0)
-            {
-                yeast yeast = new yeast();
-                //Model.yeasts[0] = new yeastAddition();
-                //Model.yeasts[0].yeast = yeast;
-                Model.adjuncts.RemoveAt(selectedYeastAddition);
-            }
-            else //otherwise
-            {
-                Model.adjuncts.RemoveAt(selectedYeastAddition);
+                Model.yeasts.RemoveAt(selectedYeastAddition);
                 if (selectedYeastAddition == Model.yeasts.Count)
                 {
                     selectedYeastAddition--;
                 }
-            }
+            Save(false);
         }
 
     }

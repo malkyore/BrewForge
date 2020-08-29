@@ -2,15 +2,16 @@
 @using Craftly.Beer_Blazor.ComponentClasses.EditorComponents;
 @inherits FermentableEditor;
 
-    <div id="fermentableWidgetWrapper" class="grid grid-pad widgetItem recipeEditorWidget">
-        <div class="col-1-2">
-            <div id="fermentableListSelector" class="module selectorWidget">
-                @{
-                    if(Model.fermentables.Count != 0)
-                    {
+<div id="fermentableWidgetWrapper" class="grid grid-pad widgetItem recipeEditorWidget">
+    <div class="col-1-2">
+        <div id="fermentableListSelector" class="module selectorWidget">
+            @{
+                if (Model.fermentables.Count != 0)
+                {
+                    int i = 0;
                     foreach (fermentableAddition fa in Model.fermentables)
                     {
-                        <div class="hopListItem grid" @onclick="(() => changeSelectedFermentable(fa.additionGuid))">
+                        <div class="hopListItem grid @(i == selectedFermentableAddition ? "hopListItemSelected" : "")" @onclick="(() => changeSelectedFermentable(fa.additionGuid))">
                             <div class="col-1-3">
                                 <div>@fa.fermentable.name</div>
                                 <div class="ingredientUnit">name</div>
@@ -24,87 +25,90 @@
                                 <div class="ingredientUnit">lbs</div>
                             </div>
                         </div>
-                    }
+                        i++;
                     }
                 }
+            }
+        </div>
+    </div>
+    <div class="col-1-2">
+        <div class="module grid">
+            <div class="col-1-2">
+                <button type="button" @onclick="(() => AddFermentable())">Add Fermentable</button>
+            </div>
+            <div class="col-1-2">
+                <button type="button" @onclick="(() => DeleteFermentable())">Delete Fermentable</button>
             </div>
         </div>
-        <div class="col-1-2">
-            <div class="module grid">
-                <div class="col-1-2">
-                    <button type="button" @onclick="(() => AddFermentable())">Add Fermentable</button>
+        <div class="module editorWidget">
+            <h4 style="padding-top:0;">Edit Fermentable</h4>
+            <div class="editorListItem infogrid">
+                <div class="col-1-4 editorLabel">
+                    <label>Fermentable: </label>
                 </div>
-                <div class="col-1-2">
-                    <button type="button" @onclick="(() => DeleteFermentable())">Delete Fermentable</button>
+                <div class="col-3-4">
+                    <RadzenDropDown AllowClear="false" TValue="string"
+                                    LoadData="@LoadData" AllowFiltering="true"
+                                    Data="@FermentableList" TextProperty="name" Value="@selectedFermentableID" Placeholder="@fermentableName" ValueProperty="idString" Style="width:100%;"
+                                    Change="@(args => Change(args, "DropDown with custom filtering"))" />
                 </div>
             </div>
-            <div class="module editorWidget">
-                    <h4 style="padding-top:0;">Edit Fermentable</h4>
-                    <div class="editorListItem infogrid">
-                        <div class="col-1-4 editorLabel">
-                            <label>Fermentable: </label>
-                        </div>
-                        <div class="col-3-4">
-                            <RadzenDropDown AllowClear="true" TValue="string"
-                                            LoadData="@LoadData" AllowFiltering="true"
-                                            Data="@FermentableList" TextProperty="name" Value="@selectedFermentableID" Placeholder="@fermentableName" ValueProperty="idString" Style="margin-bottom: 30px"
-                                            Change="@(args => Change(args, "DropDown with custom filtering"))" />
-                        </div>
-                    </div>
-                    <div class="editorListItem infogrid">
-                        <div class="col-1-4 editorLabel">
-                            <label>PPG: </label>
-                        </div>
-                        <div class="col-3-4">
-                            <label>
-                                @if (Model.fermentables.Count != 0)
-                                {
-                                    @Model.fermentables[selectedFermentableAddition].fermentable.yield
-                                }
-                            </label>
-                        </div>
-                    </div>
-                    <div class="editorListItem infogrid">
-                        <div class="col-1-4 editorLabel">
-                            <label>Type: </label>
-                        </div>
-                        <div class="col-3-4">
-                            <label>
-                                @if (Model.fermentables.Count != 0)
-                                {
-                                    @Model.fermentables[selectedFermentableAddition].fermentable.type
-                                }
-                                </label>
-                        </div>
-                    </div>
-                    <div class="editorListItem infogrid">
-                        <div class="col-1-4 editorLabel">
-                            <label>Maltster: </label>
-                        </div>
-                        <div class="col-3-4">
-                            <label>
-                                @if (Model.fermentables.Count != 0)
-                                {
-                                    @Model.fermentables[selectedFermentableAddition].fermentable.maltster
-                                }
-                            </label>
-                        </div>
-                    </div>
-                    <div class="editorListItem infogrid">
-                        <div class="col-1-4 editorLabel">
-                            <label>amount</label>
-                        </div>
-                        <div class="col-3-4">
-                            @if (Model.fermentables.Count != 0)
-                            {
-                                <input type="text" @bind="Model.fermentables[selectedFermentableAddition].weight" />
-                            }
-                            else
-                            {
-                                <input type="text" />
-                            }
-                        </div>
-                    </div>
+            <div class="editorListItem infogrid">
+                <div class="col-1-4 editorLabel">
+                    <label>PPG: </label>
+                </div>
+                <div class="col-3-4">
+                    @if (selectedFermentableAddition != -1 && Model.fermentables.Count != 0 && Model.fermentables[selectedFermentableAddition].fermentable != null)
+                    {
+                        <RadzenTextBox Style="width:100%;" @oninput="@(args => ChangeFermentableYield(args.Value.ToString(), "TextBox with change on every input"))" Value="@Model.fermentables[selectedFermentableAddition].fermentable.yield.ToString()" />
+                    }
+                    else
+                    {
+                        <RadzenTextBox Style="width:100%;" @oninput="@(args => ChangeFermentableYield(args.Value.ToString(), "TextBox with change on every input"))" Value="" />
+                    }
+                </div>
+            </div>
+            <div class="editorListItem infogrid">
+                <div class="col-1-4 editorLabel">
+                    <label>Type: </label>
+                </div>
+                <div class="col-3-4">
+                    <label>
+                        @if (selectedFermentableAddition != -1 && Model.fermentables.Count != 0)
+                        {
+                            @Model.fermentables[selectedFermentableAddition].fermentable.type
+                        }
+                    </label>
+                </div>
+            </div>
+            <div class="editorListItem infogrid">
+                <div class="col-1-4 editorLabel">
+                    <label>Maltster: </label>
+                </div>
+                <div class="col-3-4">
+                    <label>
+                        @if (selectedFermentableAddition != -1 && Model.fermentables.Count != 0)
+                        {
+                            @Model.fermentables[selectedFermentableAddition].fermentable.maltster
+                        }
+                    </label>
+                </div>
+            </div>
+            <div class="editorListItem infogrid">
+                <div class="col-1-4 editorLabel">
+                    <label>amount</label>
+                </div>
+                <div class="col-3-4">
+                    @if (selectedFermentableAddition != -1 && Model.fermentables.Count != 0)
+                    {
+                        <RadzenTextBox Style="width:100%;" @oninput="@(args => ChangeFermentableWeight(args.Value.ToString(), "TextBox with change on every input"))" Value="@Model.fermentables[selectedFermentableAddition].weight.ToString()" />
+                    }
+                    else
+                    {
+                        <RadzenTextBox Style="width:100%;" @oninput="@(args => ChangeFermentableWeight(args.Value.ToString(), "TextBox with change on every input"))" Value="" />
+                    }
+                </div>
             </div>
         </div>
     </div>
+</div>

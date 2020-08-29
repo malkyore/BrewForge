@@ -34,8 +34,7 @@
                         <label>Name: </label>
                     </div>
                     <div class="col-3-4">
-                        <input type="text" @bind="Model.name" />
-                        @*@Html.TextBoxFor(m => Model.currentRecipe.name, new { style = "width:100%" })*@
+                        <RadzenTextBox Style="width:100%;" @oninput="@(args => ChangeRecipeName(args.Value.ToString(), "TextBox with change on every input"))" Value="@Model.name" />
                     </div>
                 </div>
                 <div class="editorListItem infogrid">
@@ -44,16 +43,20 @@
                             Style:
                         </label>
                     </div>
-                    @*<div style="display:none">
-                            @Html.TextBoxFor(m => Model.selectedStyle, new { id = "selectedstyleIndex" })
-                        </div>*@
                     <div class="col-3-4">
-                        <select id="StyleSelector" class="ingredientSelector" style="width:100%;">
-                            @foreach (style s in styleOptions)
-                            {
-                                <option value="@s.idString">@s.name</option>
-                            }
-                        </select>
+                            <RadzenDropDown AllowClear="false"
+                                            Style="width:100%;"
+                                            TValue="string"
+                                            AllowFiltering="true"
+                                            LoadData="@LoadData"
+                                            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                            Placeholder="Select..."
+                                            TextProperty="name" 
+                                            ValueProperty="idString"
+                                            Data="@styleOptionsList"
+                                            Value="@selectedStyle"
+                                            Change="@(args => ChangeRecipeStyle(args, "DropDown with placeholder"))"
+                                             />
                     </div>
                 </div>
                 <div class="editorListItem infogrid">
@@ -63,13 +66,9 @@
                         </label>
                     </div>
                     <div class="col-3-4">
-                        <EditForm Model="Model.description">
-                            <InputTextArea @bind-Value="Model.description"> </InputTextArea>
-                        </EditForm>
-                        @*@Html.TextAreaFor(m => Model.currentRecipe.description, new { style = "width:100%;height: auto;", rows = "3" })*@
+                        <RadzenTextArea @bind-Value="@Model.description" Cols="60" Rows="4" Change="@(args => ChangeRecipeDescription(args, "Disabled TextArea with 3 rows and 30 columns"))" Style="margin-bottom: 20px" />
                     </div>
                 </div>
-                <input type="submit" value="Save" />
             </div>
             <div class="col-3-4 statsWidgetSection">
                 <div id="ibuStatWidget" class="statWidget">
@@ -182,13 +181,13 @@
                     <!--Start Hop Widget-->
                     <div class="col-1-2 grid-pad">
                         <h3 style="color:white">Hops</h3>
-                        <Craftly.Beer_Blazor.Shared.EditorWidgets.HopWidget Model=@Model> </Craftly.Beer_Blazor.Shared.EditorWidgets.HopWidget>
+                        <Craftly.Beer_Blazor.Shared.EditorWidgets.HopWidget Model=@Model refreshParent=@refresh> </Craftly.Beer_Blazor.Shared.EditorWidgets.HopWidget>
                     </div><!--End Hop Widget-->
 
                     <div class="col-1-2 grid-pad">
                         <!--fermentable widget-->
                         <h3 style="color:white">Fermentables</h3>
-                        <Craftly.Beer_Blazor.Shared.EditorWidgets.FermentableWidget Model=@Model> </Craftly.Beer_Blazor.Shared.EditorWidgets.FermentableWidget>
+                        <Craftly.Beer_Blazor.Shared.EditorWidgets.FermentableWidget Model=@Model refreshParent=@refresh> </Craftly.Beer_Blazor.Shared.EditorWidgets.FermentableWidget>
                     </div><!--End Fermentable Widget-->
                     <div class="grid">
 
@@ -198,12 +197,12 @@
                     <div class="col-1-2 grid-pad">
                         <!--Yeast Widget-->
                         <h3 style="color:white">Yeasts</h3>
-                        <Craftly.Beer_Blazor.Shared.EditorWidgets.YeastWidget Model=@Model> </Craftly.Beer_Blazor.Shared.EditorWidgets.YeastWidget>
+                        <Craftly.Beer_Blazor.Shared.EditorWidgets.YeastWidget Model=@Model refreshParent=@refresh> </Craftly.Beer_Blazor.Shared.EditorWidgets.YeastWidget>
                     </div> <!--End Yeast Widget-->
                     <div class="col-1-2 grid-pad">
                         <!--Adjunct widget-->
                         <h3 style="color:white">Adjuncts</h3>
-                        <Craftly.Beer_Blazor.Shared.EditorWidgets.AdjunctWidget Model=@Model> </Craftly.Beer_Blazor.Shared.EditorWidgets.AdjunctWidget>
+                        <Craftly.Beer_Blazor.Shared.EditorWidgets.AdjunctWidget Model=@Model refreshParent=@refresh> </Craftly.Beer_Blazor.Shared.EditorWidgets.AdjunctWidget>
                     </div><!--End Yeast Widget-->
                 </div>
             </div>

@@ -13,7 +13,7 @@ namespace Beernet_Lib.Models
         //public string Id { get; set; }
         //public string recipeID { get; set; }
         [BsonElement("additionGuid")]
-        public string additionGuid { get; set; }
+        public string additionGuid { get; set; } = Guid.NewGuid().ToString();
         [BsonElement("adjunctID")]
         public string adjunctID { get; set; }
         [BsonElement("amount")]

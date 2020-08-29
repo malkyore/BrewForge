@@ -156,11 +156,20 @@ namespace Beernet_Lib.Tools
             //BeerNet/userSettings
         }
 
-        public static RecipeResponse postRecipe(recipe recipe, string dataurl, string apiAuthToken)
+        public static RecipeResponse postRecipe(recipe recipe, string dataurl, string apiAuthToken, bool save)
         {
-            string jsonurl = dataurl + "/beernet/recipe/" + recipe.idString;
+            string jsonurl = "";
 
 
+            if (save)
+            {
+                jsonurl = dataurl + "/beernet/recipe/" + recipe.idString;
+            }
+            else
+            {
+                jsonurl = dataurl + "/beernet/recipe/" + recipe.idString + "/true";
+            }
+             
             var client = new RestClient("" + dataurl);
             var request = new RestRequest(jsonurl, Method.POST);
 

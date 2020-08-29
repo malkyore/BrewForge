@@ -5,13 +5,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Beernet_Lib.Models;
 using Radzen;
+using Beernet_Lib.Tools;
 
 namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
 {
     public class AdjunctEditor : ComponentBase
     {
         [Parameter]
-        public  recipe Model { get; set; }
+        public recipe Model { get; set; }
+        [Parameter] public EventCallback<string> refreshParent { get; set; }
         public static int selectedAdjunctAddition { get; set; } = 0;
 
         IEnumerable<adjunct> AllAdjuncts;
@@ -20,7 +22,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
         public string adjunctName = "";
         public string selectedAdjunctID = "";
 
-        public async void changeSelectedAdjunct(string id)
+        public void changeSelectedAdjunct(string id)
         {
             int i = 0;
             int indexOfAdjunct = -1;
@@ -30,6 +32,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
                 {
                     indexOfAdjunct = i;
                     adjunctName = aa.adjunct.name;
+                    selectedAdjunctID = aa.adjunct.idString;
                     break;
                 }
                 i++;
@@ -41,9 +44,40 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
             }
 
         }
+        public void Save(bool save)
+        {
+            RecipeResponse r = RecipeHelper.SaveRecipe(Model, save);
+            Model.recipeStats = r.recipeStats;
+            Model.lastModifiedGuid = r.lastModifiedGuid;
+            refreshParent.InvokeAsync("");
+        }
+
+        public void resetSelector()
+        {
+            if(selectedAdjunctAddition > Model.adjuncts.Count - 1)
+            {
+                if (Model.adjuncts.Count > 0)
+                {
+                    selectedAdjunctAddition = 0;
+                }
+                else
+                {
+                    selectedAdjunctAddition = -1;
+                }
+            }
+        }
 
         protected override void OnInitialized()
         {
+            if (Model.adjuncts.Count > 0)
+            {
+                selectedAdjunctAddition = 0;
+            }
+            else
+            {
+                selectedAdjunctAddition = -1;
+            }
+            resetSelector();
             AllAdjuncts = RecipeHelper.GetAllAdjuncts();
             AdjunctList = AllAdjuncts;
             selectedAdjunctID = findAdjunctIDFromSelecteAdjunct();
@@ -54,6 +88,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
             }
             else
             {
+                selectedAdjunctAddition = -1;
                 adjunctName = "";
             }
         }
@@ -70,21 +105,37 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
             Model.adjuncts[selectedAdjunctAddition].adjunct = AllAdjuncts.Where(x => x.idString == value).FirstOrDefault();
             Model.adjuncts[selectedAdjunctAddition].adjunctID = value.ToString();
 
-            //save to api
+            selectedAdjunctID = value.ToString();
 
+            if (Model.adjuncts.Count != 0)
+            {
+                adjunctName = Model.adjuncts[selectedAdjunctAddition].adjunct.name;
+            }
+            else
+            {
+                adjunctName = "";
+            }
+
+            //save to api
+            Save(false);
 
             StateHasChanged();
         }
 
         public string findAdjunctIDFromSelecteAdjunct()
         {
-            var query = AllAdjuncts.AsQueryable();
-
-            query = query.Where(x => x.name == Model.hops[selectedAdjunctAddition].hop.name);
-
-            if (query.Count() != 0)
+            resetSelector();
+            if (selectedAdjunctAddition != -1 && Model.adjuncts.Count != 0)
             {
-                return query.FirstOrDefault().idString;
+                adjunct currentSelection = AllAdjuncts.Where(x => x.name == Model.adjuncts[selectedAdjunctAddition].adjunct.name).FirstOrDefault();
+                if (currentSelection == null)
+                {
+                    return "-1";
+                }
+                else
+                {
+                    return currentSelection.idString;
+                }
             }
             else
             {
@@ -106,12 +157,50 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
             InvokeAsync(StateHasChanged);
         }
 
+        
+        public void ChangeAdjunctAmount(object value, string name)
+        {
+            float output = -1;
+            if (float.TryParse(value.ToString(), out output))
+            {
+                Model.adjuncts[selectedAdjunctAddition].amount = output;
+            }
+            Save(false);
+        }
+        public void ChangeAdjunctUnit(object value, string name)
+        {
+                Model.adjuncts[selectedAdjunctAddition].unit = value.ToString();
+            Save(false);
+        }
+
+        public void ChangeAdjunctTime(object value, string name)
+        {
+            float output = -1;
+            if (float.TryParse(value.ToString(), out output))
+            {
+                Model.adjuncts[selectedAdjunctAddition].time = output;
+            }
+            Save(false);
+        }
+
+        public void ChangeAdjunctTimeUnit(object value, string name)
+        {
+                Model.adjuncts[selectedAdjunctAddition].timeUnit = value.ToString();
+            Save(false);
+        }
+        public void ChangeAdjunctType(object value, string name)
+        {
+                Model.adjuncts[selectedAdjunctAddition].type = value.ToString();
+            Save(false);
+        }
+
         public void AddAdjunct()
         {
-            adjunctAddition aa = new adjunctAddition();
-            adjunct adjunct = new adjunct();
-            aa.adjunct = adjunct;
+            adjunctAddition aa = RecipeTools.makeEmptyAdjunctAddition();//new adjunctAddition();
+            //adjunct adjunct = new adjunct();
+            //aa.adjunct = adjunct;
             selectedAdjunctID = "";
+
             if (Model.adjuncts.Count > 0)
             {
                 Model.adjuncts.Insert(selectedAdjunctAddition + 1, aa);
@@ -120,27 +209,21 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
             else
             {
                 Model.adjuncts.Add(aa);
+                selectedAdjunctAddition++;
             }
+            Save(false);
         }
 
         public void DeleteAdjunct()
         {
             if (Model.adjuncts.Count == 0)
             { return; }
-                //if its the only one
-                if (selectedAdjunctAddition == (Model.adjuncts.Count - 1) && selectedAdjunctAddition == 0)
-                {
-                    //adjunct adjunct = new adjunct();
-                    Model.adjuncts.RemoveAt(selectedAdjunctAddition);
-                }
-                else //otherwise
-                {
-                    Model.adjuncts.RemoveAt(selectedAdjunctAddition);
-                    if (selectedAdjunctAddition == Model.adjuncts.Count)
-                    {
-                        selectedAdjunctAddition--;
-                    }
-                }
+            Model.adjuncts.RemoveAt(selectedAdjunctAddition);
+            if (selectedAdjunctAddition == Model.adjuncts.Count)
+            {
+                selectedAdjunctAddition--;
+            }
+            Save(false);
         }
     }
 }

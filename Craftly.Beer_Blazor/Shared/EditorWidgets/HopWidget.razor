@@ -16,7 +16,7 @@
                 int i = 0;
                 foreach (hopAddition ha in Model.hops)
                 {
-                    <div class="hopListItem grid" @onclick="(() => changeSelectedHop(ha.additionGuid))">
+                    <div id="hop-@i" class="hopListItem grid @(i == selectedHopAddition ? "hopListItemSelected" : "")" @onclick="(() => changeSelectedHop(ha.additionGuid))">
                         <div class="col-1-4">
                             <div>@ha.hop.name</div>
                             <div class="ingredientUnit">name</div>
@@ -57,8 +57,8 @@
                 <div class="col-3-4">
                     <RadzenDropDown AllowClear="true" TValue="string"
                                     LoadData="@LoadData" AllowFiltering="true"
-                                    Data="@HopList" TextProperty="name" Value="@selectedHopID" Placeholder="@Model.hops[selectedHopAddition].hop.name" ValueProperty="idString" Style="margin-bottom: 30px" 
-                                    Change="@(args => Change(args, "DropDown with custom filtering"))" />
+                                    Data="@HopList" TextProperty="name" Value="@selectedHopID" Placeholder="@hopName" ValueProperty="idString" Style="width:100%;"
+                                    Change="@(args => ChangeHop(args, "DropDown with custom filtering"))" />
 
                 </div>
             </div>
@@ -67,35 +67,59 @@
                     <label>AAU: </label>
                 </div>
                 <div class="col-3-4">
-                    <label>@Model.hops[selectedHopAddition].hop.aau</label>
+                    @if (selectedHopAddition != -1 && Model.hops.Count != 0 && Model.hops[selectedHopAddition].hop != null)
+                    {
+                        <RadzenTextBox Style="width:100%;" @oninput="@(args => ChangeHopAAU(args.Value.ToString(), "TextBox with change on every input"))" Value="@Model.hops[selectedHopAddition].hop.aau.ToString()" />
+                    }
+                    else
+                    {
+                        <RadzenTextBox Style="width:100%;" @oninput="@(args => ChangeHopAAU(args.Value.ToString(), "TextBox with change on every input"))" Value="" />
+                    }
                 </div>
             </div>
             <div class="editorListItem infogrid">
                 <div class="col-1-4">
-                    <label>amount</label>
+                    <label>Amount: </label>
                 </div>
                 <div class="col-3-4">
-                    <input type="text" @bind="Model.hops[selectedHopAddition].amount" />
+                    @if (selectedHopAddition != -1 && Model.hops.Count != 0)
+                    {
+                        <RadzenTextBox Style="width:100%;" @oninput="@(args => ChangeHopAmount(args.Value.ToString(), "TextBox with change on every input"))" Value="@Model.hops[selectedHopAddition].amount.ToString()" />
+                    }
+                    else
+                    {
+                        <RadzenTextBox Style="width:100%;" @oninput="@(args => ChangeHopAmount(args.Value.ToString(), "TextBox with change on every input"))" Value="" />
+                    }
                 </div>
             </div>
             <div class="editorListItem infogrid">
                 <div class="col-1-4">
-                    <label>Type</label>
+                    <label>Type: </label>
                 </div>
                 <div class="col-3-4">
-                    <select id="HopTypeSelector" class="ingredientSelector" style="width:100%;" onchange="">
-                        <option value="Boil">Boil</option>
-                        <option value="Whirlpool">Whirlpool</option>
-                        <option value="Dry Hop">Dry Hop</option>
-                    </select>
+                    <RadzenDropDown AllowClear="false"
+                                    Style="width:100%;"
+                                    TValue="string"
+                                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                    Placeholder="Select..."
+                                    Data="@HopUses"
+                                    Change="@(args => ChangeHopUse(args, "DropDown with placeholder"))"
+                                    Value="@hopUse" />
                 </div>
             </div>
             <div class="editorListItem infogrid">
                 <div class="col-1-4">
-                    <label>time</label>
+                    <label>Time: </label>
                 </div>
                 <div class="col-3-4">
-                    <input type="text" @bind="Model.hops[selectedHopAddition].time" />
+                    @if (selectedHopAddition != -1 && Model.hops.Count != 0)
+                    {
+                        <RadzenTextBox Style="width:100%;" @oninput="@(args => ChangeHopTime(args.Value.ToString(), "TextBox with change on every input"))" Value="@Model.hops[selectedHopAddition].time.ToString()" />
+                    }
+                    else
+                    {
+                        <RadzenTextBox Style="width:100%;" @oninput="@(args => ChangeHopTime(args.Value.ToString(), "TextBox with change on every input"))" Value="" />
+                    }
                 </div>
             </div>
         </div>

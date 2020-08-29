@@ -64,7 +64,6 @@ namespace Beernet_Lib.Models
         public float boilVolume { get; set; }
         [BsonElement("equipmentProfile")]
         public equipmentProfileBase equipmentProfile { get; set; }
-
        // public double grainsInPounds()
        // {
        //     double lbs = 0;

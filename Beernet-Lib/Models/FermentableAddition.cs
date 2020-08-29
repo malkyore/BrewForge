@@ -15,7 +15,7 @@ namespace Beernet_Lib.Models
         //public string recipeID { get; set; }
         //  [BsonElement("fermentableID")]
         [BsonElement("additionGuid")]
-        public string additionGuid { get; set; }
+        public string additionGuid { get; set; } = Guid.NewGuid().ToString();
         public string fermentableID { get; set; }
       //  [BsonElement("use")]
         public string use { get; set; }

@@ -17,7 +17,11 @@ namespace Craftly.Beer_Blazor.ComponentClasses
                { "Password", "" + "Poopbutt1" }
             };
 
-        static string apiLink = "http://rest.unacceptable.beer:5123";
+        //dev
+        static string apiLink = "http://dev.unacceptable.beer:666";
+
+        //prod
+        //static string apiLink = "http://rest.unacceptable.beer:5123";
         static string loginEndpoint = "/Beernet/Login/";
 
         public async static Task<List<recipe>> GetRecipes()
@@ -27,6 +31,13 @@ namespace Craftly.Beer_Blazor.ComponentClasses
             List<recipe> allRecipes = DataAccess.getRecipes(apiLink + "/beernet/recipe/", token).ToList();
             return allRecipes;
 
+        }
+        
+        public static List<style> GetAllStyles ()
+        {
+            string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
+
+            return DataAccess.getAllStyles(apiLink, token);
         }
 
         public static recipe GetRecipeDetails(string recipeID)
@@ -88,6 +99,13 @@ namespace Craftly.Beer_Blazor.ComponentClasses
 
             return listOfadjuncts;
 
+        }
+
+        public static RecipeResponse SaveRecipe(recipe recipe, bool save)
+        {
+            string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
+            RecipeResponse stats = DataAccess.postRecipe(recipe, apiLink, token, save);
+            return stats;
         }
 
         public static recipe initializeBlankRecipe()

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Beernet_Lib.Models;
+using Radzen;
 
 namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
 {
@@ -13,6 +14,8 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
         [Parameter]
         public recipe Model { get; set; }
         public List<style> styleOptions = getStyleOptions();
+        public List<style> styleOptionsList = new List<style>();
+        public string selectedStyle = "";
 
         public static List<style> getStyleOptions()
         {
@@ -30,6 +33,64 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
             styles.Add(b);
 
             return styles;
+        }
+
+
+        public void refresh()
+        {
+            StateHasChanged();
+        }
+        public void ChangeRecipeStyle(object value, string name)
+        {
+            Model.style = styleOptions.Where(x => x.idString == value).FirstOrDefault();
+            selectedStyle = Model.style.idString;
+            Save(false);
+        }
+        
+        public void ChangeRecipeName(object value, string name)
+        {
+            Model.name = value.ToString();
+            Save(false);
+            
+        }
+
+        protected override void OnInitialized()
+        {
+            getAllStyles();
+            styleOptionsList = styleOptions;
+            selectedStyle = Model.style.idString;
+        }
+
+        public void getAllStyles()
+        {
+            styleOptions = RecipeHelper.GetAllStyles();
+        }
+
+        public void ChangeRecipeDescription(object value, string name)
+        {
+            Model.description = value.ToString();
+            Save(false);
+        }
+        public void Save(bool save)
+        {
+            RecipeResponse r = RecipeHelper.SaveRecipe(Model, save);
+            Model.recipeStats = r.recipeStats;
+            Model.lastModifiedGuid = r.lastModifiedGuid;
+            StateHasChanged();
+        }
+
+        public void LoadData(LoadDataArgs args)
+        {
+            var query = styleOptions.AsQueryable();
+
+            if (!string.IsNullOrEmpty(args.Filter))
+            {
+                query = query.Where(c => c.name.ToLower().Contains(args.Filter.ToLower()));
+            }
+
+            styleOptionsList = query.ToList();
+
+            StateHasChanged();
         }
 
     }
