@@ -160,15 +160,22 @@ namespace Beernet_Lib.Tools
         {
             string jsonurl = "";
 
-
-            if (save)
+            if(recipe.idString != null)
             {
-                jsonurl = dataurl + "/beernet/recipe/" + recipe.idString;
+                if (save)
+                {
+                    jsonurl = dataurl + "/beernet/recipe/" + recipe.idString;
+                }
+                else
+                {
+                    jsonurl = dataurl + "/beernet/recipe/" + recipe.idString + "/true";
+                }
             }
             else
             {
-                jsonurl = dataurl + "/beernet/recipe/" + recipe.idString + "/true";
+                jsonurl = dataurl + "/beernet/recipe";
             }
+            
              
             var client = new RestClient("" + dataurl);
             var request = new RestRequest(jsonurl, Method.POST);
@@ -182,6 +189,32 @@ namespace Beernet_Lib.Tools
             var response = client.Execute(request);
             RecipeResponse returnable = JsonConvert.DeserializeObject<RecipeResponse>(response.Content);
             return returnable;
+        }
+
+        public static void deleteRecipe(recipe recipe, string dataurl, string apiAuthToken)
+        {
+            string jsonurl = "";
+
+            if (recipe.idString != null)
+            {
+                    jsonurl = dataurl + "/beernet/recipe/" + recipe.idString;
+            }
+            else
+            {
+                return;
+            }
+
+            var client = new RestClient("" + dataurl);
+            var request = new RestRequest(jsonurl, Method.DELETE);
+
+            // Json to post.
+            string jsonToSend = Newtonsoft.Json.JsonConvert.SerializeObject(recipe);
+            request.AddParameter("application/json; charset=utf-8", jsonToSend, ParameterType.RequestBody);
+            request.RequestFormat = DataFormat.Json;
+
+            request.AddHeader("Authorization", "bearer " + apiAuthToken);
+            var response = client.Execute(request);
+            RecipeResponse returnable = JsonConvert.DeserializeObject<RecipeResponse>(response.Content);
         }
 
         public static List<BrewLog> getAllBrewLogs(string apiLink, string apiAuthToken)

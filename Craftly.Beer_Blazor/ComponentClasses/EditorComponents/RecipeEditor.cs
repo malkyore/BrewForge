@@ -31,7 +31,6 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
 
             styles.Add(a);
             styles.Add(b);
-
             return styles;
         }
 
@@ -74,6 +73,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
         public void Save(bool save)
         {
             RecipeResponse r = RecipeHelper.SaveRecipe(Model, save);
+            Model.idString = r.idString;
             Model.recipeStats = r.recipeStats;
             Model.lastModifiedGuid = r.lastModifiedGuid;
             StateHasChanged();

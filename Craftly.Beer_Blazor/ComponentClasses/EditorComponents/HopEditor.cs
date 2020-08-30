@@ -94,6 +94,19 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
 
             selectedHopID = findHopIDFromSelecteHop();
         }
+        
+        private int GetHopUseID(string name)
+        {
+            int i = -1;
+            foreach(string s in HopUses)
+            {
+                if(name == s )
+                {
+                    return i;
+                }
+            }
+            return i;
+        }
 
         public void Save(bool save)
         {
@@ -136,7 +149,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
         public void ChangeHopUse(object value, string name)
         {
             Model.hops[selectedHopAddition].type = value.ToString();
-            hopUse = Model.hops[selectedHopAddition].type;
+            hopUse = value.ToString();
             Save(false);
         }
 
@@ -153,6 +166,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
                 Model.hops.Add(ha);
                 Model.hops[0].hop = hopw;
                 selectedHopAddition = 0;
+                hopUse = "";
             }
 
             if (!(String.IsNullOrEmpty(name) || value == null))
@@ -164,9 +178,11 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
             if (Model.hops.Count != 0)
             {
                 hopName = Model.hops[selectedHopAddition].hop.name;
+                hopUse = Model.hops[selectedHopAddition].type;
             }
             else
             {
+                hopUse = "";
                 hopName = "";
             }
 
@@ -212,6 +228,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
         {
             hopAddition ha = RecipeTools.makeEmptyHopAddition();
             selectedHopID = "";
+            hopUse = "";
 
             if (Model.hops.Count > 0)
             {

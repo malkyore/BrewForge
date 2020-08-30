@@ -16,6 +16,14 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Model = RecipeHelper.GetRecipeDetails(RecipeHelper.currentRecipeId);
+        if(RecipeHelper.currentRecipeId != "-1")
+        {
+            Model = RecipeHelper.GetRecipeDetails(RecipeHelper.currentRecipeId);
+        }
+        else
+        {
+            Model = RecipeHelper.initializeBlankRecipe();
+        }
+
     }
 }
