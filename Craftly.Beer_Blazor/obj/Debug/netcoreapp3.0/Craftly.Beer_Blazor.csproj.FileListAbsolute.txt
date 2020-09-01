@@ -72,6 +72,8 @@ F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\bin\Debug\
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\bin\Debug\netcoreapp3.0\System.Runtime.CompilerServices.Unsafe.dll
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\bin\Debug\netcoreapp3.0\System.Text.Encodings.Web.dll
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\bin\Debug\netcoreapp3.0\System.Text.Json.dll
+F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\RazorDeclaration\Pages\Login.razor.g.cs
+F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\RazorDeclaration\Shared\LoginLayout.razor.g.cs
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\Craftly.Beer_Blazor.MvcApplicationPartsAssemblyInfo.cache
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\RazorDeclaration\Craftly.Beer_Blazor.dll
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\Razor\App.razor.g.cs
@@ -80,11 +82,13 @@ F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\Razor\Pages\Error.razor.g.cs
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\Razor\Pages\FetchData.razor.g.cs
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\Razor\Pages\Index.razor.g.cs
+F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\Razor\Pages\Login.razor.g.cs
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\Razor\Shared\EditorWidgets\AdjunctWidget.razor.g.cs
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\Razor\Shared\EditorWidgets\FermentableWidget.razor.g.cs
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\Razor\Shared\EditorWidgets\HopWidget.razor.g.cs
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\Razor\Shared\EditorWidgets\RecipeSelectorWidget.razor.g.cs
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\Razor\Shared\EditorWidgets\YeastWidget.razor.g.cs
+F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\Razor\Shared\LoginLayout.razor.g.cs
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\Razor\Shared\MainLayout.razor.g.cs
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\Razor\Shared\MainNav.razor.g.cs
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\Razor\Shared\NavMenu.razor.g.cs
