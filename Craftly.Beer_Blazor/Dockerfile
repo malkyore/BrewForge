@@ -5,7 +5,7 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.0-buster AS build
 WORKDIR /src
-COPY ["Craftly.Beer_Blazor.csproj", "Craftly.Beer_Blazor/"]
+COPY ["./Craftly.Beer_Blazor.csproj", "Craftly.Beer_Blazor/"]
 COPY ["Beernet-Lib/Beernet-Lib.csproj", "Beernet-Lib/"]
 RUN dotnet restore "Craftly.Beer_Blazor.csproj"
 COPY . .
