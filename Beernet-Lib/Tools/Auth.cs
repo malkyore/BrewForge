@@ -34,9 +34,13 @@ namespace Beernet_Lib.Tools
                 {
                     token = response.Content;
                 }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    token = "Unauthorized";
+                }
                 else
                 {
-                    token = "error";
+                    token = "Unknown Error";
                 }
             }
             catch (Exception error)

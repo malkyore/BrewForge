@@ -2,13 +2,25 @@
 @using Beernet_Lib.Models;
 @page "/"
 
-@if (recipes == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <Craftly.Beer_Blazor.Shared.EditorWidgets.RecipeSelectorWidget Model=@Model recipes=@recipes> </Craftly.Beer_Blazor.Shared.EditorWidgets.RecipeSelectorWidget>
+@{
+    if (RecipeHelper.isLoggedIn)
+    {
+        if (recipes == null)
+        {
+
+            <p><em>Loading...</em></p>
+        }
+        else
+        {
+            <Craftly.Beer_Blazor.Shared.EditorWidgets.RecipeSelectorWidget Model=@Model recipes=@recipes> </Craftly.Beer_Blazor.Shared.EditorWidgets.RecipeSelectorWidget>
+        }
+    }
+    else
+    {
+        <Craftly.Beer_Blazor.Pages.Login refreshParent=@refresh> </Craftly.Beer_Blazor.Pages.Login>
+    }
+
+
 }
 
 @code
@@ -18,6 +30,18 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        recipes = await RecipeHelper.GetRecipes();
+        if (RecipeHelper.isLoggedIn)
+        {
+            recipes = await RecipeHelper.GetRecipes();
+        }
+    }
+
+    public async void refresh()
+    {
+        if (RecipeHelper.isLoggedIn)
+        {
+            recipes = await RecipeHelper.GetRecipes();
+        }
+        StateHasChanged();
     }
 }

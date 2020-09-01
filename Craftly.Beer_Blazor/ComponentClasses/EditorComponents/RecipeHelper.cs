@@ -10,12 +10,15 @@ namespace Craftly.Beer_Blazor.ComponentClasses
     public static class RecipeHelper
     {
         public static string currentRecipeId { get; set; }
+        private static string LoginToken { get; set; }
 
-        static Dictionary<string, string> values = new Dictionary<string, string>
-            {
-               { "Username", "" + "beer"},
-               { "Password", "" + "Poopbutt1" }
-            };
+        public static bool isLoggedIn { get; set; }
+
+        //static Dictionary<string, string> values = new Dictionary<string, string>
+        //    {
+        //       { "Username", "" + "beer"},
+        //       { "Password", "" + "Poopbutt1" }
+        //    };
 
         //dev
         static string apiLink = "http://dev.unacceptable.beer:666";
@@ -24,54 +27,82 @@ namespace Craftly.Beer_Blazor.ComponentClasses
         //static string apiLink = "http://rest.unacceptable.beer:5123";
         static string loginEndpoint = "/Beernet/Login/";
 
+        public static bool Login(string username, string password)
+        {
+            Dictionary<string, string> LoginInfo = new Dictionary<string, string>
+            {
+               { "Username", "" + username},
+               { "Password", "" + password }
+            };
+
+            LoginToken = Auth.getAPIAuthToken(apiLink, loginEndpoint, LoginInfo).Replace("\"", "");
+            if(LoginToken == "Unauthorized" || LoginToken == "Unknown Error")
+            {
+                isLoggedIn = false;
+                return false;
+            }
+            else
+            {
+                isLoggedIn = true;
+                return true;
+            }
+            
+        }
+
+        public static void Logout()
+        {
+            isLoggedIn = false;
+            LoginToken = null;
+        }
+
         public async static Task<List<recipe>> GetRecipes()
         {
-            string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
+            //string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
 
-            List<recipe> allRecipes = DataAccess.getRecipes(apiLink + "/beernet/recipe/", token).ToList();
+            List<recipe> allRecipes = DataAccess.getRecipes(apiLink + "/beernet/recipe/", LoginToken).ToList();
             return allRecipes;
 
         }
-        
-        public static List<style> GetAllStyles ()
-        {
-            string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
 
-            return DataAccess.getAllStyles(apiLink, token);
+        public static List<style> GetAllStyles()
+        {
+            //string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
+
+            return DataAccess.getAllStyles(apiLink, LoginToken);
         }
 
         public static recipe GetRecipeDetails(string recipeID)
         {
-            string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
+            //string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
 
             currentRecipeId = recipeID;
 
-            recipe RecipeDetail = DataAccess.getRecipeDetails(apiLink + "/beernet/recipe/", token, recipeID);
+            recipe RecipeDetail = DataAccess.getRecipeDetails(apiLink + "/beernet/recipe/", LoginToken, recipeID);
             return RecipeDetail;
 
         }
 
         public static List<hopbase> GetAllHops()
         {
-            string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
+            //string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
 
             //currentRecipeId = recipeID;
 
             List<hopbase> listOfHops = new List<hopbase>();
 
-            listOfHops = DataAccess.getAllHops(apiLink, token);
+            listOfHops = DataAccess.getAllHops(apiLink, LoginToken);
 
             return listOfHops;
 
         }
-        
+
         public static List<fermentable> GetAllFermentables()
         {
-            string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
+            //string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
 
             List<fermentable> listOfFermentables = new List<fermentable>();
 
-            listOfFermentables = DataAccess.getAllFermentables(apiLink, token);
+            listOfFermentables = DataAccess.getAllFermentables(apiLink, LoginToken);
 
             return listOfFermentables;
 
@@ -79,11 +110,11 @@ namespace Craftly.Beer_Blazor.ComponentClasses
 
         public static List<yeast> GetAllYeasts()
         {
-            string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
+            //string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
 
             List<yeast> listOfYeasts = new List<yeast>();
 
-            listOfYeasts = DataAccess.getAllYeasts(apiLink, token);
+            listOfYeasts = DataAccess.getAllYeasts(apiLink, LoginToken);
 
             return listOfYeasts;
 
@@ -91,11 +122,11 @@ namespace Craftly.Beer_Blazor.ComponentClasses
 
         public static List<adjunct> GetAllAdjuncts()
         {
-            string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
+            //string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
 
             List<adjunct> listOfadjuncts = new List<adjunct>();
 
-            listOfadjuncts = DataAccess.getAllAdjuncts(apiLink, token);
+            listOfadjuncts = DataAccess.getAllAdjuncts(apiLink, LoginToken);
 
             return listOfadjuncts;
 
@@ -103,15 +134,15 @@ namespace Craftly.Beer_Blazor.ComponentClasses
 
         public static RecipeResponse SaveRecipe(recipe recipe, bool save)
         {
-            string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
-            RecipeResponse stats = DataAccess.postRecipe(recipe, apiLink, token, save);
+            //string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
+            RecipeResponse stats = DataAccess.postRecipe(recipe, apiLink, LoginToken, save);
             return stats;
         }
 
         public static void DeleteRecipe(recipe recipe)
         {
-            string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
-            DataAccess.deleteRecipe(recipe, apiLink, token);
+            //string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
+            DataAccess.deleteRecipe(recipe, apiLink, LoginToken);
         }
 
         public static recipe initializeBlankRecipe()
@@ -165,53 +196,53 @@ namespace Craftly.Beer_Blazor.ComponentClasses
             //b.origin = "";
             //a.hop = b;
             //newRecipe.hops.Add(a);
-            
 
-        //    fermentable f = new fermentable
-        //    {
-        //        color = 6,
-        //        name = "2 Row",
-        //        yield = 14.65F,
-        //        maltster = "Breiss"
-        //    };
 
-        //    fermentableAddition fa = new fermentableAddition
-        //    {
-        //        use = "Mash",
-        //        weight = 12.5F,
-        //        fermentable = f
-        //    };
+            //    fermentable f = new fermentable
+            //    {
+            //        color = 6,
+            //        name = "2 Row",
+            //        yield = 14.65F,
+            //        maltster = "Breiss"
+            //    };
 
-        //    yeast y = new yeast
-        //    {
-        //        attenuation = 1.05F,
-        //        lab = "Wyeast",
-        //        name = "Wheat"
-        //    };
+            //    fermentableAddition fa = new fermentableAddition
+            //    {
+            //        use = "Mash",
+            //        weight = 12.5F,
+            //        fermentable = f
+            //    };
 
-        //    yeastAddition ya = new yeastAddition
-        //    {
-        //        yeast = y
-        //};
+            //    yeast y = new yeast
+            //    {
+            //        attenuation = 1.05F,
+            //        lab = "Wyeast",
+            //        name = "Wheat"
+            //    };
 
-        //    adjunct ad = new adjunct
-        //    {
-        //        name = "Cocoa nibs"
-        //    };
+            //    yeastAddition ya = new yeastAddition
+            //    {
+            //        yeast = y
+            //};
 
-        //    adjunctAddition aa = new adjunctAddition
-        //    {
-        //        adjunct = ad,
-        //        amount = 2,
-        //        time = 60,
-        //        timeUnit = "min",
-        //        type = "boil",
-        //        unit = "oz"
-        //    };
+            //    adjunct ad = new adjunct
+            //    {
+            //        name = "Cocoa nibs"
+            //    };
 
-        //    newRecipe.fermentables.Add(fa);
-        //    newRecipe.yeasts.Add(ya);
-        //    newRecipe.adjuncts.Add(aa);
+            //    adjunctAddition aa = new adjunctAddition
+            //    {
+            //        adjunct = ad,
+            //        amount = 2,
+            //        time = 60,
+            //        timeUnit = "min",
+            //        type = "boil",
+            //        unit = "oz"
+            //    };
+
+            //    newRecipe.fermentables.Add(fa);
+            //    newRecipe.yeasts.Add(ya);
+            //    newRecipe.adjuncts.Add(aa);
 
             return newRecipe;
         }
