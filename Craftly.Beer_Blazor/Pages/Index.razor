@@ -1,28 +1,37 @@
 ﻿@using Craftly.Beer_Blazor.ComponentClasses;
 @using Beernet_Lib.Models;
 @page "/"
-
 @{
-    if (RecipeHelper.isLoggedIn)
+    if(RecipeHelper.isLoggedIn)
     {
-        if (recipes == null)
-        {
-
-            <p><em>Loading...</em></p>
-        }
-        else
-        {
-            <Craftly.Beer_Blazor.Shared.EditorWidgets.RecipeSelectorWidget Model=@Model recipes=@recipes> </Craftly.Beer_Blazor.Shared.EditorWidgets.RecipeSelectorWidget>
-        }
+    <MainNav refreshParent=@refresh/>
     }
-    else
-    {
-        <Craftly.Beer_Blazor.Pages.Login refreshParent=@refresh> </Craftly.Beer_Blazor.Pages.Login>
-    }
-
-
 }
+<div class="container-fluid body-content">
+    <div class="bodywrapper">
+        @{
+            if (RecipeHelper.isLoggedIn)
+            {
+                if (recipes == null)
+                {
 
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <Craftly.Beer_Blazor.Shared.EditorWidgets.RecipeSelectorWidget Model=@Model recipes=@recipes> </Craftly.Beer_Blazor.Shared.EditorWidgets.RecipeSelectorWidget>
+                }
+            }
+            else
+            {
+                <Craftly.Beer_Blazor.Pages.Login refreshParent=@refresh> </Craftly.Beer_Blazor.Pages.Login>
+            }
+
+
+        }
+    </div>
+
+</div>
 @code
 {
     public static recipe Model = RecipeHelper.initializeBlankRecipe();

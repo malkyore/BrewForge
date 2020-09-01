@@ -86,6 +86,7 @@
     void ClickLogout()
     {
         logout();
-        NavManager.NavigateTo("Login");
+        refreshParent.InvokeAsync("");;
+        NavManager.NavigateTo("/");
     }
 }

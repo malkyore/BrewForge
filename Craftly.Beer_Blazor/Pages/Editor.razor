@@ -2,9 +2,12 @@
 
 @using Craftly.Beer_Blazor.ComponentClasses;
 @using Beernet_Lib.Models;
-
-
-
+@{
+    if (RecipeHelper.isLoggedIn)
+    {
+        <MainNav refreshParent=@refresh />
+    }
+}
 <Craftly.Beer_Blazor.Shared.RecipeEditor Model=@Model> </Craftly.Beer_Blazor.Shared.RecipeEditor>
 
 @code
@@ -16,7 +19,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if(RecipeHelper.currentRecipeId != "-1")
+        if (RecipeHelper.currentRecipeId != "-1")
         {
             Model = RecipeHelper.GetRecipeDetails(RecipeHelper.currentRecipeId);
         }
@@ -25,5 +28,10 @@
             Model = RecipeHelper.initializeBlankRecipe();
         }
 
+    }
+
+    public async void refresh()
+    {
+        StateHasChanged();
     }
 }
