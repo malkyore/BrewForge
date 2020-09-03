@@ -1,3 +1,4 @@
 ﻿<StaticWebAssets Version="1.0">
+  <ContentRoot BasePath="_content/Microsoft.AspNetCore.ProtectedBrowserStorage" Path="C:\Users\Nick.APTNET\.nuget\packages\microsoft.aspnetcore.protectedbrowserstorage\0.1.0-alpha.19521.1\build\..\staticwebassets\" />
   <ContentRoot BasePath="_content/Radzen.Blazor" Path="C:\Users\Nick.APTNET\.nuget\packages\radzen.blazor\2.11.14\build\..\staticwebassets\" />
 </StaticWebAssets>

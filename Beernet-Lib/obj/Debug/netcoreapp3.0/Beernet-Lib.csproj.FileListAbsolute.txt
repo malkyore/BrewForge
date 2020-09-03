@@ -6,3 +6,4 @@ F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Beernet-Lib\obj\Debug\netcorea
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Beernet-Lib\obj\Debug\netcoreapp3.0\Beernet-Lib.AssemblyInfo.cs
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Beernet-Lib\obj\Debug\netcoreapp3.0\Beernet-Lib.dll
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Beernet-Lib\obj\Debug\netcoreapp3.0\Beernet-Lib.pdb
+F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Beernet-Lib\obj\Debug\netcoreapp3.0\Beernet-Lib.csproj.CoreCompileInputs.cache

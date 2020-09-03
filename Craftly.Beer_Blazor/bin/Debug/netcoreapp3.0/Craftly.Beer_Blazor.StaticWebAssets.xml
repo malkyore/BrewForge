@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <StaticWebAssets Version="1.0">
+  <ContentRoot BasePath="_content/Microsoft.AspNetCore.ProtectedBrowserStorage" Path="/root/.nuget/fallbackpackages2/microsoft.aspnetcore.protectedbrowserstorage/0.1.0-alpha.19521.1/staticwebassets/" />
   <ContentRoot BasePath="_content/Radzen.Blazor" Path="/root/.nuget/fallbackpackages2/radzen.blazor/2.11.14/staticwebassets/" />
 </StaticWebAssets>

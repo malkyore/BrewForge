@@ -74,6 +74,7 @@ F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\bin\Debug\
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\bin\Debug\netcoreapp3.0\System.Text.Json.dll
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\RazorDeclaration\Pages\Login.razor.g.cs
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\RazorDeclaration\Shared\LoginLayout.razor.g.cs
+F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\bin\Debug\netcoreapp3.0\Microsoft.AspNetCore.ProtectedBrowserStorage.dll
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\Craftly.Beer_Blazor.MvcApplicationPartsAssemblyInfo.cache
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\RazorDeclaration\Craftly.Beer_Blazor.dll
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\Razor\App.razor.g.cs
@@ -94,3 +95,5 @@ F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\Razor\Shared\NavMenu.razor.g.cs
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\Razor\Shared\RecipeEditor.razor.g.cs
 F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\Razor\_Imports.razor.g.cs
+F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\Craftly.Beer_Blazor.csproj.CoreCompileInputs.cache
+F:\_Repos\Craftly.beer_Blazor\Craftly.Beer_Blazor\Craftly.Beer_Blazor\obj\Debug\netcoreapp3.0\Craftly.Beer_Blazor.genruntimeconfig.cache

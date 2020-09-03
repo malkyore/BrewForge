@@ -100,7 +100,7 @@ using Craftly.Beer_Blazor.ComponentClasses.EditorComponents;
 #line default
 #line hidden
 #nullable disable
-    public class YeastWidget : YeastEditor
+    public partial class YeastWidget : YeastEditor
     {
         #pragma warning disable 1998
         protected override void BuildRenderTree(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder __builder)

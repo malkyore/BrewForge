@@ -90,7 +90,7 @@ using Radzen.Blazor;
 #line default
 #line hidden
 #nullable disable
-    public class _Imports : System.Object
+    public partial class _Imports : System.Object
     {
         #pragma warning disable 1998
         protected void Execute()

@@ -10,7 +10,7 @@
       "NETCOREAPP",
       "NETCOREAPP3_0"
     ],
-    "languageVersion": "",
+    "languageVersion": "8.0",
     "platform": "",
     "allowUnsafe": false,
     "warningsAsErrors": false,
@@ -25,6 +25,7 @@
       "Craftly.Beer_Blazor/1.0.0": {
         "dependencies": {
           "Beernet-Lib": "1.0.0",
+          "Microsoft.AspNetCore.ProtectedBrowserStorage": "0.1.0-alpha.19521.1",
           "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": "1.9.5",
           "Radzen.Blazor": "2.11.14",
           "Microsoft.AspNetCore.Antiforgery": "3.0.0.0",
@@ -406,6 +407,17 @@
         },
         "compile": {
           "lib/netstandard2.0/Microsoft.AspNetCore.Metadata.dll": {}
+        }
+      },
+      "Microsoft.AspNetCore.ProtectedBrowserStorage/0.1.0-alpha.19521.1": {
+        "runtime": {
+          "lib/netcoreapp3.0/Microsoft.AspNetCore.ProtectedBrowserStorage.dll": {
+            "assemblyVersion": "0.1.0.0",
+            "fileVersion": "0.100.19.52101"
+          }
+        },
+        "compile": {
+          "lib/netcoreapp3.0/Microsoft.AspNetCore.ProtectedBrowserStorage.dll": {}
         }
       },
       "Microsoft.CSharp/4.7.0": {},
@@ -3356,6 +3368,13 @@
       "sha512": "sha512-ZiNCjglz4kR2OGElM2u/S6cS1ArAxE6lP4BeniCZcr6l+ACzslKgcPGOTY8/Glppx6CDzMKfmyqV+VbFh5CyjQ==",
       "path": "microsoft.aspnetcore.metadata/3.1.0",
       "hashPath": "microsoft.aspnetcore.metadata.3.1.0.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.ProtectedBrowserStorage/0.1.0-alpha.19521.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-P81qtHhl6KXr+TCm5qfCxkhFxkGtALmY3bNcraKX6rPGMbPMBGi9mIeCyUZVmpzIVkD1ocUfuRqiob05jR3hUA==",
+      "path": "microsoft.aspnetcore.protectedbrowserstorage/0.1.0-alpha.19521.1",
+      "hashPath": "microsoft.aspnetcore.protectedbrowserstorage.0.1.0-alpha.19521.1.nupkg.sha512"
     },
     "Microsoft.CSharp/4.7.0": {
       "type": "package",
