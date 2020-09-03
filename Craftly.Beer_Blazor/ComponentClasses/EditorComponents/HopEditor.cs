@@ -14,7 +14,8 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
         public static string operatorvalue = "";
         [Parameter]
         public recipe Model { get; set; }
-
+        [CascadingParameter(Name = "SessionID")]
+        protected string SessionID { get; set; }
         [Parameter] public EventCallback<string> refreshParent { get; set; }
 
         IEnumerable<hopbase> AllHops;
@@ -77,7 +78,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
                 selectedHopAddition = -1;
             }
             resetSelector();
-            AllHops = RecipeHelper.GetAllHops();
+            AllHops = RecipeHelper.GetAllHops(SessionID);
             HopList = AllHops;
             
             if (Model.hops.Count != 0  && selectedHopAddition != -1)
@@ -110,7 +111,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
 
         public void Save(bool save)
         {
-            RecipeResponse r = RecipeHelper.SaveRecipe(Model, save);
+            RecipeResponse r = RecipeHelper.SaveRecipe(Model, save, SessionID);
             Model.recipeStats = r.recipeStats;
             Model.lastModifiedGuid = r.lastModifiedGuid;
             refreshParent.InvokeAsync("");

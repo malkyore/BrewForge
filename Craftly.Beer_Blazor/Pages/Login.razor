@@ -2,7 +2,10 @@
 @using Craftly.Beer_Blazor.ComponentClasses;
 @using Beernet_Lib.Models;
 @inherits Craftly.Beer_Blazor.ComponentClasses.LoginComponent;
+@using Microsoft.AspNetCore.ProtectedBrowserStorage
+@inject ProtectedSessionStorage ProtectedSessionStore
 @*@layout LoginLayout*@
+
 <div id="header">
     <br />
     <br />

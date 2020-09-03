@@ -14,12 +14,12 @@ namespace Craftly.Beer_Blazor.ComponentClasses
         [Parameter] public EventCallback<string> refreshParent { get; set; }
         public void logout()
         {
-            RecipeHelper.Logout();
+            //RecipeHelper.Logout(SessionID);
         }
 
-        public static bool isLoggedIn()
-        {
-            return RecipeHelper.isLoggedIn;
-        }
+        //public static bool isLoggedIn()
+        //{
+        //    return RecipeHelper;
+        //}
     }
 }

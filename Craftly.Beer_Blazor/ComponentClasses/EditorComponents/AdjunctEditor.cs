@@ -14,6 +14,9 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
         [Parameter]
         public recipe Model { get; set; }
         [Parameter] public EventCallback<string> refreshParent { get; set; }
+
+        [CascadingParameter(Name = "SessionID")]
+        protected string SessionID { get; set; }
         public static int selectedAdjunctAddition { get; set; } = 0;
 
         IEnumerable<adjunct> AllAdjuncts;
@@ -46,7 +49,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
         }
         public void Save(bool save)
         {
-            RecipeResponse r = RecipeHelper.SaveRecipe(Model, save);
+            RecipeResponse r = RecipeHelper.SaveRecipe(Model, save, SessionID);
             Model.recipeStats = r.recipeStats;
             Model.lastModifiedGuid = r.lastModifiedGuid;
             refreshParent.InvokeAsync("");
@@ -78,7 +81,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
                 selectedAdjunctAddition = -1;
             }
             resetSelector();
-            AllAdjuncts = RecipeHelper.GetAllAdjuncts();
+            AllAdjuncts = RecipeHelper.GetAllAdjuncts(SessionID);
             AdjunctList = AllAdjuncts;
             selectedAdjunctID = findAdjunctIDFromSelecteAdjunct();
 
@@ -95,7 +98,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
 
         public List<adjunct> loadAllAdjuncts()
         {
-            return RecipeHelper.GetAllAdjuncts();
+            return RecipeHelper.GetAllAdjuncts(SessionID);
         }
 
         public void Change(object value, string name)

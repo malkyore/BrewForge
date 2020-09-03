@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Beernet_Lib.Models;
 using Radzen;
+using Microsoft.AspNetCore.ProtectedBrowserStorage;
 
 namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
 {
@@ -13,9 +14,25 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
     {
         [Parameter]
         public recipe Model { get; set; }
+
+        [Inject]
+        ProtectedSessionStorage ProtectedSessionStore { get; set; }
+
+        [CascadingParameter]
+        string SessionID { get; set; }
         public List<style> styleOptions = getStyleOptions();
         public List<style> styleOptionsList = new List<style>();
         public string selectedStyle = "";
+
+        public async void setSessionID(string sessionState)
+        {
+            await ProtectedSessionStore.SetAsync("session", sessionState);
+        }
+
+        public string getSessionID()
+        {
+            return ProtectedSessionStore.GetAsync<string>("session").Result;
+        }
 
         public static List<style> getStyleOptions()
         {
@@ -55,6 +72,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
 
         protected override void OnInitialized()
         {
+            SessionID = getSessionID();
             getAllStyles();
             styleOptionsList = styleOptions;
             selectedStyle = Model.style.idString;
@@ -62,7 +80,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
 
         public void getAllStyles()
         {
-            styleOptions = RecipeHelper.GetAllStyles();
+            styleOptions = RecipeHelper.GetAllStyles(SessionID);
         }
 
         public void ChangeRecipeDescription(object value, string name)
@@ -72,7 +90,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
         }
         public void Save(bool save)
         {
-            RecipeResponse r = RecipeHelper.SaveRecipe(Model, save);
+            RecipeResponse r = RecipeHelper.SaveRecipe(Model, save, SessionID);
             Model.idString = r.idString;
             Model.recipeStats = r.recipeStats;
             Model.lastModifiedGuid = r.lastModifiedGuid;

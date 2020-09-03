@@ -1,16 +1,18 @@
 ﻿@using Craftly.Beer_Blazor.ComponentClasses;
 @using Beernet_Lib.Models;
+@using Microsoft.AspNetCore.ProtectedBrowserStorage
+@inject ProtectedSessionStorage ProtectedSessionStore
 @page "/"
 @{
-    if(RecipeHelper.isLoggedIn)
+    if (isLoggedIn)
     {
-    <MainNav refreshParent=@refresh/>
+        <MainNav refreshParent=@refresh />
     }
 }
 <div class="container-fluid body-content">
     <div class="bodywrapper">
         @{
-            if (RecipeHelper.isLoggedIn)
+            if (isLoggedIn)
             {
                 if (recipes == null)
                 {
@@ -34,23 +36,69 @@
 </div>
 @code
 {
+    public string state = "";
+
     public static recipe Model = RecipeHelper.initializeBlankRecipe();
     public static List<recipe> recipes = new List<recipe>();
 
+    public static bool isLoggedIn = false;
+
     protected override async Task OnInitializedAsync()
     {
-        if (RecipeHelper.isLoggedIn)
+
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        //getSessionState();
+        var session = state;
+        if (session != null)
         {
-            recipes = await RecipeHelper.GetRecipes();
+            isLoggedIn = true;
+            //recipes = await RecipeHelper.GetRecipes(session);
         }
     }
 
     public async void refresh()
     {
-        if (RecipeHelper.isLoggedIn)
+        state = await getSessionID();
+        if (RecipeHelper.isLoggedIn(state))
         {
-            recipes = await RecipeHelper.GetRecipes();
+            recipes = await RecipeHelper.GetRecipes(state);
         }
         StateHasChanged();
     }
+
+    async void saveSessionState(string session)
+    {
+        await ProtectedSessionStore.SetAsync("session", session);
+    }
+
+    ValueTask<string> getSessionID()
+    {
+        string session = "";
+        return ProtectedSessionStore.GetAsync<string>("session");
+    }
+
+    //async void getSessionState()
+    //{
+    //    string session = null;
+    //    try
+    //    {
+    //        state = await ProtectedSessionStore.GetAsync<string>("session");
+    //        if(state != null)
+    //        {
+    //            isLoggedIn = true;
+    //        }
+    //        else
+    //        {
+    //            state = "";
+    //            isLoggedIn = false;
+    //        }
+    //    }
+    //    catch(Exception e)
+    //    {
+
+    //    }
+    //}
 }

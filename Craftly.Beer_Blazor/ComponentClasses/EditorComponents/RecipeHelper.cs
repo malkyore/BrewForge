@@ -7,19 +7,22 @@ using Beernet_Lib.Tools;
 
 namespace Craftly.Beer_Blazor.ComponentClasses
 {
+    public class UserSessionItem
+    {
+        public string sessionID { get; set; }
+        public string authToken { get; set; }
+        public DateTime expiryTimestamp { get; set; }
+    }
+
     public static class RecipeHelper
     {
+        static List<UserSessionItem> UserSessions { get; set; } = new List<UserSessionItem>();
         public static string currentRecipeId { get; set; }
-        private static string LoginToken { get; set; }
+        //private static string LoginToken { get; set; }
 
-        public static bool isLoggedIn { get; set; }
+        //public static bool isLoggedIn { get; set; }
 
-        //static Dictionary<string, string> values = new Dictionary<string, string>
-        //    {
-        //       { "Username", "" + "beer"},
-        //       { "Password", "" + "Poopbutt1" }
-        //    };
-
+        private static int LoginExpiryDays { get; set; } = 10;
         //dev
         static string apiLink = "http://dev.unacceptable.beer:666";
 
@@ -27,7 +30,47 @@ namespace Craftly.Beer_Blazor.ComponentClasses
         //static string apiLink = "http://rest.unacceptable.beer:5123";
         static string loginEndpoint = "/Beernet/Login/";
 
-        public static bool Login(string username, string password)
+
+        public static string retrieveToken(string sessionID)
+        {
+            var currentSesh = UserSessions.Where(x => x.sessionID == sessionID).FirstOrDefault();
+
+            if (!(currentSesh.expiryTimestamp < DateTime.Now))
+            {
+                return currentSesh.authToken;
+            }
+            else
+            {
+                UserSessions.Remove(currentSesh);
+                return "expired";
+            }
+        }
+        public static bool isLoggedIn(string sessionID)
+        {
+            var currentSesh = UserSessions.Where(x => x.sessionID == sessionID);
+
+            if (currentSesh.Any())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public static string storeLoginSession(string Token)
+        {
+            string sessionGuid = Guid.NewGuid().ToString();
+            UserSessionItem sesh = new UserSessionItem();
+            sesh.sessionID = sessionGuid;
+            sesh.authToken = Token;
+            sesh.expiryTimestamp = DateTime.Now.AddDays(LoginExpiryDays);
+            UserSessions.Add(sesh);
+            return sessionGuid;
+        }
+
+        public static string Login(string username, string password)
         {
             Dictionary<string, string> LoginInfo = new Dictionary<string, string>
             {
@@ -35,46 +78,49 @@ namespace Craftly.Beer_Blazor.ComponentClasses
                { "Password", "" + password }
             };
 
-            LoginToken = Auth.getAPIAuthToken(apiLink, loginEndpoint, LoginInfo).Replace("\"", "");
+            string LoginToken = Auth.getAPIAuthToken(apiLink, loginEndpoint, LoginInfo).Replace("\"", "");
             if(LoginToken == "Unauthorized" || LoginToken == "Unknown Error")
             {
-                isLoggedIn = false;
-                return false;
+                //isLoggedIn = false;
+                return "false";
             }
             else
             {
-                isLoggedIn = true;
-                return true;
+                //isLoggedIn = true;
+                return storeLoginSession(LoginToken);
             }
             
         }
 
-        public static void Logout()
+        public static void Logout(string sessionID)
         {
-            isLoggedIn = false;
-            LoginToken = null;
+            var sesh = UserSessions.Where(X => X.sessionID == sessionID).FirstOrDefault();
+            UserSessions.Remove(sesh);
+            //isLoggedIn = false;
+            //LoginToken = null;
         }
 
-        public async static Task<List<recipe>> GetRecipes()
+        public async static Task<List<recipe>> GetRecipes(string sessionID)
         {
-            //string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
+            string LoginToken = retrieveToken(sessionID);//Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
 
             List<recipe> allRecipes = DataAccess.getRecipes(apiLink + "/beernet/recipe/", LoginToken).ToList();
             return allRecipes;
 
         }
 
-        public static List<style> GetAllStyles()
+        public static List<style> GetAllStyles(string sessionID)
         {
             //string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
 
+            string LoginToken = retrieveToken(sessionID);
             return DataAccess.getAllStyles(apiLink, LoginToken);
         }
 
-        public static recipe GetRecipeDetails(string recipeID)
+        public static recipe GetRecipeDetails(string recipeID, string sessionID)
         {
             //string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
-
+            string LoginToken = retrieveToken(sessionID);
             currentRecipeId = recipeID;
 
             recipe RecipeDetail = DataAccess.getRecipeDetails(apiLink + "/beernet/recipe/", LoginToken, recipeID);
@@ -82,11 +128,12 @@ namespace Craftly.Beer_Blazor.ComponentClasses
 
         }
 
-        public static List<hopbase> GetAllHops()
+        public static List<hopbase> GetAllHops(string sessionID)
         {
             //string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
 
             //currentRecipeId = recipeID;
+            string LoginToken = retrieveToken(sessionID);
 
             List<hopbase> listOfHops = new List<hopbase>();
 
@@ -96,9 +143,10 @@ namespace Craftly.Beer_Blazor.ComponentClasses
 
         }
 
-        public static List<fermentable> GetAllFermentables()
+        public static List<fermentable> GetAllFermentables(string sessionID)
         {
             //string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
+            string LoginToken = retrieveToken(sessionID);
 
             List<fermentable> listOfFermentables = new List<fermentable>();
 
@@ -108,9 +156,10 @@ namespace Craftly.Beer_Blazor.ComponentClasses
 
         }
 
-        public static List<yeast> GetAllYeasts()
+        public static List<yeast> GetAllYeasts(string sessionID)
         {
             //string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
+            string LoginToken = retrieveToken(sessionID);
 
             List<yeast> listOfYeasts = new List<yeast>();
 
@@ -120,9 +169,10 @@ namespace Craftly.Beer_Blazor.ComponentClasses
 
         }
 
-        public static List<adjunct> GetAllAdjuncts()
+        public static List<adjunct> GetAllAdjuncts(string sessionID)
         {
             //string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
+            string LoginToken = retrieveToken(sessionID);
 
             List<adjunct> listOfadjuncts = new List<adjunct>();
 
@@ -132,16 +182,18 @@ namespace Craftly.Beer_Blazor.ComponentClasses
 
         }
 
-        public static RecipeResponse SaveRecipe(recipe recipe, bool save)
+        public static RecipeResponse SaveRecipe(recipe recipe, bool save, string sessionID)
         {
             //string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
+            string LoginToken = retrieveToken(sessionID);
             RecipeResponse stats = DataAccess.postRecipe(recipe, apiLink, LoginToken, save);
             return stats;
         }
 
-        public static void DeleteRecipe(recipe recipe)
+        public static void DeleteRecipe(recipe recipe, string sessionID)
         {
             //string token = Auth.getAPIAuthToken(apiLink, loginEndpoint, values).Replace("\"", "");
+            string LoginToken = retrieveToken(sessionID);
             DataAccess.deleteRecipe(recipe, apiLink, LoginToken);
         }
 
