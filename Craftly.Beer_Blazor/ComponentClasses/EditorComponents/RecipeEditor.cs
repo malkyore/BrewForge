@@ -15,23 +15,35 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
         [Parameter]
         public recipe Model { get; set; }
 
+        [Parameter]
+        public string state { get; set; }
+
         [Inject]
         ProtectedSessionStorage ProtectedSessionStore { get; set; }
-
-        [CascadingParameter]
-        string SessionID { get; set; }
+        public string SessionID { get; set; } = "";
         public List<style> styleOptions = getStyleOptions();
         public List<style> styleOptionsList = new List<style>();
         public string selectedStyle = "";
 
+        //public async void setSessionID(string sessionState)
+        //{
+        //    await ProtectedSessionStore.SetAsync("session", sessionState);
+        //}
+
+        //public string getSessionID()
+        //{
+        //    return ProtectedSessionStore.GetAsync<string>("session").Result;
+        //}
+
         public async void setSessionID(string sessionState)
         {
-            await ProtectedSessionStore.SetAsync("session", sessionState);
+            ProtectedSessionStore.SetAsync("session", sessionState).ConfigureAwait(false);
         }
 
-        public string getSessionID()
+        public ValueTask<string> getSessionID()
         {
-            return ProtectedSessionStore.GetAsync<string>("session").Result;
+            string session = "";
+            return ProtectedSessionStore.GetAsync<string>("session");
         }
 
         public static List<style> getStyleOptions()
@@ -70,17 +82,22 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
             
         }
 
-        protected override void OnInitialized()
+        protected override async void OnInitialized()
         {
-            SessionID = getSessionID();
-            getAllStyles();
+            SessionID = state;
             styleOptionsList = styleOptions;
+        }
+        protected override async void OnAfterRender(bool firstRender)
+        {
+            getAllStyles();
             selectedStyle = Model.style.idString;
+            SessionID = await getSessionID();
+            base.OnAfterRender(firstRender);
         }
 
-        public void getAllStyles()
+        public async void getAllStyles()
         {
-            styleOptions = RecipeHelper.GetAllStyles(SessionID);
+            styleOptions = RecipeHelper.GetAllStyles(await getSessionID());
         }
 
         public void ChangeRecipeDescription(object value, string name)
@@ -88,9 +105,9 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
             Model.description = value.ToString();
             Save(false);
         }
-        public void Save(bool save)
+        public async void Save(bool save)
         {
-            RecipeResponse r = RecipeHelper.SaveRecipe(Model, save, SessionID);
+            RecipeResponse r = RecipeHelper.SaveRecipe(Model, save, await getSessionID());
             Model.idString = r.idString;
             Model.recipeStats = r.recipeStats;
             Model.lastModifiedGuid = r.lastModifiedGuid;

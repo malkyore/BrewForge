@@ -4,15 +4,15 @@
 @inject ProtectedSessionStorage ProtectedSessionStore
 @page "/"
 @{
-    if (isLoggedIn)
+    if (!String.IsNullOrEmpty(state))
     {
-        <MainNav refreshParent=@refresh />
+        <MainNav refreshParent=@refreshToHome logout=@refreshAndLogout />
     }
 }
 <div class="container-fluid body-content">
     <div class="bodywrapper">
         @{
-            if (isLoggedIn)
+            if (!String.IsNullOrEmpty(state))
             {
                 if (recipes == null)
                 {
@@ -21,7 +21,14 @@
                 }
                 else
                 {
-                    <Craftly.Beer_Blazor.Shared.EditorWidgets.RecipeSelectorWidget Model=@Model recipes=@recipes> </Craftly.Beer_Blazor.Shared.EditorWidgets.RecipeSelectorWidget>
+                    if (String.IsNullOrEmpty(selectedRecipeID))
+                    {
+                        <Craftly.Beer_Blazor.Shared.EditorWidgets.RecipeSelectorWidget Model=@Model recipes=@recipes refreshParentRecipe=@refreshRecipe openNewRecipe=@openNewRecipe> </Craftly.Beer_Blazor.Shared.EditorWidgets.RecipeSelectorWidget>
+                    }
+                    else
+                    {
+                        <Craftly.Beer_Blazor.Shared.RecipeEditor Model=@Model state=@state> </Craftly.Beer_Blazor.Shared.RecipeEditor>
+                    }
                 }
             }
             else
@@ -36,26 +43,30 @@
 </div>
 @code
 {
-    public string state = "";
+    public string state;
 
-    public static recipe Model = RecipeHelper.initializeBlankRecipe();
-    public static List<recipe> recipes = new List<recipe>();
+    public string selectedRecipeID;
 
-    public static bool isLoggedIn = false;
+    public recipe Model = RecipeHelper.initializeBlankRecipe();
+    public List<recipe> recipes = new List<recipe>();
 
     protected override async Task OnInitializedAsync()
     {
 
     }
 
-    protected override void OnAfterRender(bool firstRender)
+    protected override async void OnAfterRender(bool firstRender)
     {
-        //getSessionState();
-        var session = state;
-        if (session != null)
+        state = await getSessionID();
+        //var session = state;
+        //if (session != null)
+        //{
+        //    isLoggedIn = true;
+        //    //recipes = await RecipeHelper.GetRecipes(session);
+        //}
+        if(firstRender)
         {
-            isLoggedIn = true;
-            //recipes = await RecipeHelper.GetRecipes(session);
+            refresh();
         }
     }
 
@@ -67,6 +78,37 @@
             recipes = await RecipeHelper.GetRecipes(state);
         }
         StateHasChanged();
+    }
+
+    public async void refreshToHome()
+    {
+        selectedRecipeID = "";
+        refresh();
+    }
+
+    public async void refreshAndLogout()
+    {
+        //state = await getSessionID();
+        RecipeHelper.Logout(state);
+        state = null;
+        selectedRecipeID = "";
+        ProtectedSessionStore.DeleteAsync("session");
+        StateHasChanged();
+    }
+
+    public async void refreshRecipe(string selectedRecipe)
+    {
+        //state = await getSessionID();
+        selectedRecipeID = selectedRecipe;
+        Model = RecipeHelper.GetRecipeDetails(selectedRecipe, state);
+        StateHasChanged();
+    }
+
+    public async void openNewRecipe()
+    {
+        selectedRecipeID = "-1";
+        Model = RecipeHelper.initializeBlankRecipe();
+        refresh();
     }
 
     async void saveSessionState(string session)

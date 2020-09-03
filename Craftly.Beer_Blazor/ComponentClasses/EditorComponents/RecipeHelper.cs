@@ -227,6 +227,8 @@ namespace Craftly.Beer_Blazor.ComponentClasses
 
             newRecipe.recipeParameters = rp;
 
+            newRecipe.equipmentProfile = RecipeTools.getDefaultEquipmentProfile();
+
             newRecipe.adjuncts = new List<adjunctAddition>();
             newRecipe.fermentables = new List<fermentableAddition>();
             newRecipe.hops = new List<hopAddition>();

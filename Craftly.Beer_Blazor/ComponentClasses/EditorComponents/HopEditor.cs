@@ -14,8 +14,8 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
         public static string operatorvalue = "";
         [Parameter]
         public recipe Model { get; set; }
-        [CascadingParameter(Name = "SessionID")]
-        protected string SessionID { get; set; }
+        [Parameter]
+        public string SessionID { get; set; }
         [Parameter] public EventCallback<string> refreshParent { get; set; }
 
         IEnumerable<hopbase> AllHops;
@@ -78,8 +78,11 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
                 selectedHopAddition = -1;
             }
             resetSelector();
-            AllHops = RecipeHelper.GetAllHops(SessionID);
-            HopList = AllHops;
+            if(!String.IsNullOrEmpty(SessionID))
+            {
+                AllHops = RecipeHelper.GetAllHops(SessionID);
+                HopList = AllHops;
+            }
             
             if (Model.hops.Count != 0  && selectedHopAddition != -1)
             {
@@ -213,16 +216,19 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
 
         public void LoadData(LoadDataArgs args)
         {
-            var query = AllHops.AsQueryable();
-
-            if (!string.IsNullOrEmpty(args.Filter))
+            if(AllHops != null)
             {
-                query = query.Where(c => c.name.ToLower().Contains(args.Filter.ToLower()));
+                var query = AllHops.AsQueryable();
+
+                if (!string.IsNullOrEmpty(args.Filter))
+                {
+                    query = query.Where(c => c.name.ToLower().Contains(args.Filter.ToLower()));
+                }
+
+                HopList = query.ToList();
+
+                InvokeAsync(StateHasChanged);
             }
-
-            HopList = query.ToList();
-
-            InvokeAsync(StateHasChanged);
         }
 
         public async void AddHop()

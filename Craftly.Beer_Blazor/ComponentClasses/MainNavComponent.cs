@@ -12,10 +12,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses
     public class MainNavComponent : ComponentBase
     {
         [Parameter] public EventCallback<string> refreshParent { get; set; }
-        public void logout()
-        {
-            //RecipeHelper.Logout(SessionID);
-        }
+        [Parameter] public EventCallback<string> logout { get; set; }
 
         //public static bool isLoggedIn()
         //{

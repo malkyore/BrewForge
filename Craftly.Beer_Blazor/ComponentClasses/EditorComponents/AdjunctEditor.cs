@@ -15,8 +15,8 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
         public recipe Model { get; set; }
         [Parameter] public EventCallback<string> refreshParent { get; set; }
 
-        [CascadingParameter(Name = "SessionID")]
-        protected string SessionID { get; set; }
+        [Parameter]
+        public string SessionID { get; set; }
         public static int selectedAdjunctAddition { get; set; } = 0;
 
         IEnumerable<adjunct> AllAdjuncts;

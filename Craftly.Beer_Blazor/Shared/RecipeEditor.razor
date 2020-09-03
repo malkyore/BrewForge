@@ -12,6 +12,7 @@
     <nav class="menu" tabindex="0">
         <div class="smartphone-menu-trigger"></div>
         <header class="avatar">
+            <h4>@state</h4>
             <h2>@Model.name</h2>
             <h4>@Model.style.name</h4>
             <div>
@@ -181,13 +182,13 @@
                     <!--Start Hop Widget-->
                     <div class="col-1-2 grid-pad">
                         <h3 style="color:white">Hops</h3>
-                        <Craftly.Beer_Blazor.Shared.EditorWidgets.HopWidget Model=@Model refreshParent=@refresh> </Craftly.Beer_Blazor.Shared.EditorWidgets.HopWidget>
+                        <Craftly.Beer_Blazor.Shared.EditorWidgets.HopWidget Model=@Model refreshParent=@refresh SessionID=@SessionID> </Craftly.Beer_Blazor.Shared.EditorWidgets.HopWidget>
                     </div><!--End Hop Widget-->
 
                     <div class="col-1-2 grid-pad">
                         <!--fermentable widget-->
                         <h3 style="color:white">Fermentables</h3>
-                        <Craftly.Beer_Blazor.Shared.EditorWidgets.FermentableWidget Model=@Model refreshParent=@refresh> </Craftly.Beer_Blazor.Shared.EditorWidgets.FermentableWidget>
+                        <Craftly.Beer_Blazor.Shared.EditorWidgets.FermentableWidget Model=@Model refreshParent=@refresh SessionID=@SessionID> </Craftly.Beer_Blazor.Shared.EditorWidgets.FermentableWidget>
                     </div><!--End Fermentable Widget-->
                     <div class="grid">
 
@@ -197,12 +198,12 @@
                     <div class="col-1-2 grid-pad">
                         <!--Yeast Widget-->
                         <h3 style="color:white">Yeasts</h3>
-                        <Craftly.Beer_Blazor.Shared.EditorWidgets.YeastWidget Model=@Model refreshParent=@refresh> </Craftly.Beer_Blazor.Shared.EditorWidgets.YeastWidget>
+                        <Craftly.Beer_Blazor.Shared.EditorWidgets.YeastWidget Model=@Model refreshParent=@refresh SessionID=@SessionID> </Craftly.Beer_Blazor.Shared.EditorWidgets.YeastWidget>
                     </div> <!--End Yeast Widget-->
                     <div class="col-1-2 grid-pad">
                         <!--Adjunct widget-->
                         <h3 style="color:white">Adjuncts</h3>
-                        <Craftly.Beer_Blazor.Shared.EditorWidgets.AdjunctWidget Model=@Model refreshParent=@refresh> </Craftly.Beer_Blazor.Shared.EditorWidgets.AdjunctWidget>
+                        <Craftly.Beer_Blazor.Shared.EditorWidgets.AdjunctWidget Model=@Model refreshParent=@refresh SessionID=@SessionID> </Craftly.Beer_Blazor.Shared.EditorWidgets.AdjunctWidget>
                     </div><!--End Yeast Widget-->
                 </div>
             </div>

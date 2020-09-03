@@ -2,12 +2,11 @@
 
 @using Craftly.Beer_Blazor.ComponentClasses;
 @using Beernet_Lib.Models;
-@{
-    if (RecipeHelper.isLoggedIn(SessionID))
-    {
+@using Microsoft.AspNetCore.ProtectedBrowserStorage; 
+@inject ProtectedSessionStorage ProtectedSessionStore;
+
         <MainNav refreshParent=@refresh />
-    }
-}
+
 <Craftly.Beer_Blazor.Shared.RecipeEditor Model=@Model> </Craftly.Beer_Blazor.Shared.RecipeEditor>
 
 @code
@@ -16,21 +15,32 @@
     public static string recipeId { get; set; }
 
     [CascadingParameter(Name = "SessionID")]
-        protected string SessionID { get; set; }
+    protected string SessionID { get; set; }
 
     public static recipe Model { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        if (RecipeHelper.currentRecipeId != "-1")
-        {
-            Model = RecipeHelper.GetRecipeDetails(RecipeHelper.currentRecipeId,SessionID);
-        }
-        else
-        {
-            Model = RecipeHelper.initializeBlankRecipe();
-        }
+        //if (RecipeHelper.currentRecipeId != "-1")
+        //{
+        //    Model = RecipeHelper.GetRecipeDetails(RecipeHelper.currentRecipeId, await getSessionID());
+        //}
+        //else
+        //{
+        //    Model = RecipeHelper.initializeBlankRecipe();
+        //}
 
+    }
+
+    public async void setSessionID(string sessionState)
+    {
+        ProtectedSessionStore.SetAsync("session", sessionState).ConfigureAwait(false);
+    }
+
+    public ValueTask<string> getSessionID()
+    {
+        string session = "";
+        return ProtectedSessionStore.GetAsync<string>("session");
     }
 
     public async void refresh()

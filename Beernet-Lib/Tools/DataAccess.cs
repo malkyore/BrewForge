@@ -160,6 +160,11 @@ namespace Beernet_Lib.Tools
         {
             string jsonurl = "";
 
+            if(recipe.equipmentProfile == null)
+            {
+                recipe.equipmentProfile = RecipeTools.getDefaultEquipmentProfile();
+            }
+
             if(recipe.idString != null)
             {
                 if (save)
