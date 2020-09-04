@@ -11,7 +11,7 @@
                     int i = 0;
                     foreach (fermentableAddition fa in Model.fermentables)
                     {
-                        <div class="hopListItem grid @(i == selectedFermentableAddition ? "hopListItemSelected" : "")" @onclick="(() => changeSelectedFermentable(fa.additionGuid))">
+                        <div class="hopListItem grid @(i == fermentableState.currentSelectedFermentableIndex  ? "hopListItemSelected" : "")" @onclick="(() => changeSelectedFermentable(fa.additionGuid))">
                             <div class="col-1-3">
                                 <div>@fa.fermentable.name</div>
                                 <div class="ingredientUnit">name</div>
@@ -49,7 +49,7 @@
                 <div class="col-3-4">
                     <RadzenDropDown AllowClear="false" TValue="string"
                                     LoadData="@LoadData" AllowFiltering="true"
-                                    Data="@FermentableList" TextProperty="name" Value="@selectedFermentableID" Placeholder="@fermentableName" ValueProperty="idString" Style="width:100%;"
+                                    Data="@FermentableList" TextProperty="name" Value="@fermentableState.currentSelectedFermentableID" Placeholder="@fermentableName" ValueProperty="idString" Style="width:100%;"
                                     Change="@(args => Change(args, "DropDown with custom filtering"))" />
                 </div>
             </div>
@@ -58,9 +58,9 @@
                     <label>PPG: </label>
                 </div>
                 <div class="col-3-4">
-                    @if (selectedFermentableAddition != -1 && Model.fermentables.Count != 0 && Model.fermentables[selectedFermentableAddition].fermentable != null)
+                    @if (fermentableState.currentSelectedFermentableIndex != -1 && Model.fermentables.Count != 0 && Model.fermentables[fermentableState.currentSelectedFermentableIndex].fermentable != null)
                     {
-                        <RadzenTextBox Style="width:100%;" @oninput="@(args => ChangeFermentableYield(args.Value.ToString(), "TextBox with change on every input"))" Value="@Model.fermentables[selectedFermentableAddition].fermentable.yield.ToString()" />
+                        <RadzenTextBox Style="width:100%;" @oninput="@(args => ChangeFermentableYield(args.Value.ToString(), "TextBox with change on every input"))" Value="@Model.fermentables[fermentableState.currentSelectedFermentableIndex].fermentable.yield.ToString()" />
                     }
                     else
                     {
@@ -74,9 +74,9 @@
                 </div>
                 <div class="col-3-4">
                     <label>
-                        @if (selectedFermentableAddition != -1 && Model.fermentables.Count != 0)
+                        @if (fermentableState.currentSelectedFermentableIndex != -1 && Model.fermentables.Count != 0)
                         {
-                            @Model.fermentables[selectedFermentableAddition].fermentable.type
+                            @Model.fermentables[fermentableState.currentSelectedFermentableIndex].fermentable.type
                         }
                     </label>
                 </div>
@@ -87,9 +87,9 @@
                 </div>
                 <div class="col-3-4">
                     <label>
-                        @if (selectedFermentableAddition != -1 && Model.fermentables.Count != 0)
+                        @if (fermentableState.currentSelectedFermentableIndex != -1 && Model.fermentables.Count != 0)
                         {
-                            @Model.fermentables[selectedFermentableAddition].fermentable.maltster
+                            @Model.fermentables[fermentableState.currentSelectedFermentableIndex].fermentable.maltster
                         }
                     </label>
                 </div>
@@ -99,9 +99,9 @@
                     <label>amount</label>
                 </div>
                 <div class="col-3-4">
-                    @if (selectedFermentableAddition != -1 && Model.fermentables.Count != 0)
+                    @if (fermentableState.currentSelectedFermentableIndex != -1 && Model.fermentables.Count != 0)
                     {
-                        <RadzenTextBox Style="width:100%;" @oninput="@(args => ChangeFermentableWeight(args.Value.ToString(), "TextBox with change on every input"))" Value="@Model.fermentables[selectedFermentableAddition].weight.ToString()" />
+                        <RadzenTextBox Style="width:100%;" @oninput="@(args => ChangeFermentableWeight(args.Value.ToString(), "TextBox with change on every input"))" Value="@Model.fermentables[fermentableState.currentSelectedFermentableIndex].weight.ToString()" />
                     }
                     else
                     {

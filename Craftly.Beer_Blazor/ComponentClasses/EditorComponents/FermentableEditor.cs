@@ -6,44 +6,45 @@ using System.Threading.Tasks;
 using Beernet_Lib.Models;
 using Radzen;
 using Beernet_Lib.Tools;
+using Craftly.Beer_Blazor.ComponentClasses.ComponentStateClasses;
 
 namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
 {
     public class FermentableEditor : ComponentBase
     {
-        [Parameter]
-        public recipe Model { get; set; }
+        [Parameter] public recipe Model { get; set; }
         [Parameter] public EventCallback<string> refreshParent { get; set; }
-        [Parameter]
-        public string SessionID { get; set; }
-        public static int selectedFermentableAddition { get; set; } = 0;
+        [Parameter] public string SessionID { get; set; }
+        [Parameter] public FermentableState fermentableState { get; set; }
+        //public static int fermentableState.currentSelectedFermentableIndex { get; set; } = 0;
 
         IEnumerable<fermentable> AllFermentables;
         public IEnumerable<fermentable> FermentableList;
 
         public string fermentableName = "";
 
-        public string selectedFermentableID = "";
+        //public string fermentableState.currentSelectedFermentableID = "";
 
         public void Save(bool save)
         {
             RecipeResponse r = RecipeHelper.SaveRecipe(Model, save, SessionID);
             Model.recipeStats = r.recipeStats;
             Model.lastModifiedGuid = r.lastModifiedGuid;
+            Model.idString = r.idString;
             refreshParent.InvokeAsync("");
         }
 
         public void resetSelector()
         {
-            if (selectedFermentableAddition > Model.fermentables.Count - 1)
+            if (fermentableState.currentSelectedFermentableIndex > Model.fermentables.Count - 1)
             {
                 if (Model.fermentables.Count > 0)
                 {
-                    selectedFermentableAddition = 0;
+                    fermentableState.currentSelectedFermentableIndex = 0;
                 }
                 else
                 {
-                    selectedFermentableAddition = -1;
+                    fermentableState.currentSelectedFermentableIndex = -1;
                 }
             }
         }
@@ -58,7 +59,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
                 {
                     indexOfFermentable = i;
                     fermentableName = fa.fermentable.name;
-                    selectedFermentableID = fa.fermentable.idString;
+                    fermentableState.currentSelectedFermentableID = fa.fermentable.idString;
                     break;
                 }
                 i++;
@@ -66,7 +67,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
 
             if (indexOfFermentable != -1)
             {
-                selectedFermentableAddition = indexOfFermentable;
+                fermentableState.currentSelectedFermentableIndex = indexOfFermentable;
             }
 
         }
@@ -75,21 +76,21 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
         {
             if (Model.adjuncts.Count > 0)
             {
-                selectedFermentableAddition = 0;
+                fermentableState.currentSelectedFermentableIndex = 0;
             }
             else
             {
-                selectedFermentableAddition = -1;
+                fermentableState.currentSelectedFermentableIndex = -1;
             }
             resetSelector();
             AllFermentables = RecipeHelper.GetAllFermentables(SessionID);
             FermentableList = AllFermentables;
-            selectedFermentableID = findFermentableIDFromSelecteFermentable();
+            fermentableState.currentSelectedFermentableID = findFermentableIDFromSelecteFermentable();
             
 
-            if (Model.fermentables.Count != 0 && selectedFermentableAddition != -1)
+            if (Model.fermentables.Count != 0 && fermentableState.currentSelectedFermentableIndex != -1)
             {
-                fermentableName = Model.fermentables[selectedFermentableAddition].fermentable.name;
+                fermentableName = Model.fermentables[fermentableState.currentSelectedFermentableIndex].fermentable.name;
             }
             else
             {
@@ -103,7 +104,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
             float output = -1;
             if (float.TryParse(value.ToString(), out output))
             {
-                Model.fermentables[selectedFermentableAddition].weight = output;
+                Model.fermentables[fermentableState.currentSelectedFermentableIndex].weight = output;
             }
             Save(false);
         }
@@ -112,7 +113,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
             float output = -1;
             if (float.TryParse(value.ToString(), out output))
             {
-                Model.fermentables[selectedFermentableAddition].fermentable.yield = output;
+                Model.fermentables[fermentableState.currentSelectedFermentableIndex].fermentable.yield = output;
             }
             Save(false);
         }
@@ -126,21 +127,21 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
         {
             var str = value is IEnumerable<object> ? string.Join(", ", (IEnumerable<object>)value) : value;
 
-            if (Model.hops.Count == 0)
+            if (Model.fermentables.Count == 0)
             {
                 fermentable hopw = new fermentable();
                 fermentableAddition ha = new fermentableAddition();
                 Model.fermentables.Add(ha);
                 Model.fermentables[0].fermentable = hopw;
-                selectedFermentableAddition = 0;
+                fermentableState.currentSelectedFermentableIndex = 0;
             }
-            selectedFermentableID = value.ToString();
-            Model.fermentables[selectedFermentableAddition].fermentable = AllFermentables.Where(x => x.idString == value).FirstOrDefault();
-            Model.fermentables[selectedFermentableAddition].fermentableID = value.ToString();
+            fermentableState.currentSelectedFermentableID = value.ToString();
+            Model.fermentables[fermentableState.currentSelectedFermentableIndex].fermentable = AllFermentables.Where(x => x.idString == value).FirstOrDefault();
+            Model.fermentables[fermentableState.currentSelectedFermentableIndex].fermentableID = value.ToString();
 
             if (Model.fermentables.Count != 0)
             {
-                fermentableName = Model.fermentables[selectedFermentableAddition].fermentable.name;
+                fermentableName = Model.fermentables[fermentableState.currentSelectedFermentableIndex].fermentable.name;
             }
             else
             {
@@ -155,9 +156,9 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
         public string findFermentableIDFromSelecteFermentable()
         {
             resetSelector();
-            if (selectedFermentableAddition != -1 && Model.fermentables.Count != 0)
+            if (fermentableState.currentSelectedFermentableIndex != -1 && Model.fermentables.Count != 0)
             {
-                fermentable currentSelection = AllFermentables.Where(x => x.name == Model.fermentables[selectedFermentableAddition].fermentable.name).FirstOrDefault();
+                fermentable currentSelection = AllFermentables.Where(x => x.name == Model.fermentables[fermentableState.currentSelectedFermentableIndex].fermentable.name).FirstOrDefault();
                 if (currentSelection == null)
                 {
                     return "-1";
@@ -190,17 +191,17 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
         public void AddFermentable()
         {
             fermentableAddition fa = RecipeTools.makeEmptyFermentablAddition();//new fermentableAddition();
-            selectedFermentableID = "";
+            fermentableState.currentSelectedFermentableID = "";
 
             if (Model.fermentables.Count > 0)
             {
-                Model.fermentables.Insert(selectedFermentableAddition + 1, fa);
-                selectedFermentableAddition++;
+                Model.fermentables.Insert(fermentableState.currentSelectedFermentableIndex + 1, fa);
+                fermentableState.currentSelectedFermentableIndex++;
             }
             else
             {
                 Model.fermentables.Add(fa);
-                selectedFermentableAddition++;
+                fermentableState.currentSelectedFermentableIndex = 0;
             }
             Save(false);
         }
@@ -210,10 +211,10 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
             if (Model.fermentables.Count == 0)
             { return; }
 
-            Model.fermentables.RemoveAt(selectedFermentableAddition);
-            if (selectedFermentableAddition == Model.fermentables.Count)
+            Model.fermentables.RemoveAt(fermentableState.currentSelectedFermentableIndex);
+            if (fermentableState.currentSelectedFermentableIndex == Model.fermentables.Count)
             {
-                selectedFermentableAddition--;
+                fermentableState.currentSelectedFermentableIndex--;
             }
             Save(false);
         }

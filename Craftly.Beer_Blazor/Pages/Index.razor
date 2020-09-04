@@ -1,12 +1,13 @@
 ﻿@using Craftly.Beer_Blazor.ComponentClasses;
 @using Beernet_Lib.Models;
 @using Microsoft.AspNetCore.ProtectedBrowserStorage
+@using Craftly.Beer_Blazor.ComponentClasses.ComponentStateClasses;
 @inject ProtectedSessionStorage ProtectedSessionStore
 @page "/"
 @{
     if (!String.IsNullOrEmpty(state))
     {
-        <MainNav refreshParent=@refreshToHome logout=@refreshAndLogout />
+        <MainNav refreshParent=@refreshToHome logout=@refreshAndLogout openNewRecipe=@openNewRecipe/>
     }
 }
 <div class="container-fluid body-content">
@@ -27,7 +28,7 @@
                     }
                     else
                     {
-                        <Craftly.Beer_Blazor.Shared.RecipeEditor Model=@Model state=@state> </Craftly.Beer_Blazor.Shared.RecipeEditor>
+                        <Craftly.Beer_Blazor.Shared.RecipeEditor Model=@Model state=@state editorState=@es> </Craftly.Beer_Blazor.Shared.RecipeEditor>
                     }
                 }
             }
@@ -46,13 +47,14 @@
     public string state;
 
     public string selectedRecipeID;
+    public EditorState es { get; set; }
 
     public recipe Model = RecipeHelper.initializeBlankRecipe();
     public List<recipe> recipes = new List<recipe>();
 
     protected override async Task OnInitializedAsync()
     {
-
+        es = generateNewEditorState();
     }
 
     protected override async void OnAfterRender(bool firstRender)
@@ -107,6 +109,7 @@
     public async void openNewRecipe()
     {
         selectedRecipeID = "-1";
+        es = generateNewEditorState();
         Model = RecipeHelper.initializeBlankRecipe();
         refresh();
     }
@@ -120,6 +123,34 @@
     {
         string session = "";
         return ProtectedSessionStore.GetAsync<string>("session");
+    }
+
+    EditorState generateNewEditorState()
+    {
+        EditorState e = new EditorState();
+        HopState h = new HopState();
+        FermentableState f = new FermentableState();
+        YeastState y = new YeastState();
+        AdjunctState a = new AdjunctState();
+
+        h.currentSelectedHopID = "";
+        h.currentSelectedHopIndex = 0;
+
+        f.currentSelectedFermentableID = "";
+        f.currentSelectedFermentableIndex = 0;
+
+        y.currentSelectedYeastID = "";
+        y.currentSelectedYeastIndex = 0;
+
+        a.currentSelectedAdjunctID = "";
+        a.currentSelectedAdjunctIndex = 0;
+
+        e.hopstate = h;
+        e.fermentableState = f;
+        e.yeastState = y;
+        e.adjunctState = a;
+
+        return e;
     }
 
     //async void getSessionState()

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Beernet_Lib.Models;
 using Radzen;
 using Microsoft.AspNetCore.ProtectedBrowserStorage;
+using Craftly.Beer_Blazor.ComponentClasses.ComponentStateClasses;
 
 namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
 {
@@ -17,6 +18,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
 
         [Parameter]
         public string state { get; set; }
+        [Parameter] public EditorState editorState { get; set; }
 
         [Inject]
         ProtectedSessionStorage ProtectedSessionStore { get; set; }
@@ -24,16 +26,6 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
         public List<style> styleOptions = getStyleOptions();
         public List<style> styleOptionsList = new List<style>();
         public string selectedStyle = "";
-
-        //public async void setSessionID(string sessionState)
-        //{
-        //    await ProtectedSessionStore.SetAsync("session", sessionState);
-        //}
-
-        //public string getSessionID()
-        //{
-        //    return ProtectedSessionStore.GetAsync<string>("session").Result;
-        //}
 
         public async void setSessionID(string sessionState)
         {
@@ -85,19 +77,23 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
         protected override async void OnInitialized()
         {
             SessionID = state;
+            getAllStyles();//styleOptions;
             styleOptionsList = styleOptions;
+            selectedStyle = Model.style.idString;
         }
         protected override async void OnAfterRender(bool firstRender)
         {
-            getAllStyles();
-            selectedStyle = Model.style.idString;
-            SessionID = await getSessionID();
+            //if(editorState.hopstate.currentSelectedHopIndex > Model.hops.Count)
+            //{
+            //    editorState.hopstate.currentSelectedHopIndex = 0;
+            //    editorState.hopstate.currentSelectedHopID = "";
+            //}
             base.OnAfterRender(firstRender);
         }
 
         public async void getAllStyles()
         {
-            styleOptions = RecipeHelper.GetAllStyles(await getSessionID());
+            styleOptions = RecipeHelper.GetAllStyles(state);
         }
 
         public void ChangeRecipeDescription(object value, string name)

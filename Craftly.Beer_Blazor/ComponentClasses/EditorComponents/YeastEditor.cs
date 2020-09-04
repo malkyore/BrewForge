@@ -6,26 +6,27 @@ using System.Threading.Tasks;
 using Beernet_Lib.Models;
 using Radzen;
 using Beernet_Lib.Tools;
+using Craftly.Beer_Blazor.ComponentClasses.ComponentStateClasses;
 
 namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
 {
     public class YeastEditor : ComponentBase
     {
-        [Parameter]
-        public  recipe Model { get; set; }
+        [Parameter] public  recipe Model { get; set; }
         [Parameter] public EventCallback<string> refreshParent { get; set; }
-        public static int selectedYeastAddition { get; set; } = 0;
-        [Parameter]
-        public string SessionID { get; set; }
+        [Parameter] public string SessionID { get; set; }
+        [Parameter] public YeastState yeastState { get; set; }
 
         IEnumerable<yeast> AllYeasts;
         public IEnumerable<yeast> YeastList;
 
-        public string selectedHopID = "";
+        //public static int yeastState.currentSelectedYeastIndex { get; set; } = 0;
+        //public string yeastState.currentSelectedYeastID = "";
         public string yeastName = "";
 
         public void changeSelectedYeast(string id)
         {
+            
             int i = 0;
             int indexOfYeast = -1;
             foreach (yeastAddition ya in Model.yeasts)
@@ -41,7 +42,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
 
             if (indexOfYeast != -1)
             {
-                selectedYeastAddition = indexOfYeast;
+                yeastState.currentSelectedYeastIndex = indexOfYeast;
             }
 
         }
@@ -50,6 +51,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
             RecipeResponse r = RecipeHelper.SaveRecipe(Model, save, SessionID);
             Model.recipeStats = r.recipeStats;
             Model.lastModifiedGuid = r.lastModifiedGuid;
+            Model.idString = r.idString;
             refreshParent.InvokeAsync("");
         }
 
@@ -57,21 +59,21 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
         {
             if (Model.yeasts.Count > 0)
             {
-                selectedYeastAddition = 0;
+                yeastState.currentSelectedYeastIndex = 0;
             }
             else
             {
-                selectedYeastAddition = -1;
+                yeastState.currentSelectedYeastIndex = -1;
             }
             resetSelector();
             AllYeasts = RecipeHelper.GetAllYeasts(SessionID);
             YeastList = AllYeasts;
-            selectedHopID = findYeastIDFromSelectedYeast();
+            yeastState.currentSelectedYeastID = findYeastIDFromSelectedYeast();
            
 
-            if (Model.yeasts.Count != 0 && selectedYeastAddition != -1)
+            if (Model.yeasts.Count != 0 && yeastState.currentSelectedYeastIndex != -1)
             {
-                yeastName = Model.yeasts[selectedYeastAddition].yeast.name;
+                yeastName = Model.yeasts[yeastState.currentSelectedYeastIndex].yeast.name;
             }
             else
             {
@@ -88,14 +90,14 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
         {
             var str = value is IEnumerable<object> ? string.Join(", ", (IEnumerable<object>)value) : value;
 
-            if(Model.yeasts[selectedYeastAddition].yeast != null)
+            if(Model.yeasts[yeastState.currentSelectedYeastIndex].yeast != null)
             {
-                Model.yeasts[selectedYeastAddition].yeast = AllYeasts.Where(x => x.idString == value).FirstOrDefault();
+                Model.yeasts[yeastState.currentSelectedYeastIndex].yeast = AllYeasts.Where(x => x.idString == value).FirstOrDefault();
             }
 
             if (Model.yeasts.Count != 0)
             {
-                yeastName = Model.yeasts[selectedYeastAddition].yeast.name;
+                yeastName = Model.yeasts[yeastState.currentSelectedYeastIndex].yeast.name;
             }
             else
             {
@@ -110,9 +112,9 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
         public string findYeastIDFromSelectedYeast()
         {
             resetSelector();
-            if (selectedYeastAddition != -1 && Model.yeasts.Count != 0)
+            if (yeastState.currentSelectedYeastIndex != -1 && Model.yeasts.Count != 0)
             {
-                yeast currentSelection = AllYeasts.Where(x => x.name == Model.yeasts[selectedYeastAddition].yeast.name).FirstOrDefault();
+                yeast currentSelection = AllYeasts.Where(x => x.name == Model.yeasts[yeastState.currentSelectedYeastIndex].yeast.name).FirstOrDefault();
                 if (currentSelection == null)
                 {
                     return "-1";
@@ -130,15 +132,15 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
 
         public void resetSelector()
         {
-            if (selectedYeastAddition > Model.yeasts.Count - 1)
+            if (yeastState.currentSelectedYeastIndex > Model.yeasts.Count - 1)
             {
                 if (Model.yeasts.Count > 0)
                 {
-                    selectedYeastAddition = 0;
+                    yeastState.currentSelectedYeastIndex = 0;
                 }
                 else
                 {
-                    selectedYeastAddition = -1;
+                    yeastState.currentSelectedYeastIndex = -1;
                 }
             }
         }
@@ -160,17 +162,17 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
         public void AddYeast()
         {
             yeastAddition ya = RecipeTools.makeEmptyYeastAddition();
-            selectedHopID = "";
+            yeastState.currentSelectedYeastID = "";
 
             if (Model.yeasts.Count > 0)
             {
-                Model.yeasts.Insert(selectedYeastAddition + 1, ya);
-                selectedYeastAddition++;
+                Model.yeasts.Insert(yeastState.currentSelectedYeastIndex + 1, ya);
+                yeastState.currentSelectedYeastIndex++;
             }
             else
             {
                 Model.yeasts.Add(ya);
-                selectedYeastAddition++;
+                yeastState.currentSelectedYeastIndex = 0;
             }
             Save(false);
         }
@@ -179,10 +181,10 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
         {
             if (Model.yeasts.Count == 0)
             { return; }
-                Model.yeasts.RemoveAt(selectedYeastAddition);
-                if (selectedYeastAddition == Model.yeasts.Count)
+                Model.yeasts.RemoveAt(yeastState.currentSelectedYeastIndex);
+                if (yeastState.currentSelectedYeastIndex == Model.yeasts.Count)
                 {
-                    selectedYeastAddition--;
+                    yeastState.currentSelectedYeastIndex--;
                 }
             Save(false);
         }

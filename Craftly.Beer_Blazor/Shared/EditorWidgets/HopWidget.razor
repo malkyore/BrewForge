@@ -16,7 +16,7 @@
                 int i = 0;
                 foreach (hopAddition ha in Model.hops)
                 {
-                    <div id="hop-@i" class="hopListItem grid @(i == selectedHopAddition ? "hopListItemSelected" : "")" @onclick="(() => changeSelectedHop(ha.additionGuid))">
+                    <div id="hop-@i" class="hopListItem grid @(i == hopState.currentSelectedHopIndex ? "hopListItemSelected" : "")" @onclick="(() => changeSelectedHop(ha.additionGuid))">
                         <div class="col-1-4">
                             <div>@ha.hop.name</div>
                             <div class="ingredientUnit">name</div>
@@ -57,7 +57,7 @@
                 <div class="col-3-4">
                     <RadzenDropDown AllowClear="true" TValue="string"
                                     LoadData="@LoadData" AllowFiltering="true"
-                                    Data="@HopList" TextProperty="name" Value="@selectedHopID" Placeholder="@hopName" ValueProperty="idString" Style="width:100%;"
+                                    Data="@HopList" TextProperty="name" Value="@hopState.currentSelectedHopID" Placeholder="@hopName" ValueProperty="idString" Style="width:100%;"
                                     Change="@(args => ChangeHop(args, "DropDown with custom filtering"))" />
 
                 </div>
@@ -67,9 +67,9 @@
                     <label>AAU: </label>
                 </div>
                 <div class="col-3-4">
-                    @if (selectedHopAddition != -1 && Model.hops.Count != 0 && Model.hops[selectedHopAddition].hop != null)
+                    @if (hopState.currentSelectedHopIndex != -1 && Model.hops.Count != 0 && Model.hops[hopState.currentSelectedHopIndex].hop != null)
                     {
-                        <RadzenTextBox Style="width:100%;" @oninput="@(args => ChangeHopAAU(args.Value.ToString(), "TextBox with change on every input"))" Value="@Model.hops[selectedHopAddition].hop.aau.ToString()" />
+                        <RadzenTextBox Style="width:100%;" @oninput="@(args => ChangeHopAAU(args.Value.ToString(), "TextBox with change on every input"))" Value="@Model.hops[hopState.currentSelectedHopIndex].hop.aau.ToString()" />
                     }
                     else
                     {
@@ -82,9 +82,9 @@
                     <label>Amount: </label>
                 </div>
                 <div class="col-3-4">
-                    @if (selectedHopAddition != -1 && Model.hops.Count != 0)
+                    @if (hopState.currentSelectedHopIndex != -1 && Model.hops.Count != 0)
                     {
-                        <RadzenTextBox Style="width:100%;" @oninput="@(args => ChangeHopAmount(args.Value.ToString(), "TextBox with change on every input"))" Value="@Model.hops[selectedHopAddition].amount.ToString()" />
+                        <RadzenTextBox Style="width:100%;" @oninput="@(args => ChangeHopAmount(args.Value.ToString(), "TextBox with change on every input"))" Value="@Model.hops[hopState.currentSelectedHopIndex].amount.ToString()" />
                     }
                     else
                     {
@@ -112,9 +112,9 @@
                     <label>Time: </label>
                 </div>
                 <div class="col-3-4">
-                    @if (selectedHopAddition != -1 && Model.hops.Count != 0)
+                    @if (hopState.currentSelectedHopIndex != -1 && Model.hops.Count != 0)
                     {
-                        <RadzenTextBox Style="width:100%;" @oninput="@(args => ChangeHopTime(args.Value.ToString(), "TextBox with change on every input"))" Value="@Model.hops[selectedHopAddition].time.ToString()" />
+                        <RadzenTextBox Style="width:100%;" @oninput="@(args => ChangeHopTime(args.Value.ToString(), "TextBox with change on every input"))" Value="@Model.hops[hopState.currentSelectedHopIndex].time.ToString()" />
                     }
                     else
                     {
