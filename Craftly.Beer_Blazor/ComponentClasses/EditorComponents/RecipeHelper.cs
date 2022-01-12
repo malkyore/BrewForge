@@ -23,19 +23,23 @@ namespace Craftly.Beer_Blazor.ComponentClasses
         //public static bool isLoggedIn { get; set; }
 
         private static int LoginExpiryDays { get; set; } = 10;
-        //dev
-        static string apiLink = "http://dev.unacceptable.beer:666";
+        ////dev
+        //static string apiLink = "http://dev.unacceptable.beer:666";
+
+        //devdb locally
+        static string apiLink = "http://host.docker.internal:50422";
 
         //prod
         //static string apiLink = "http://rest.unacceptable.beer:5123";
         static string loginEndpoint = "/Beernet/Login/";
+        static string createAccountEndpoint = "/Beernet/Register/";
 
 
         public static string retrieveToken(string sessionID)
         {
             var currentSesh = UserSessions.Where(x => x.sessionID == sessionID).FirstOrDefault();
 
-            if (!(currentSesh.expiryTimestamp < DateTime.Now))
+            if (currentSesh != null && !(currentSesh.expiryTimestamp < DateTime.Now))
             {
                 return currentSesh.authToken;
             }
@@ -90,6 +94,20 @@ namespace Craftly.Beer_Blazor.ComponentClasses
                 return storeLoginSession(LoginToken);
             }
             
+        }
+
+        public static string CreateAccount(string username, string email, string password)
+        {
+            Dictionary<string, string> AccountInfo = new Dictionary<string, string>
+            {
+                {"Username", "" + username },
+                {"Email", "" + email },
+                {"Password", "" + password }
+            };
+
+            string creationResponse = Auth.createNewUserAccount(apiLink, createAccountEndpoint, AccountInfo);
+
+            return creationResponse;
         }
 
         public static void Logout(string sessionID)

@@ -1,0 +1,36 @@
+﻿@using Beernet_Lib.Models;
+@using Craftly.Beer_Blazor.ComponentClasses.EditorComponents;
+@inherits Craftly.Beer_Blazor.ComponentClasses.EditorComponents.EditorWidgetWrapper;
+
+<div class="grid" style="height: 86%; width:100%; min-width: 1000px; min-height:700px;">
+    <div>
+        <div class="grid">
+            <!--Start Hop Widget-->
+            <div class="col-1-2 grid-pad">
+                <h3 style="color:white">Hops</h3>
+                <Craftly.Beer_Blazor.Shared.EditorWidgets.HopWidget Model=@Model refreshParent=@refreshParent SessionID=@SessionID hopState=@editorState.hopstate> </Craftly.Beer_Blazor.Shared.EditorWidgets.HopWidget>
+            </div><!--End Hop Widget-->
+
+            <div class="col-1-2 grid-pad">
+                <!--fermentable widget-->
+                <h3 style="color:white">Fermentables</h3>
+                <Craftly.Beer_Blazor.Shared.EditorWidgets.FermentableWidget Model=@Model refreshParent=@refreshParent SessionID=@SessionID fermentableState=@editorState.fermentableState> </Craftly.Beer_Blazor.Shared.EditorWidgets.FermentableWidget>
+            </div><!--End Fermentable Widget-->
+            <div class="grid">
+
+            </div>
+        </div>
+        <div class="grid">
+            <div class="col-1-2 grid-pad">
+                <!--Yeast Widget-->
+                <h3 style="color:white">Yeasts</h3>
+                <Craftly.Beer_Blazor.Shared.EditorWidgets.YeastWidget Model=@Model refreshParent=@refreshParent SessionID=@SessionID yeastState=@editorState.yeastState> </Craftly.Beer_Blazor.Shared.EditorWidgets.YeastWidget>
+            </div> <!--End Yeast Widget-->
+            <div class="col-1-2 grid-pad">
+                <!--Adjunct widget-->
+                <h3 style="color:white">Adjuncts</h3>
+                <Craftly.Beer_Blazor.Shared.EditorWidgets.AdjunctWidget Model=@Model refreshParent=@refreshParent SessionID=@SessionID adjunctState=@editorState.adjunctState> </Craftly.Beer_Blazor.Shared.EditorWidgets.AdjunctWidget>
+            </div><!--End Yeast Widget-->
+        </div>
+    </div>
+</div>

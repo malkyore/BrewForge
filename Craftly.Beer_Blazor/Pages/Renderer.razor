@@ -1,0 +1,51 @@
+﻿@using Craftly.Beer_Blazor.ComponentClasses;
+@using Beernet_Lib.Models;
+@using Microsoft.AspNetCore.ProtectedBrowserStorage
+@using Craftly.Beer_Blazor.ComponentClasses.ComponentStateClasses;
+@inherits Craftly.Beer_Blazor.ComponentClasses.RendererComponent;
+@inject ProtectedSessionStorage ProtectedSessionStore
+@page "/"
+@{
+    if (!String.IsNullOrEmpty(state))
+    {
+        <MainNav refreshParent=@refreshToHome logout=@refreshAndLogout openNewRecipe=@openNewRecipe />
+    }
+}
+<div class="container-fluid body-content">
+    <div class="bodywrapper">
+        @{
+            if (!String.IsNullOrEmpty(state))
+            {
+                if (recipes == null)
+                {
+
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    if (String.IsNullOrEmpty(selectedRecipeID))
+                    {
+                        <Craftly.Beer_Blazor.Shared.EditorWidgets.RecipeSelectorWidget Model=@Model recipes=@recipes refreshParentRecipe=@refreshRecipe openNewRecipe=@openNewRecipe> </Craftly.Beer_Blazor.Shared.EditorWidgets.RecipeSelectorWidget>
+                    }
+                    else
+                    {
+                        //if()
+                        <Craftly.Beer_Blazor.Shared.RecipeEditor Model=@Model state=@state editorState=@es changeVerb="changeVerb" verb=@selectedVerb> </Craftly.Beer_Blazor.Shared.RecipeEditor>
+                    }
+                }
+            }
+            else
+            {
+                if (selectedVerb == "CreateAccount")
+                {
+                    <Craftly.Beer_Blazor.Pages.CreateAccount refreshParent=@refresh changeVerb="changeVerb"> </Craftly.Beer_Blazor.Pages.CreateAccount>
+                }
+                else
+                {
+                    <Craftly.Beer_Blazor.Pages.Login refreshParent=@refresh changeVerb="changeVerb"> </Craftly.Beer_Blazor.Pages.Login>
+                }
+            }
+        }
+    </div>
+
+</div>

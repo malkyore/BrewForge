@@ -16,6 +16,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses
         [Inject] 
         ProtectedSessionStorage ProtectedSessionStore { get; set; }
         [Parameter] public EventCallback<string> refreshParent { get; set; }
+        [Parameter] public EventCallback<string> changeVerb { get; set; }
         public bool isError { get; set; } = false;
         public string ErrorMessage { get; set; }
         private string Username { get; set; }
@@ -31,9 +32,10 @@ namespace Craftly.Beer_Blazor.ComponentClasses
         public void ChangePassword(Object args)
         {
             Password = args.ToString();
+            Login();
         }
 
-        public async  void setSessionID(string sessionState)
+        public async void setSessionID(string sessionState)
         {
             ProtectedSessionStore.SetAsync("session", sessionState).ConfigureAwait(false);
         }
@@ -42,6 +44,11 @@ namespace Craftly.Beer_Blazor.ComponentClasses
         {
             string session = "";
             return ProtectedSessionStore.GetAsync<string>("session");
+        }
+
+        public void CreateAccount()
+        {
+            changeVerb.InvokeAsync("CreateAccount");
         }
 
         public async void Login()
@@ -59,7 +66,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses
             {
                 isError = true;
             }
-            ErrorMessage = "FAILED AS SHIT DOG";
+            ErrorMessage = "Login Failed";
 
             if(!isError)
             {

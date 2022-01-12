@@ -10,12 +10,6 @@ namespace Beernet_Lib.Tools
     {
         public static string getAPIAuthToken(string apiLink, string authEndpoint, Dictionary<string, string> values)
         {
-            //var values = new Dictionary<string, string>
-            //{
-            //   { "Username", "" + "beer"},
-            //   { "Password", "" + "Poopbutt1" }
-            //};
-
             //string dataurl = "http://rest.unacceptable.beer:5123";
 
             var client = new RestClient("" + apiLink);
@@ -48,6 +42,29 @@ namespace Beernet_Lib.Tools
                 token = "exception";
             }
             return token;
+        }
+
+        public static string createNewUserAccount(string apiLink, string authEndpoint, Dictionary<string, string> values)
+        {
+            var client = new RestClient("" + apiLink);
+            string creationResponse = "";
+            var request = new RestRequest(authEndpoint, Method.POST);
+
+            string jsonToSend = Newtonsoft.Json.JsonConvert.SerializeObject(values);
+            request.AddParameter("application/json; charset=utf-8", jsonToSend, ParameterType.RequestBody);
+            request.RequestFormat = DataFormat.Json;
+
+            try
+            {
+                var response = client.Execute(request);
+
+                creationResponse = response.Content;
+            }
+            catch (Exception error)
+            {
+                creationResponse = error.Message;
+            }
+            return creationResponse;
         }
     }
 }

@@ -1,10 +1,38 @@
 ﻿using Beernet_Lib.Models;
+using Microsoft.AspNetCore.WebUtilities;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Web;
 
 namespace Beernet_Lib.Tools
 {
+    public static class URITools
+    {
+        public static string removeQueryParameter(Uri uri, string parameter)
+        {
+            var q = HttpUtility.ParseQueryString(uri.Query);
+            q.Remove(parameter);
+            string pagePathWithoutQueryString = uri.GetLeftPart(UriPartial.Path);
+
+            var a = q.Count > 0
+                ? String.Format("{0}?{1}", pagePathWithoutQueryString, q)
+                : pagePathWithoutQueryString;
+            return a;
+        }
+
+        public static string updateQueryParameter(Uri uri, string parameter, string newValue)
+        {
+            string removedRID = removeQueryParameter(uri, parameter);
+            return QueryHelpers.AddQueryString(removedRID, new Dictionary<string, string> { { parameter, newValue } });
+        }
+
+        public static string addQueryParameter(Uri uri, string parameter, string value)
+        {
+            return QueryHelpers.AddQueryString(uri.ToString(), new Dictionary<string, string> { { parameter, value } });
+        }
+    }
+
     public static class RecipeTools
     {
         public static hopAddition updateHopAddition(hopAddition oldAddition, hopAddition newAddition)

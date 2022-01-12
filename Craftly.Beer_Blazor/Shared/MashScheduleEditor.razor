@@ -1,0 +1,195 @@
+﻿@using Beernet_Lib.Models;
+@using Craftly.Beer_Blazor.ComponentClasses.EditorComponents;
+@inherits Craftly.Beer_Blazor.ComponentClasses.EditorComponents.MashScheduleEditor;
+@inject IJSRuntime JSRuntime
+
+<div class="editorBody">
+    <div id="header">
+        <br />
+    </div>
+    <div id="toolbar" class="btn-group">
+    </div>
+    <nav class="menu" tabindex="0">
+        <div class="smartphone-menu-trigger"></div>
+        <header class="avatar">
+            <h4>@state</h4>
+            <h2>@Model.name</h2>
+            <h4>@Model.style.name</h4>
+            <div>
+                @Model.description
+            </div>
+        </header>
+        <ul>
+            <li id="recipeListItem" tabindex="0" class="icon-dashboard"><span>Recipe</span></li>
+            <li id="mashEditorListItem" tabindex="0" class="icon-customers"><span>Mash Editor</span></li>
+            <li id="brewLogListItem" tabindex="0" class="icon-users"><span>Brew Logs</span></li>
+            <li id="recipeParametersListItem" tabindex="0" class="icon-settings"><span>Recipe Parameters</span></li>
+        </ul>
+    </nav>
+    <div class="recipe-Editor-body-content">
+        <div class="module grid" id="recipeInfo" style="height: auto; width:auto; min-height:250px; min-width:600px;">
+            <h3>Recipe Info</h3>
+            <div class="col-1-4">
+                <div class="editorListItem infogrid">
+                    <div class="col-1-4 editorLabel">
+                        <label>Name: </label>
+                    </div>
+                    <div class="col-3-4">
+                        <RadzenTextBox Style="width:100%;" Change="@(args => ChangeRecipeName(args, "TextBox with change on every input"))" Value="@Model.name" />
+                    </div>
+                </div>
+                <div class="editorListItem infogrid">
+                    <div class="col-1-4 editorLabel">
+                        <label>
+                            Style:
+                        </label>
+                    </div>
+                    <div class="col-3-4">
+                            <RadzenDropDown AllowClear="false"
+                                            Style="width:100%;"
+                                            TValue="string"
+                                            AllowFiltering="true"
+                                            LoadData="@LoadData"
+                                            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                            Placeholder="Select..."
+                                            TextProperty="name" 
+                                            ValueProperty="idString"
+                                            Data="@styleOptionsList"
+                                            Value="@selectedStyle"
+                                            Change="@(args => ChangeRecipeStyle(args, "DropDown with placeholder"))"
+                                             />
+                    </div>
+                </div>
+                <div class="editorListItem infogrid">
+                    <div class="col-1-4 editorLabel">
+                        <label>
+                            Description:
+                        </label>
+                    </div>
+                    <div class="col-3-4">
+                        <RadzenTextArea @bind-Value="@Model.description" Cols="60" Rows="4" Change="@(args => ChangeRecipeDescription(args, "Disabled TextArea with 3 rows and 30 columns"))" Style="margin-bottom: 20px" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-3-4 statsWidgetSection">
+                <div id="ibuStatWidget" class="statWidget">
+                    <div class="statTop">
+                        IBU
+                    </div>
+                    <div class="statBottom">
+                        <div id="ibuLabel" class="statLabelText">
+                            @Math.Round(Model.recipeStats.ibu, 2)
+                        </div>
+                        <div class="grid">
+                            <div class="col-1-2" style="font-size:10px; text-align:left;">
+                                <div>MIN</div>
+                                <div class="statLabelText">@Model.style.minIBU</div>
+                            </div>
+                            <div class="col-1-2" style="font-size:10px; text-align:right;">
+                                <div>MAX</div>
+                                <div class="statLabelText">@Model.style.maxIBU</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="abvStatWidget" class="statWidget">
+                    <div class="statTop">
+                        ABV
+                    </div>
+                    <div class="statBottom">
+                        <div id="abvLabel" class="statLabelText">
+                            @Math.Round(Model.recipeStats.abv, 2)
+                        </div>
+                        <div class="grid">
+                            <div class="col-1-2" style="font-size:10px; text-align:left;">
+                                <div>MIN</div>
+                                <div class="statLabelText">@Model.style.minABV</div>
+                            </div>
+                            <div class="col-1-2" style="font-size:10px; text-align:right;">
+                                <div>MAX</div>
+                                <div class="statLabelText">@Model.style.maxABV</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="fgStatWidget" class="statWidget">
+                    <div class="statTop">
+                        FG
+                    </div>
+                    <div class="statBottom">
+                        <div id="fgLabel" class="statLabelText">
+                            @Math.Round(Model.recipeStats.fg, 2)
+                        </div>
+                        <div class="grid">
+                            <div class="col-1-2" style="font-size:10px; text-align:left;">
+                                <div>MIN</div>
+                                <div class="statLabelText">@Model.style.minFG</div>
+                            </div>
+                            <div class="col-1-2" style="font-size:10px; text-align:right;">
+                                <div>MAX</div>
+                                <div class="statLabelText">@Model.style.maxFG</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="ogStatWidget" class="statWidget">
+                    <div class="statTop">
+                        OG
+                    </div>
+                    <div class="statBottom">
+                        <div id="ogLabel" class="statLabelText">
+                            @Math.Round(Model.recipeStats.og, 2)
+                        </div>
+                        <div class="grid">
+                            <div class="col-1-2" style="font-size:10px; text-align:left;">
+                                <div>MIN</div>
+                                <div class="statLabelText">@Model.style.minOG</div>
+                            </div>
+                            <div class="col-1-2" style="font-size:10px; text-align:right;">
+                                <div>MAX</div>
+                                <div class="statLabelText">@Model.style.maxOG</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="srmStatWidget" class="statWidget">
+                    <div class="statTop">
+                        SRM
+                    </div>
+                    <div class="statBottom">
+                        <div id="srmLabel" class="statLabelText">
+                            @Math.Round(Model.recipeStats.srm, 2)
+                        </div>
+                        <div class="grid">
+                            <div class="col-1-2" style="font-size:10px; text-align:left;">
+                                <div>MIN</div>
+                                <div class="statLabelText">@Model.style.minColor</div>
+                            </div>
+                            <div class="col-1-2" style="font-size:10px; text-align:right;">
+                                <div>MAX</div>
+                                <div class="statLabelText">@Model.style.maxColor</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--<button id="testbutton" onclick="ajaxThing()"> CLICK THIS</button>-->
+        </div>
+
+        <div class="grid" style="height: 86%; width:100%; min-width: 1000px; min-height:700px;">
+            <div>
+                MASH SCHEDULE EDITOR
+            </div>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    private async Task LoadDropdowns()
+    {
+        var text =
+            await JSRuntime.InvokeAsync<string>("dropdowns",null);
+
+    }
+}

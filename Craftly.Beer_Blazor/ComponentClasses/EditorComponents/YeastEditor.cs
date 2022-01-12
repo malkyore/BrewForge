@@ -12,7 +12,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
 {
     public class YeastEditor : ComponentBase
     {
-        [Parameter] public  recipe Model { get; set; }
+        [Parameter] public recipe Model { get; set; }
         [Parameter] public EventCallback<string> refreshParent { get; set; }
         [Parameter] public string SessionID { get; set; }
         [Parameter] public YeastState yeastState { get; set; }
@@ -26,7 +26,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
 
         public void changeSelectedYeast(string id)
         {
-            
+
             int i = 0;
             int indexOfYeast = -1;
             foreach (yeastAddition ya in Model.yeasts)
@@ -69,7 +69,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
             AllYeasts = RecipeHelper.GetAllYeasts(SessionID);
             YeastList = AllYeasts;
             yeastState.currentSelectedYeastID = findYeastIDFromSelectedYeast();
-           
+
 
             if (Model.yeasts.Count != 0 && yeastState.currentSelectedYeastIndex != -1)
             {
@@ -90,7 +90,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
         {
             var str = value is IEnumerable<object> ? string.Join(", ", (IEnumerable<object>)value) : value;
 
-            if(Model.yeasts[yeastState.currentSelectedYeastIndex].yeast != null)
+            if (Model.yeasts[yeastState.currentSelectedYeastIndex].yeast != null)
             {
                 Model.yeasts[yeastState.currentSelectedYeastIndex].yeast = AllYeasts.Where(x => x.idString == value).FirstOrDefault();
             }
@@ -181,11 +181,11 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
         {
             if (Model.yeasts.Count == 0)
             { return; }
-                Model.yeasts.RemoveAt(yeastState.currentSelectedYeastIndex);
-                if (yeastState.currentSelectedYeastIndex == Model.yeasts.Count)
-                {
-                    yeastState.currentSelectedYeastIndex--;
-                }
+            Model.yeasts.RemoveAt(yeastState.currentSelectedYeastIndex);
+            if (yeastState.currentSelectedYeastIndex == Model.yeasts.Count)
+            {
+                yeastState.currentSelectedYeastIndex--;
+            }
             Save(false);
         }
 

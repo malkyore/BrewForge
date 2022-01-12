@@ -119,6 +119,19 @@
           "buildMultiTargeting/Microsoft.AspNetCore.ProtectedBrowserStorage.props": {}
         }
       },
+      "Microsoft.AspNetCore.WebUtilities/2.2.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Net.Http.Headers": "2.2.0",
+          "System.Text.Encodings.Web": "4.5.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.WebUtilities.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.WebUtilities.dll": {}
+        }
+      },
       "Microsoft.CSharp/4.7.0": {
         "type": "package",
         "compile": {
@@ -294,6 +307,19 @@
           "lib/netstandard2.0/Microsoft.JSInterop.dll": {}
         }
       },
+      "Microsoft.Net.Http.Headers/2.2.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "2.2.0",
+          "System.Buffers": "4.5.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Microsoft.Net.Http.Headers.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Net.Http.Headers.dll": {}
+        }
+      },
       "Microsoft.NETCore.Platforms/2.0.0": {
         "type": "package",
         "compile": {
@@ -466,26 +492,19 @@
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
         }
       },
-      "Radzen.Blazor/2.11.14": {
+      "Radzen.Blazor/3.14.1": {
         "type": "package",
         "dependencies": {
           "Microsoft.AspNetCore.Components": "3.1.0",
           "Microsoft.AspNetCore.Components.Web": "3.1.0",
           "Microsoft.CSharp": "4.7.0",
-          "System.Linq.Dynamic.Core": "1.0.19"
+          "System.Linq.Dynamic.Core": "1.2.12"
         },
         "compile": {
           "lib/netstandard2.1/Radzen.Blazor.dll": {}
         },
         "runtime": {
           "lib/netstandard2.1/Radzen.Blazor.dll": {}
-        },
-        "contentFiles": {
-          "contentFiles/any/netstandard2.1/Properties/launchSettings.json": {
-            "buildAction": "Content",
-            "codeLanguage": "any",
-            "copyToOutput": false
-          }
         },
         "build": {
           "buildTransitive/Radzen.Blazor.props": {}
@@ -712,20 +731,13 @@
           "lib/netstandard1.6/System.AppContext.dll": {}
         }
       },
-      "System.Buffers/4.3.0": {
+      "System.Buffers/4.5.0": {
         "type": "package",
-        "dependencies": {
-          "System.Diagnostics.Debug": "4.3.0",
-          "System.Diagnostics.Tracing": "4.3.0",
-          "System.Resources.ResourceManager": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Threading": "4.3.0"
-        },
         "compile": {
-          "lib/netstandard1.1/System.Buffers.dll": {}
+          "ref/netcoreapp2.0/_._": {}
         },
         "runtime": {
-          "lib/netstandard1.1/System.Buffers.dll": {}
+          "lib/netcoreapp2.0/_._": {}
         }
       },
       "System.Collections/4.3.0": {
@@ -1201,7 +1213,7 @@
           "lib/netstandard1.6/System.Linq.dll": {}
         }
       },
-      "System.Linq.Dynamic.Core/1.0.19": {
+      "System.Linq.Dynamic.Core/1.2.12": {
         "type": "package",
         "compile": {
           "lib/netcoreapp2.1/System.Linq.Dynamic.Core.dll": {}
@@ -2227,6 +2239,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.0",
         "dependencies": {
+          "Microsoft.AspNetCore.WebUtilities": "2.2.0",
           "Microsoft.Extensions.Configuration": "2.2.0",
           "Microsoft.Extensions.Configuration.Binder": "2.2.0",
           "Microsoft.Extensions.Configuration.Json": "2.2.0",
@@ -2373,6 +2386,19 @@
         "microsoft.aspnetcore.protectedbrowserstorage.0.1.0-alpha.19521.1.nupkg.sha512",
         "microsoft.aspnetcore.protectedbrowserstorage.nuspec",
         "staticwebassets/protectedBrowserStorage.js"
+      ]
+    },
+    "Microsoft.AspNetCore.WebUtilities/2.2.0": {
+      "sha512": "oPl52Mxm8MTP3jHw+bQQ6UUOFYiaHDK4gU4cHGjH/yIZDn3vdPH5jV6ONZQJQJAQBqBYKZX28sH8NyYmsFRupw==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.webutilities/2.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/Microsoft.AspNetCore.WebUtilities.dll",
+        "lib/netstandard2.0/Microsoft.AspNetCore.WebUtilities.xml",
+        "microsoft.aspnetcore.webutilities.2.2.0.nupkg.sha512",
+        "microsoft.aspnetcore.webutilities.nuspec"
       ]
     },
     "Microsoft.CSharp/4.7.0": {
@@ -2644,8 +2670,21 @@
         "packageIcon.png"
       ]
     },
+    "Microsoft.Net.Http.Headers/2.2.0": {
+      "sha512": "yFn57woR2lfjUfcoqrc+F8hbmsjTLNu+14FIiGGMUTfvQtZE6xJRwFntp4oMJi99KpMHYX5MOS0mmjRSEwGtLw==",
+      "type": "package",
+      "path": "microsoft.net.http.headers/2.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/Microsoft.Net.Http.Headers.dll",
+        "lib/netstandard2.0/Microsoft.Net.Http.Headers.xml",
+        "microsoft.net.http.headers.2.2.0.nupkg.sha512",
+        "microsoft.net.http.headers.nuspec"
+      ]
+    },
     "Microsoft.NETCore.Platforms/2.0.0": {
-      "sha512": "CCf4NjmDOoise7FAij2VPuHIgKKsu696vkTwhOkPVQfLsTmB2WLFfQ4yeO5Udtk8FD636UBMx6Y9eovzJKT76A==",
+      "sha512": "VdLJOCXhZaEMY7Hm2GKiULmn7IEPFE4XC5LPSfBVCUIA8YLZVh846gtfBJalsPQF2PlzdD7ecX7DZEulJ402ZQ==",
       "type": "package",
       "path": "microsoft.netcore.platforms/2.0.0",
       "files": [
@@ -2903,10 +2942,10 @@
         "newtonsoft.json.nuspec"
       ]
     },
-    "Radzen.Blazor/2.11.14": {
-      "sha512": "h4a933UKiuwNMhHGstFjdwPvL7LTIqqlbBW1tfAs5+jT3hAyTwIQ1830HEFNUJbaYojRf4cgIlsxce2dMtmsIA==",
+    "Radzen.Blazor/3.14.1": {
+      "sha512": "198yMXo3V2CMncVvcsRQST1XuLdhoI6li03UQwQRh7TO6Sa2opvszJ5r/fGyoDiBoFWMzvVRrsUN/Oe7MKWzVw==",
       "type": "package",
-      "path": "radzen.blazor/2.11.14",
+      "path": "radzen.blazor/3.14.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2915,11 +2954,12 @@
         "build/Radzen.Blazor.props",
         "buildMultiTargeting/Radzen.Blazor.props",
         "buildTransitive/Radzen.Blazor.props",
-        "content/Properties/launchSettings.json",
-        "contentFiles/any/netstandard2.1/Properties/launchSettings.json",
         "icon.png",
+        "lib/net5.0/Radzen.Blazor.dll",
+        "lib/net5.0/Radzen.Blazor.xml",
         "lib/netstandard2.1/Radzen.Blazor.dll",
-        "radzen.blazor.2.11.14.nupkg.sha512",
+        "lib/netstandard2.1/Radzen.Blazor.xml",
+        "radzen.blazor.3.14.1.nupkg.sha512",
         "radzen.blazor.nuspec",
         "staticwebassets/Radzen.Blazor.js",
         "staticwebassets/css/dark-base.css",
@@ -2928,10 +2968,10 @@
         "staticwebassets/css/default.css",
         "staticwebassets/css/humanistic-base.css",
         "staticwebassets/css/humanistic.css",
-        "staticwebassets/css/material-dark.css",
-        "staticwebassets/css/material.css",
         "staticwebassets/css/software-base.css",
         "staticwebassets/css/software.css",
+        "staticwebassets/css/standard-base.css",
+        "staticwebassets/css/standard.css",
         "staticwebassets/fonts/MaterialIcons-Regular.woff",
         "staticwebassets/fonts/SourceSansPro-Black.woff",
         "staticwebassets/fonts/SourceSansPro-BlackIt.woff",
@@ -3253,18 +3293,33 @@
         "system.appcontext.nuspec"
       ]
     },
-    "System.Buffers/4.3.0": {
-      "sha512": "ratu44uTIHgeBeI0dE8DWvmXVBSo4u7ozRZZHOMmK/JPpYyo0dAfgSiHlpiObMQ5lEtEyIXA40sKRYg5J6A8uQ==",
+    "System.Buffers/4.5.0": {
+      "sha512": "pL2ChpaRRWI/p4LXyy4RgeWlYF2sgfj/pnVMvBqwNFr5cXg7CXNnWZWxrOONLg8VGdFB8oB+EG2Qw4MLgTOe+A==",
       "type": "package",
-      "path": "system.buffers/4.3.0",
+      "path": "system.buffers/4.5.0",
       "files": [
         ".nupkg.metadata",
-        "ThirdPartyNotices.txt",
-        "dotnet_library_license.txt",
-        "lib/netstandard1.1/.xml",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/netcoreapp2.0/_._",
         "lib/netstandard1.1/System.Buffers.dll",
-        "system.buffers.4.3.0.nupkg.sha512",
-        "system.buffers.nuspec"
+        "lib/netstandard1.1/System.Buffers.xml",
+        "lib/netstandard2.0/System.Buffers.dll",
+        "lib/netstandard2.0/System.Buffers.xml",
+        "lib/uap10.0.16299/_._",
+        "ref/net45/System.Buffers.dll",
+        "ref/net45/System.Buffers.xml",
+        "ref/netcoreapp2.0/_._",
+        "ref/netstandard1.1/System.Buffers.dll",
+        "ref/netstandard1.1/System.Buffers.xml",
+        "ref/netstandard2.0/System.Buffers.dll",
+        "ref/netstandard2.0/System.Buffers.xml",
+        "ref/uap10.0.16299/_._",
+        "system.buffers.4.5.0.nupkg.sha512",
+        "system.buffers.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
       ]
     },
     "System.Collections/4.3.0": {
@@ -4686,10 +4741,10 @@
         "system.linq.nuspec"
       ]
     },
-    "System.Linq.Dynamic.Core/1.0.19": {
-      "sha512": "GFYslLz/1ZZ0+gbqYED2zlD0H95BIK4hOpIcEEEfTDDXAcKE5vpXQQseOGduNVjcJZOF3Wx+4npa2EjdFpuDgA==",
+    "System.Linq.Dynamic.Core/1.2.12": {
+      "sha512": "wJDLhidcJnLAJeZ4z10YVAxMm4rTW0zlYmUjriJTo4eGLHD5NKZOm6qFabkn5TinbfZ6LM9LeYFPyiQMpRly3Q==",
       "type": "package",
-      "path": "system.linq.dynamic.core/1.0.19",
+      "path": "system.linq.dynamic.core/1.2.12",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -4705,6 +4760,9 @@
         "lib/net46/System.Linq.Dynamic.Core.dll",
         "lib/net46/System.Linq.Dynamic.Core.pdb",
         "lib/net46/System.Linq.Dynamic.Core.xml",
+        "lib/net5.0/System.Linq.Dynamic.Core.dll",
+        "lib/net5.0/System.Linq.Dynamic.Core.pdb",
+        "lib/net5.0/System.Linq.Dynamic.Core.xml",
         "lib/netcoreapp2.1/System.Linq.Dynamic.Core.dll",
         "lib/netcoreapp2.1/System.Linq.Dynamic.Core.pdb",
         "lib/netcoreapp2.1/System.Linq.Dynamic.Core.xml",
@@ -4714,11 +4772,14 @@
         "lib/netstandard2.0/System.Linq.Dynamic.Core.dll",
         "lib/netstandard2.0/System.Linq.Dynamic.Core.pdb",
         "lib/netstandard2.0/System.Linq.Dynamic.Core.xml",
-        "lib/uap10.0/System.Linq.Dynamic.Core.dll",
-        "lib/uap10.0/System.Linq.Dynamic.Core.pdb",
-        "lib/uap10.0/System.Linq.Dynamic.Core.pri",
-        "lib/uap10.0/System.Linq.Dynamic.Core.xml",
-        "system.linq.dynamic.core.1.0.19.nupkg.sha512",
+        "lib/netstandard2.1/System.Linq.Dynamic.Core.dll",
+        "lib/netstandard2.1/System.Linq.Dynamic.Core.pdb",
+        "lib/netstandard2.1/System.Linq.Dynamic.Core.xml",
+        "lib/uap10.0.10240/System.Linq.Dynamic.Core.dll",
+        "lib/uap10.0.10240/System.Linq.Dynamic.Core.pdb",
+        "lib/uap10.0.10240/System.Linq.Dynamic.Core.pri",
+        "lib/uap10.0.10240/System.Linq.Dynamic.Core.xml",
+        "system.linq.dynamic.core.1.2.12.nupkg.sha512",
         "system.linq.dynamic.core.nuspec"
       ]
     },
@@ -6145,7 +6206,7 @@
       ]
     },
     "System.Security.AccessControl/4.5.0": {
-      "sha512": "6RQtcT+TyDgLUFsAnmmdfRRGdLYKxSZGkSPOd052tvYFxOTMaQb6ANlwhGqZtNO52PosaCoXu7uatFneujAxmA==",
+      "sha512": "vW8Eoq0TMyz5vAG/6ce483x/CP83fgm4SJe5P8Tb1tZaobcvPrbMEL7rhH1DRdrYbbb6F0vq3OlzmK0Pkwks5A==",
       "type": "package",
       "path": "system.security.accesscontrol/4.5.0",
       "files": [
@@ -6502,7 +6563,7 @@
       ]
     },
     "System.Security.Permissions/4.5.0": {
-      "sha512": "vDQ7q30Soe0a1cPhvxn+7IFmMeTG5IP+hTQrnKQDjTNpD2epqwbZSzMM2Git5TXBr4Kwwhc/0SEtJY0qPoiegA==",
+      "sha512": "9gdyuARhUR7H+p5CjyUB/zPk7/Xut3wUSP8NJQB6iZr8L3XUXTMdoLeVAg9N4rqF8oIpE7MpdqHdDHQ7XgJe0g==",
       "type": "package",
       "path": "system.security.permissions/4.5.0",
       "files": [
@@ -6581,7 +6642,7 @@
       ]
     },
     "System.Security.Principal.Windows/4.5.0": {
-      "sha512": "hs2zF4tOQ3V4iQttVnLrnR/i8AOrrAgu2Gmp4/jNaE/+5hiZWDj20FK/m/OW3Itdi9XDvqf55WzHkiWYtOSUNg==",
+      "sha512": "U77HfRXlZlOeIXd//Yoj6Jnk8AXlbeisf1oq1os+hxOGVnuG+lGSfGqTwTZBoORFF6j/0q7HXIl8cqwQ9aUGqQ==",
       "type": "package",
       "path": "system.security.principal.windows/4.5.0",
       "files": [
@@ -7387,7 +7448,7 @@
       "Beernet-Lib >= 1.0.0",
       "Microsoft.AspNetCore.ProtectedBrowserStorage >= 0.1.0-alpha.19521.1",
       "Microsoft.VisualStudio.Azure.Containers.Tools.Targets >= 1.9.5",
-      "Radzen.Blazor >= 2.11.14"
+      "Radzen.Blazor >= 3.14.1"
     ]
   },
   "packageFolders": {
@@ -7419,6 +7480,7 @@
       },
       "frameworks": {
         "netcoreapp3.0": {
+          "targetAlias": "netcoreapp3.0",
           "projectReferences": {
             "F:\\_Repos\\Craftly.beer_Blazor\\Craftly.Beer_Blazor\\Beernet-Lib\\Beernet-Lib.csproj": {
               "projectPath": "F:\\_Repos\\Craftly.beer_Blazor\\Craftly.Beer_Blazor\\Beernet-Lib\\Beernet-Lib.csproj"
@@ -7434,6 +7496,7 @@
     },
     "frameworks": {
       "netcoreapp3.0": {
+        "targetAlias": "netcoreapp3.0",
         "dependencies": {
           "Microsoft.AspNetCore.ProtectedBrowserStorage": {
             "target": "Package",
@@ -7445,7 +7508,7 @@
           },
           "Radzen.Blazor": {
             "target": "Package",
-            "version": "[2.11.14, )"
+            "version": "[3.14.1, )"
           }
         },
         "imports": [
@@ -7476,7 +7539,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.210\\RuntimeIdentifierGraph.json"
       }
     }
   }

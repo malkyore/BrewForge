@@ -20,8 +20,8 @@
             </div>
         </header>
         <ul>
-            <li id="recipeListItem" tabindex="0" class="icon-dashboard"><span>Recipe</span></li>
-            <li id="mashEditorListItem" tabindex="0" class="icon-customers"><span>Mash Editor</span></li>
+            <li id="recipeListItem" tabindex="0" class="icon-dashboard" @onclick=@LoadRecipeEditor><span>Recipe</span></li>
+            <li id="mashEditorListItem" tabindex="0" class="icon-customers" @onclick=@LoadMashScheduleEditor><span>Mash Editor</span></li>
             <li id="brewLogListItem" tabindex="0" class="icon-users"><span>Brew Logs</span></li>
             <li id="recipeParametersListItem" tabindex="0" class="icon-settings"><span>Recipe Parameters</span></li>
         </ul>
@@ -45,19 +45,18 @@
                         </label>
                     </div>
                     <div class="col-3-4">
-                            <RadzenDropDown AllowClear="false"
-                                            Style="width:100%;"
-                                            TValue="string"
-                                            AllowFiltering="true"
-                                            LoadData="@LoadData"
-                                            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                                            Placeholder="Select..."
-                                            TextProperty="name" 
-                                            ValueProperty="idString"
-                                            Data="@styleOptionsList"
-                                            Value="@selectedStyle"
-                                            Change="@(args => ChangeRecipeStyle(args, "DropDown with placeholder"))"
-                                             />
+                        <RadzenDropDown AllowClear="false"
+                                        Style="width:100%;"
+                                        TValue="string"
+                                        AllowFiltering="true"
+                                        LoadData="@LoadData"
+                                        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                        Placeholder="Select..."
+                                        TextProperty="name"
+                                        ValueProperty="idString"
+                                        Data="@styleOptionsList"
+                                        Value="@selectedStyle"
+                                        Change="@(args => ChangeRecipeStyle(args, "DropDown with placeholder"))" />
                     </div>
                 </div>
                 <div class="editorListItem infogrid">
@@ -176,38 +175,46 @@
             <!--<button id="testbutton" onclick="ajaxThing()"> CLICK THIS</button>-->
         </div>
 
-        <div class="grid" style="height: 86%; width:100%; min-width: 1000px; min-height:700px;">
+        @*<div class="grid" style="height: 86%; width:100%; min-width: 1000px; min-height:700px;">
             <div>
                 <div class="grid">
-                    <!--Start Hop Widget-->
+                    Start Hop Widget
                     <div class="col-1-2 grid-pad">
                         <h3 style="color:white">Hops</h3>
                         <Craftly.Beer_Blazor.Shared.EditorWidgets.HopWidget Model=@Model refreshParent=@refresh SessionID=@SessionID hopState=@editorState.hopstate> </Craftly.Beer_Blazor.Shared.EditorWidgets.HopWidget>
-                    </div><!--End Hop Widget-->
+                    </div>End Hop Widget
 
                     <div class="col-1-2 grid-pad">
-                        <!--fermentable widget-->
+                        fermentable widget
                         <h3 style="color:white">Fermentables</h3>
                         <Craftly.Beer_Blazor.Shared.EditorWidgets.FermentableWidget Model=@Model refreshParent=@refresh SessionID=@SessionID fermentableState=@editorState.fermentableState> </Craftly.Beer_Blazor.Shared.EditorWidgets.FermentableWidget>
-                    </div><!--End Fermentable Widget-->
+                    </div>End Fermentable Widget
                     <div class="grid">
 
                     </div>
                 </div>
                 <div class="grid">
                     <div class="col-1-2 grid-pad">
-                        <!--Yeast Widget-->
+                        Yeast Widget
                         <h3 style="color:white">Yeasts</h3>
                         <Craftly.Beer_Blazor.Shared.EditorWidgets.YeastWidget Model=@Model refreshParent=@refresh SessionID=@SessionID yeastState=@editorState.yeastState> </Craftly.Beer_Blazor.Shared.EditorWidgets.YeastWidget>
-                    </div> <!--End Yeast Widget-->
+                    </div> End Yeast Widget
                     <div class="col-1-2 grid-pad">
-                        <!--Adjunct widget-->
+                        Adjunct widget
                         <h3 style="color:white">Adjuncts</h3>
                         <Craftly.Beer_Blazor.Shared.EditorWidgets.AdjunctWidget Model=@Model refreshParent=@refresh SessionID=@SessionID adjunctState=@editorState.adjunctState> </Craftly.Beer_Blazor.Shared.EditorWidgets.AdjunctWidget>
-                    </div><!--End Yeast Widget-->
+                    </div>End Yeast Widget
                 </div>
             </div>
-        </div>
+        </div>*@
+        @if (string.IsNullOrEmpty(verb) || verb == "recipeEditor")
+        {
+            <Craftly.Beer_Blazor.Shared.EditorWidgets.EditorWidgetWrapper Model=@Model refreshParent=@refresh SessionID=@SessionID editorState=@editorState></Craftly.Beer_Blazor.Shared.EditorWidgets.EditorWidgetWrapper>
+        }
+        else if (verb == "mashScheduleEditor")
+        {
+            <Craftly.Beer_Blazor.Shared.EditorWidgets.MashScheduleWidgetWrapper Model=@Model refreshParent=@refresh SessionID=@SessionID editorState=@editorState></Craftly.Beer_Blazor.Shared.EditorWidgets.MashScheduleWidgetWrapper>
+        }
     </div>
 </div>
 

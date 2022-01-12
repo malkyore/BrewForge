@@ -7,6 +7,7 @@ using Beernet_Lib.Models;
 using Radzen;
 using Microsoft.AspNetCore.ProtectedBrowserStorage;
 using Craftly.Beer_Blazor.ComponentClasses.ComponentStateClasses;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
 {
@@ -22,10 +23,15 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
 
         [Inject]
         ProtectedSessionStorage ProtectedSessionStore { get; set; }
+
+        [Inject]
+        NavigationManager NavManager { get; set; }
         public string SessionID { get; set; } = "";
         public List<style> styleOptions = getStyleOptions();
         public List<style> styleOptionsList = new List<style>();
         public string selectedStyle = "";
+        [Parameter] public EventCallback<string> changeVerb { get; set; }
+        [Parameter] public string verb { get; set; }
 
         public async void setSessionID(string sessionState)
         {
@@ -38,6 +44,15 @@ namespace Craftly.Beer_Blazor.ComponentClasses.EditorComponents
             return ProtectedSessionStore.GetAsync<string>("session");
         }
 
+        public void LoadMashScheduleEditor()
+        {
+            changeVerb.InvokeAsync("mashScheduleEditor");
+        }
+
+        public void LoadRecipeEditor()
+        {
+            changeVerb.InvokeAsync("recipeEditor");
+        }
         public static List<style> getStyleOptions()
         {
             style a = new style();

@@ -1,0 +1,60 @@
+﻿@page "/CreateAccount"
+@using Craftly.Beer_Blazor.ComponentClasses;
+@using Beernet_Lib.Models;
+@inherits Craftly.Beer_Blazor.ComponentClasses.CreateAccountComponent;
+@using Microsoft.AspNetCore.ProtectedBrowserStorage
+@inject ProtectedSessionStorage ProtectedSessionStore
+@*@layout LoginLayout*@
+
+<div id="header">
+    <br />
+    <br />
+</div>
+<div id="toolbar" class="btn-group">
+
+</div>
+<div>
+    <h1 style="text-align:center; vertical-align:central;margin: auto;">Craftly.Beer</h1>
+    <br />
+    <br />
+    <div class="module" style="width:200px; text-align:center; vertical-align:central;margin: auto;">
+        <img src="/images/hop.png" style="width: 200px; height:200px; padding-right:10px;margin-left:-10px">
+        <!--<h3>Create, Brew, Enjoy!</h3>-->
+    </div>
+    <br />
+    <div class="module" style="width:350px; text-align:center; vertical-align:central;margin: auto;">
+        <div>
+            <h4>Create Account</h4>
+        </div>
+        <div>
+            <label>Username:</label> <br />
+            <RadzenTextBox Style="margin-bottom: 20px; width:250px;" Change="@(args => ChangeUsername(args))" />
+        </div>
+        <div>
+            <label>Email:</label> <br />
+            <RadzenTextBox Style="margin-bottom: 20px; width:250px;" Change="@(args => ChangeEmail(args))" />
+        </div>
+        <div>
+            <label>Password:</label><br />
+            <RadzenPassword Placeholder="Enter password..." Change="@(args => ChangePassword(args))" Click="sdd" Style="margin-bottom: 20px; width:250px;" />
+        </div>
+        <div>
+            <label>Confirm Password:</label><br />
+            <RadzenPassword Placeholder="Enter password..." Change="@(args => ChangeConfirmPassword(args))" Click="sdd" Style="margin-bottom: 20px; width:250px;" />
+        </div>
+        <div>
+            <br />
+            <RadzenButton Click="@((args) => CreateAccount())" Text="Create Account" Style="margin-bottom: 20px; width: 250px" />
+        </div>
+
+        <div>
+            <br />
+            <RadzenButton Click="@((args) => backToLogin())" Text="Back to Login" Style="margin-bottom: 20px; width: 250px" />
+        </div>
+
+        @if (isError)
+        {
+            <div style="color:red;">@ErrorMessage</div>
+        }
+    </div>
+</div>
