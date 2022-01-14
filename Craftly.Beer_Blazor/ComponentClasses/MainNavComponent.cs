@@ -15,6 +15,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses
         [Parameter] public EventCallback<string> logout { get; set; }
 
         [Parameter] public EventCallback<string> openNewRecipe { get; set; }
+        [Parameter] public string Username { get; set; }
 
         //public static bool isLoggedIn()
         //{

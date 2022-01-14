@@ -17,10 +17,10 @@ namespace Craftly.Beer_Blazor.ComponentClasses
         ProtectedSessionStorage ProtectedSessionStore { get; set; }
         [Parameter] public EventCallback<string> refreshParent { get; set; }
         [Parameter] public EventCallback<string> changeVerb { get; set; }
+        [Parameter] public EventCallback<string> userSettings { get; set; }
         public bool isError { get; set; } = false;
         public string ErrorMessage { get; set; }
         private string Username { get; set; }
-
         private string state { get; set; } = "";
         private string Password { get; set; }
 
@@ -70,6 +70,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses
 
             if(!isError)
             {
+                userSettings.InvokeAsync(Username);
                 refreshParent.InvokeAsync("");
             }
         }

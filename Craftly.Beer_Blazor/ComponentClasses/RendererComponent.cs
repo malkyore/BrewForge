@@ -25,6 +25,8 @@ namespace Craftly.Beer_Blazor.ComponentClasses
 
         public string selectedRecipeID;
 
+        public string Username;
+
         public string selectedVerb;
         public EditorState es { get; set; }
 
@@ -40,6 +42,16 @@ namespace Craftly.Beer_Blazor.ComponentClasses
                 selectedRecipeID = firstout;
             }
             es = generateNewEditorState();
+        }
+
+        public async void tryToFindExistingSessionState()
+        {
+            string sesh = await getSessionID();
+            if(!string.IsNullOrEmpty(sesh))
+            {
+                state = sesh;
+                refresh();
+            }
         }
 
         protected override async void OnAfterRender(bool firstRender)
@@ -71,6 +83,11 @@ namespace Craftly.Beer_Blazor.ComponentClasses
             {
                 NavManager.NavigateTo(URITools.addQueryParameter(uri,"RID", recipeID));
             }
+        }
+
+        public void setUsername(string username)
+        {
+            Username = username;
         }
 
         public void changeVerb(string Verb)
@@ -145,8 +162,9 @@ namespace Craftly.Beer_Blazor.ComponentClasses
             RecipeHelper.Logout(state);
             state = null;
             selectedRecipeID = "";
-            setRecipeIDQueryString("");
-            ProtectedSessionStore.DeleteAsync("session");
+            //setRecipeIDQueryString("");
+            await ProtectedSessionStore.DeleteAsync("session");
+            Model = null;
             StateHasChanged();
         }
 
@@ -175,7 +193,15 @@ namespace Craftly.Beer_Blazor.ComponentClasses
         ValueTask<string> getSessionID()
         {
             string session = "";
-            return ProtectedSessionStore.GetAsync<string>("session");
+            var sesh = ProtectedSessionStore.GetAsync<string>("session");
+            if (!sesh.IsFaulted)
+            {
+                return sesh;
+            }
+            else
+            {
+                return new ValueTask<string>(session);
+            }
         }
 
         EditorState generateNewEditorState()

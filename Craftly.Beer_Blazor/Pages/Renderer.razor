@@ -8,7 +8,7 @@
 @{
     if (!String.IsNullOrEmpty(state))
     {
-        <MainNav refreshParent=@refreshToHome logout=@refreshAndLogout openNewRecipe=@openNewRecipe />
+        <MainNav refreshParent=@refreshToHome logout=@refreshAndLogout openNewRecipe=@openNewRecipe Username=@Username/>
     }
 }
 <div class="container-fluid body-content">
@@ -36,13 +36,14 @@
             }
             else
             {
+                tryToFindExistingSessionState();
                 if (selectedVerb == "CreateAccount")
                 {
-                    <Craftly.Beer_Blazor.Pages.CreateAccount refreshParent=@refresh changeVerb="changeVerb"> </Craftly.Beer_Blazor.Pages.CreateAccount>
+                    <Craftly.Beer_Blazor.Pages.CreateAccount refreshParent=@refresh changeVerb="changeVerb" userSettings="setUsername"> </Craftly.Beer_Blazor.Pages.CreateAccount>
                 }
                 else
                 {
-                    <Craftly.Beer_Blazor.Pages.Login refreshParent=@refresh changeVerb="changeVerb"> </Craftly.Beer_Blazor.Pages.Login>
+                    <Craftly.Beer_Blazor.Pages.Login refreshParent=@refresh changeVerb="changeVerb" userSettings="setUsername"> </Craftly.Beer_Blazor.Pages.Login>
                 }
             }
         }

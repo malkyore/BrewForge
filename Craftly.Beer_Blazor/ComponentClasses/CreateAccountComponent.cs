@@ -13,6 +13,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses
         ProtectedSessionStorage ProtectedSessionStore { get; set; }
         [Parameter] public EventCallback<string> refreshParent { get; set; }
         [Parameter] public EventCallback<string> changeVerb { get; set; }
+        [Parameter] public EventCallback<string> userSettings { get; set; }
 
         string username;
         string email;
@@ -65,6 +66,7 @@ namespace Craftly.Beer_Blazor.ComponentClasses
                     string SessionState = RecipeHelper.Login(username, password);
                     isError = false;
                     setSessionID(SessionState);
+                    userSettings.InvokeAsync(username);
                     refreshParent.InvokeAsync("");
                 }
                 else
