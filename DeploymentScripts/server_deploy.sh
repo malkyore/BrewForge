@@ -12,5 +12,5 @@ sudo docker stop $DOCKERID
 sleep 2s
 #run the docker build
 sudo docker build -f ./Craftly.Beer_Blazor/DockerfileServer -t craftly.beer_blazor .
-start the container
+#start the container
 sudo docker run -d -p 1666:80 craftly.beer_blazor
