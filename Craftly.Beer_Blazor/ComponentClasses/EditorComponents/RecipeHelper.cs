@@ -23,11 +23,11 @@ namespace Craftly.Beer_Blazor.ComponentClasses
         //public static bool isLoggedIn { get; set; }
 
         private static int LoginExpiryDays { get; set; } = 10;
-        ////dev
-        //static string apiLink = "http://dev.unacceptable.beer:666";
+        //dev
+        static string apiLink = "http://dev.unacceptable.beer:666";
 
-        //devdb locally
-        static string apiLink = "http://host.docker.internal:50422";
+        ////devdb locally
+        //static string apiLink = "http://host.docker.internal:50422";
 
         //prod
         //static string apiLink = "http://rest.unacceptable.beer:5123";
